@@ -16,6 +16,8 @@ const yargs = require('yargs'),
       csv = require('csv'),
       fs = require('fs');
 
+require('util').inspect.defaultOptions.colors = true;
+
 /**
  * Constants.
  */
@@ -26,7 +28,8 @@ const BASE_PEOPLE = 'base1_individus.csv',
 const MAPPINGS = require('../mappings.json');
 
 const PORT = 9200,
-      LOG_RATE = 5000;
+      BULK_SIZE = 1000,
+      LOG_RATE = 10 * 1000;
 
 /**
  * Describing CLI interface.
@@ -81,11 +84,24 @@ const createIndex = (name, next) => {
 
 const prettyNumber = number => numeral(number).format('0,0');
 
+const POSSIBLE_LANGS = new Set(['en', 'fr', 'es', 'it', 'sv', 'de', 'pt']);
+
 const pluralLangSplitter = string => {
   const langs = {};
 
   string.split('|').forEach(item => {
-    langs[item.slice(0, 2).toLowerCase()] = +item.slice(2);
+    const lang = item.slice(0, 2).toLowerCase(),
+          value = +item.slice(2);
+
+    // TODO: remove this with new file version
+    // TODO: error, the join function is not correct on Stata's side!
+    if (lang === 'sp')
+      return;
+
+    if (!POSSIBLE_LANGS.has(lang))
+      throw new Error(`Unknown "${lang}" lang!`);
+
+    langs[lang] = value;
   });
 
   return langs;
@@ -172,10 +188,10 @@ const readStreams = {
         languagesCount: +doc.noccur_languages + 1,
         mainLanguage: doc.language,
         originalId: doc.newid,
-        approxBirth: doc.approx_birth_num,
-        approxDeath: doc.approx_death_num,
+        approxBirth: !!+doc.approx_birth_num,
+        approxDeath: !!+doc.approx_death_num,
         continent: doc.Continent,
-        period: doc.BigPeriod,
+        period: doc.BigPeriod !== 'missing' ? doc.BigPeriod : undefined,
         availableLanguages: doc.ID_LANGUE.split('|').map(item => item.toLowerCase()),
         words: pluralLangSplitter(doc.count_words),
         length: pluralLangSplitter(doc.length),
@@ -188,7 +204,9 @@ const readStreams = {
         if (
           people[k] === undefined ||
           people[k] === '' ||
-          (Array.isArray(people[k]) && !people[k].length)
+          people[k] === '.' ||
+          (Array.isArray(people[k]) && !people[k].length) ||
+          (people[k] && typeof people[k] === 'object' && !Object.keys(people[k]).length)
         )
           delete people[k];
       }
@@ -215,7 +233,7 @@ const createWritableBulkStream = name => {
     }, next);
   });
 
-  stream.highWaterMark = 1000;
+  stream.highWaterMark = BULK_SIZE;
 
   return stream;
 };
@@ -244,7 +262,9 @@ async.series([
   //   return readStreams
   //     .location
   //     .pipe(writeStreams.location)
-  //     .on('error', next)
+  //     .on('error', err => {
+  //       throw err;
+  //     })
   //     .on('close', () => next());
   // },
   function indexPeople(next) {
@@ -253,8 +273,10 @@ async.series([
     return readStreams
       .people
       .pipe(writeStreams.people)
-      .on('error', next)
-      .on('close', () => next());
+      .on('error', err => {
+        throw err;
+      })
+      .on('close', () => next);
   }
 ], err => {
   CLIENT.close();
