@@ -10,6 +10,7 @@ const yargs = require('yargs'),
       numeral = require('numeral'),
       joinPath = require('path').join,
       through = require('through2'),
+      padStart = require('lodash/padStart'),
       ElasticSearchClient = require('elasticsearch').Client,
       WritableBulk = require('elasticsearch-streams').WritableBulk,
       TransformToBulk = require('elasticsearch-streams').TransformToBulk,
@@ -23,7 +24,7 @@ require('util').inspect.defaultOptions.colors = true;
  */
 const BASE_PEOPLE = 'base1_individus.csv',
       BASE_LOCATIONS = 'base2_locations.csv';
-      // BASE_PATHS = 'base3_trajectoires.csv';
+      BASE_PATHS = 'base3_trajectoires.csv';
 
 const MAPPINGS = require('../mappings.json');
 
@@ -82,8 +83,10 @@ const createIndex = (name, next) => {
   });
 };
 
-const prettyNumber = number => numeral(number).format('0,0');
+// Function used to pretty print numbers
+const prettyNumber = number => padStart(numeral(number).format('0,0'), 9);
 
+// Function used to create a lang map for some values
 const POSSIBLE_LANGS = new Set(['en', 'fr', 'es', 'it', 'sv', 'de', 'pt']);
 
 const pluralLangSplitter = string => {
@@ -107,6 +110,21 @@ const pluralLangSplitter = string => {
   return langs;
 };
 
+// Function used to filter empty values from a document before indexation
+const emptyFilter = doc => {
+  for (const k in doc) {
+    if (
+      doc[k] === undefined ||
+      doc[k] === '' ||
+      doc[k] === '.' ||
+      (Array.isArray(doc[k]) && !doc[k].length) ||
+      (doc[k] && typeof doc[k] === 'object' && !Object.keys(doc[k]).length)
+    )
+      delete doc[k];
+  }
+};
+
+// Function creating a logger only writing episodically at some given rate
 const createEpisodicLogger = rate => {
   let i = 0;
 
@@ -121,7 +139,8 @@ const createEpisodicLogger = rate => {
 };
 
 const locationLogger = createEpisodicLogger(LOG_RATE),
-      peopleLogger = createEpisodicLogger(LOG_RATE);
+      peopleLogger = createEpisodicLogger(LOG_RATE),
+      pathLogger = createEpisodicLogger(LOG_RATE);
 
 /**
  * Streams.
@@ -140,7 +159,7 @@ const createTransformBulkStream = name => {
 const readStreams = {
 
   // Locations
-  location: fs
+  location: () => fs
     .createReadStream(joinPath(argv.b, BASE_LOCATIONS))
     .pipe(createCSVParserStream())
     .pipe(through.obj(function(doc, enc, next) {
@@ -167,7 +186,7 @@ const readStreams = {
     .pipe(createTransformBulkStream('location')),
 
   // People
-  people: fs
+  people: () => fs
     .createReadStream(joinPath(argv.b, BASE_PEOPLE))
     .pipe(createCSVParserStream())
     .pipe(through.obj(function(doc, enc, next) {
@@ -200,16 +219,7 @@ const readStreams = {
       };
 
       // Trimming
-      for (const k in people) {
-        if (
-          people[k] === undefined ||
-          people[k] === '' ||
-          people[k] === '.' ||
-          (Array.isArray(people[k]) && !people[k].length) ||
-          (people[k] && typeof people[k] === 'object' && !Object.keys(people[k]).length)
-        )
-          delete people[k];
-      }
+      emptyFilter(people);
 
       // Gathering occupations
       // TODO: await new version of the file
@@ -220,7 +230,30 @@ const readStreams = {
 
       return next();
     }))
-    .pipe(createTransformBulkStream('people'))
+    .pipe(createTransformBulkStream('people')),
+
+  // Paths
+  path: () => fs
+    .createReadStream(joinPath(argv.b, BASE_PATHS))
+    .pipe(createCSVParserStream())
+    .pipe(through.obj(function(doc, enc, next) {
+      const path = {
+        people: doc.name,
+        location: doc.location,
+        minDate: doc.min,
+        maxDate: doc.max,
+        order: +doc.n_traj
+      };
+
+      emptyFilter(path);
+
+      pathLogger(i => `  -> (${prettyNumber(i)}) paths processed.`);
+
+      this.push(path);
+
+      return next();
+    }))
+    .pipe(createTransformBulkStream('path'))
 };
 
 // Writable streams
@@ -256,31 +289,44 @@ async.series([
       async.apply(createIndex, 'path')
     ], next);
   },
-  // function indexLocation(next) {
-  //   console.log('Indexing locations...');
+  function indexLocation(next) {
+    console.log('Indexing locations...');
+
+    return readStreams
+      .location()
+      .pipe(writeStreams.location)
+      .on('error', err => {
+        throw err;
+      })
+      .on('close', () => next());
+  },
+  // function indexPeople(next) {
+  //   console.log('Indexing people...');
 
   //   return readStreams
-  //     .location
-  //     .pipe(writeStreams.location)
+  //     .people()
+  //     .pipe(writeStreams.people)
   //     .on('error', err => {
   //       throw err;
   //     })
   //     .on('close', () => next());
   // },
-  function indexPeople(next) {
-    console.log('Indexing people...');
+  function indexPath(next) {
+    console.log('Indexing paths...');
 
     return readStreams
-      .people
-      .pipe(writeStreams.people)
+      .path()
+      .pipe(writeStreams.path)
       .on('error', err => {
         throw err;
       })
-      .on('close', () => next);
+      .on('close', () => next());
   }
 ], err => {
   CLIENT.close();
 
   if (err)
     return console.error(err);
+
+  console.log('Done!');
 });

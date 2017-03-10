@@ -196,6 +196,24 @@
     }
   },
   "path": {
-    "properties": {}
+    "properties": {
+      "people": {
+        "type": "keyword"
+      },
+      "location": {
+        "type": "keyword"
+      },
+      "minDate": {
+        "type": "date",
+        "format": "yyyy"
+      },
+      "maxDate": {
+        "type": "date",
+        "format": "yyyy"
+      },
+      "order": {
+        "type": "short"
+      }
+    }
   }
 }
