@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 /**
  * BHHT Datascape Build Index Script
  * ==================================
@@ -19,8 +20,8 @@ const yargs = require('yargs'),
  * Constants.
  */
 const BASE_PEOPLE = 'base1_individus.csv',
-      BASE_LOCATIONS = 'base2_locations.csv',
-      BASE_PATHS = 'base3_trajectoires.csv';
+      BASE_LOCATIONS = 'base2_locations.csv';
+      // BASE_PATHS = 'base3_trajectoires.csv';
 
 const MAPPINGS = require('../mappings.json');
 
@@ -112,7 +113,7 @@ const locationLogger = createEpisodicLogger(LOG_RATE),
 const createCSVParserStream = () => csv.parse({delimiter: ',', columns: true});
 
 const createTransformBulkStream = name => {
-  return new TransformToBulk(doc => {
+  return new TransformToBulk(() => {
     return {
       _type: name
     };
@@ -228,6 +229,7 @@ const writeStreams = {
 /**
  * Process outline.
  */
+console.log('Building indices...');
 async.series([
   function createIndices(next) {
     return async.parallel([
@@ -236,12 +238,21 @@ async.series([
       async.apply(createIndex, 'path')
     ], next);
   },
-  function indexLocation(next) {
-    console.log('Indexing locations...');
+  // function indexLocation(next) {
+  //   console.log('Indexing locations...');
+
+  //   return readStreams
+  //     .location
+  //     .pipe(writeStreams.location)
+  //     .on('error', next)
+  //     .on('close', () => next());
+  // },
+  function indexPeople(next) {
+    console.log('Indexing people...');
 
     return readStreams
-      .location
-      .pipe(writeStreams.location)
+      .people
+      .pipe(writeStreams.people)
       .on('error', next)
       .on('close', () => next());
   }

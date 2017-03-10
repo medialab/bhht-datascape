@@ -5,9 +5,10 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "build:indices": "node ./scripts/build-indices.js",
     "db:start": "docker-compose -p bhht up",
     "db:clean": "docker-compose -p bhht down",
-    "build:index": "node ./scripts/build-index.js"
+    "lint": "eslint scripts"
   },
   "repository": {
     "type": "git",
@@ -30,5 +31,12 @@
     "numeral": "^2.0.4",
     "through2": "^2.0.3",
     "yargs": "^7.0.2"
+  },
+  "devDependencies": {
+    "@yomguithereal/eslint-config": "^3.0.0",
+    "eslint": "^3.17.1"
+  },
+  "eslintConfig": {
+    "extends": "@yomguithereal/eslint-config/es6"
   }
 }
