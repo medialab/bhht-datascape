@@ -1,0 +1,9 @@
+version: '2'
+services:
+  index:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+    restart: unless-stopped
+    volumes:
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+    ports:
+      - 9200:9200

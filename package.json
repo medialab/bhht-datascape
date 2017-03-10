@@ -1,0 +1,30 @@
+{
+  "name": "bhht-datascape",
+  "version": "0.0.1",
+  "description": "The BHHT project's datascape.",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "db:start": "docker-compose -p bhht up",
+    "db:clean": "docker-compose -p bhht down",
+    "build:index": "node ./scripts/build-index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/medialab/bhht-datascape.git"
+  },
+  "author": {
+    "name": "Guillaume Plique",
+    "url": "http://github.com/Yomguithereal"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/medialab/bhht-datascape/issues"
+  },
+  "homepage": "https://github.com/medialab/bhht-datascape#readme",
+  "dependencies": {
+    "csv": "^1.1.1",
+    "elasticsearch": "^12.1.3",
+    "yargs": "^7.0.2"
+  }
+}
