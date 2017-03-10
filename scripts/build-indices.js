@@ -26,7 +26,8 @@ const BASE_PEOPLE = 'base1_individus.csv',
       BASE_LOCATIONS = 'base2_locations.csv';
       BASE_PATHS = 'base3_trajectoires.csv';
 
-const MAPPINGS = require('../mappings.json');
+const MAPPINGS = require('../specs/mappings.json'),
+      CATEGORIES = require('../specs/categories.json');
 
 const PORT = 9200,
       BULK_SIZE = 1000,
@@ -92,14 +93,12 @@ const POSSIBLE_LANGS = new Set(['en', 'fr', 'es', 'it', 'sv', 'de', 'pt']);
 const pluralLangSplitter = string => {
   const langs = {};
 
+  if (!string)
+    return {};
+
   string.split('|').forEach(item => {
     const lang = item.slice(0, 2).toLowerCase(),
           value = +item.slice(2);
-
-    // TODO: remove this with new file version
-    // TODO: error, the join function is not correct on Stata's side!
-    if (lang === 'sp')
-      return;
 
     if (!POSSIBLE_LANGS.has(lang))
       throw new Error(`Unknown "${lang}" lang!`);
@@ -177,7 +176,7 @@ const readStreams = {
 
       LOCATIONS.set(location.name, location);
 
-      locationLogger(i => `  -> (${prettyNumber(i)}) locations processed.`);
+      locationLogger(nb => `  -> (${prettyNumber(nb)}) locations processed.`);
 
       this.push(location);
 
@@ -194,6 +193,7 @@ const readStreams = {
       // People information
       const people = {
         name: doc.name,
+        wikipediaId: doc.id,
         gender: doc.gender,
         birthDate: doc.birth,
         deathDate: doc.death,
@@ -204,14 +204,14 @@ const readStreams = {
         birthPlace: doc.place_of_birth,
         deathPlace: doc.place_of_death,
         dead: !!+doc.dead,
-        languagesCount: +doc.noccur_languages + 1,
+        languagesCount: doc.noccur_languages ? (+doc.noccur_languages + 1) : 1,
         mainLanguage: doc.language,
         originalId: doc.newid,
         approxBirth: !!+doc.approx_birth_num,
         approxDeath: !!+doc.approx_death_num,
-        continent: doc.Continent,
-        period: doc.BigPeriod !== 'missing' ? doc.BigPeriod : undefined,
-        availableLanguages: doc.ID_LANGUE.split('|').map(item => item.toLowerCase()),
+        continent: doc.continent,
+        period: doc.bigperiod !== 'missing' ? doc.bigperiod : undefined,
+        availableLanguages: doc.id_langue.split('|').map(item => item.toLowerCase()),
         words: pluralLangSplitter(doc.count_words),
         length: pluralLangSplitter(doc.length),
         notoriety: pluralLangSplitter(doc.notoriety),
@@ -222,9 +222,36 @@ const readStreams = {
       emptyFilter(people);
 
       // Gathering occupations
-      // TODO: await new version of the file
+      const occupations = new Map();
 
-      peopleLogger(i => `  -> (${prettyNumber(i)}) people processed.`);
+      for (let i = 1; i <= 3; i++) {
+        const subCategory = doc['occupationb_' + i];
+
+        if (!subCategory || subCategory === '.')
+          continue;
+
+        if (!occupations.has(subCategory)) {
+          const category = CATEGORIES[subCategory];
+
+          if (!category)
+            throw new Error(`Unknown category for "${subCategory}" subCategory.`);
+
+          occupations.set(subCategory, {
+            order: occupations.size + 1,
+            weight: 1,
+            category,
+            subCategory
+          });
+        }
+        else {
+          occupations.get(subCategory).weight++;
+        }
+      }
+
+      if (occupations.size)
+        people.occupations = [...occupations.values()];
+
+      peopleLogger(nb => `  -> (${prettyNumber(nb)}) people processed.`);
 
       this.push(people);
 
@@ -247,7 +274,7 @@ const readStreams = {
 
       emptyFilter(path);
 
-      pathLogger(i => `  -> (${prettyNumber(i)}) paths processed.`);
+      pathLogger(nb => `  -> (${prettyNumber(nb)}) paths processed.`);
 
       this.push(path);
 
@@ -289,39 +316,39 @@ async.series([
       async.apply(createIndex, 'path')
     ], next);
   },
-  function indexLocation(next) {
-    console.log('Indexing locations...');
-
-    return readStreams
-      .location()
-      .pipe(writeStreams.location)
-      .on('error', err => {
-        throw err;
-      })
-      .on('close', () => next());
-  },
-  // function indexPeople(next) {
-  //   console.log('Indexing people...');
+  // function indexLocation(next) {
+  //   console.log('Indexing locations...');
 
   //   return readStreams
-  //     .people()
-  //     .pipe(writeStreams.people)
+  //     .location()
+  //     .pipe(writeStreams.location)
   //     .on('error', err => {
   //       throw err;
   //     })
   //     .on('close', () => next());
   // },
-  function indexPath(next) {
-    console.log('Indexing paths...');
+  function indexPeople(next) {
+    console.log('Indexing people...');
 
     return readStreams
-      .path()
-      .pipe(writeStreams.path)
+      .people()
+      .pipe(writeStreams.people)
       .on('error', err => {
         throw err;
       })
       .on('close', () => next());
-  }
+  },
+  // function indexPath(next) {
+  //   console.log('Indexing paths...');
+
+  //   return readStreams
+  //     .path()
+  //     .pipe(writeStreams.path)
+  //     .on('error', err => {
+  //       throw err;
+  //     })
+  //     .on('close', () => next());
+  // }
 ], err => {
   CLIENT.close();
 

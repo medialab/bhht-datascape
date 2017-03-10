@@ -14,6 +14,9 @@
       "name": {
         "type": "keyword"
       },
+      "wikipediaId": {
+        "type": "keyword"
+      },
       "dead": {
         "type": "boolean"
       },

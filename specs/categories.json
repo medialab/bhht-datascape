@@ -1,0 +1,17 @@
+{
+  "education": "academics",
+  "studies": "academics",
+  "lit": "entertainment",
+  "arts": "entertainment",
+  "sports": "entertainment",
+  "business": "entrepreneur",
+  "worker": "entrepreneur",
+  "inventor": "entrepreneur",
+  "familyB": "family",
+  "politics": "governance",
+  "nobility": "governance",
+  "military": "governance",
+  "religious": "governance",
+  "law": "governance",
+  "otherB": "other"
+}
