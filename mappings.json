@@ -1,0 +1,12 @@
+{
+  "location": {
+    "properties": {
+      "name": {
+        "type": "keyword"
+      },
+      "position": {
+        "type": "geo_point"
+      }
+    }
+  }
+}
