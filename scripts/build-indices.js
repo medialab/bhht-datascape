@@ -14,13 +14,14 @@ const yargs = require('yargs'),
       ElasticSearchClient = require('elasticsearch').Client,
       WritableBulk = require('elasticsearch-streams').WritableBulk,
       TransformToBulk = require('elasticsearch-streams').TransformToBulk,
+      createWikipediaLabel = require('../lib/helpers').createWikipediaLabel,
       csv = require('csv'),
       fs = require('fs');
 
 require('util').inspect.defaultOptions.colors = true;
 
-// TODO: add readable label!
-// TODO: add unit test for ./lib
+// TODO: add analyzers
+// TODO: language the n traj field
 
 /**
  * Constants.
@@ -150,10 +151,16 @@ const locationLogger = createEpisodicLogger(LOG_RATE),
 const createCSVParserStream = () => csv.parse({delimiter: ',', columns: true});
 
 const createTransformBulkStream = name => {
-  return new TransformToBulk(() => {
-    return {
+  return new TransformToBulk(doc => {
+    const bulkObject = {
       _type: name
     };
+
+    // Using the Wikipedia name as id if possible
+    if (doc.name)
+      bulkObject._id = doc.name;
+
+    return bulkObject;
   });
 };
 
@@ -171,6 +178,7 @@ const readStreams = {
 
       const location = {
         name: doc.location,
+        label: createWikipediaLabel(doc.location),
         position: {
           lat: doc.lat,
           lon: doc.lon
@@ -196,6 +204,7 @@ const readStreams = {
       // People information
       const people = {
         name: doc.name,
+        label: createWikipediaLabel(doc.name),
         wikipediaId: doc.id,
         gender: doc.gender,
         birthDate: doc.birth,
@@ -236,8 +245,10 @@ const readStreams = {
         if (!occupations.has(subCategory)) {
           const category = CATEGORIES[subCategory];
 
-          if (!category)
+          if (!category) {
+            console.log(doc);
             throw new Error(`Unknown category for "${subCategory}" subCategory.`);
+          }
 
           occupations.set(subCategory, {
             order: occupations.size + 1,
@@ -268,6 +279,7 @@ const readStreams = {
     .pipe(createCSVParserStream())
     .pipe(through.obj(function(doc, enc, next) {
       const path = {
+        lang: 'en',
         people: doc.name,
         location: doc.location,
         minDate: doc.min,
