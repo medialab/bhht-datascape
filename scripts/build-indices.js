@@ -20,7 +20,6 @@ const yargs = require('yargs'),
 
 require('util').inspect.defaultOptions.colors = true;
 
-// TODO: add analyzers
 // TODO: language the n traj field
 
 /**
@@ -31,7 +30,8 @@ const BASE_PEOPLE = 'base1_individus.csv',
       BASE_PATHS = 'base3_trajectoires.csv';
 
 const MAPPINGS = require('../specs/mappings.json'),
-      CATEGORIES = require('../specs/categories.json');
+      CATEGORIES = require('../specs/categories.json'),
+      ANALYZERS = require('../specs/analyzers.json');
 
 const PORT = 9200,
       BULK_SIZE = 1000,
@@ -81,6 +81,9 @@ const createIndex = (name, next) => {
           [name]: MAPPINGS[name]
         },
         settings: {
+          analysis: {
+            analyzer: ANALYZERS
+          },
           refresh_interval: '30s'
         }
       }

@@ -1,0 +1,10 @@
+{
+  "label": {
+    "type": "custom",
+    "tokenizer": "standard",
+    "filter": [
+      "lowercase",
+      "asciifolding"
+    ]
+  }
+}

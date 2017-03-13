@@ -5,7 +5,8 @@
         "type": "keyword"
       },
       "label": {
-        "type": "text"
+        "type": "text",
+        "analyzer": "label"
       },
       "position": {
         "type": "geo_point"
@@ -18,7 +19,8 @@
         "type": "keyword"
       },
       "label": {
-        "type": "text"
+        "type": "text",
+        "analyzer": "label"
       },
       "wikipediaId": {
         "type": "keyword"
