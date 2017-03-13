@@ -8,7 +8,8 @@
     "build:indices": "node ./scripts/build-indices.js",
     "db:start": "docker-compose -p bhht up",
     "db:clean": "docker-compose -p bhht down",
-    "lint": "eslint scripts"
+    "lint": "eslint lib scripts test",
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -35,7 +36,8 @@
   },
   "devDependencies": {
     "@yomguithereal/eslint-config": "^3.0.0",
-    "eslint": "^3.17.1"
+    "eslint": "^3.17.1",
+    "mocha": "^3.2.0"
   },
   "eslintConfig": {
     "extends": "@yomguithereal/eslint-config/es6"

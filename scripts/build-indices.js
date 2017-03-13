@@ -19,6 +19,9 @@ const yargs = require('yargs'),
 
 require('util').inspect.defaultOptions.colors = true;
 
+// TODO: add readable label!
+// TODO: add unit test for ./lib
+
 /**
  * Constants.
  */
