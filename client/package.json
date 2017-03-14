@@ -1,0 +1,21 @@
+{
+  "name": "bhht-datascape-client",
+  "version": "0.0.1",
+  "description": "Client for the BHHT datascape.",
+  "main": "index.js",
+  "scripts": {},
+  "author": {
+    "name": "Guillaume Plique",
+    "url": "http://github.com/Yomguithereal"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-router": "^4.0.0"
+  }
+}
