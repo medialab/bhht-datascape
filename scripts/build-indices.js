@@ -36,8 +36,7 @@ const MAPPINGS = require('../specs/mappings.json'),
       CATEGORIES = require('../specs/categories.json'),
       ANALYZERS = require('../specs/analyzers.json');
 
-const PORT = 9200,
-      BULK_SIZE = 1000,
+const BULK_SIZE = 1000,
       LOG_RATE = 10 * 1000;
 
 /**
@@ -56,9 +55,7 @@ const argv = yargs
 /**
  * State & sessions.
  */
-const CLIENT = new ElasticSearchClient({
-  host: `localhost:${PORT}`
-});
+const CLIENT = require('../api/client');
 
 /**
  * Indices.

@@ -28,6 +28,7 @@
   "dependencies": {
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-measure": "^1.4.6",
     "react-router": "^4.0.0"
   }
 }

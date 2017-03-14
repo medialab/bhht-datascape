@@ -4,6 +4,6 @@
  *
  * Script starting the API.
  */
-const app = require('../api/app.js');
+const app = require('../api/app');
 
 app.listen(4000);
