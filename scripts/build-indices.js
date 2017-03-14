@@ -21,6 +21,9 @@ const yargs = require('yargs'),
 require('util').inspect.defaultOptions.colors = true;
 
 // TODO: language the n traj field
+// TODO: make a from/to and rename min/max => date for paths
+// TODO: family bool for path
+// TODO: date quality for path
 
 /**
  * Constants.
@@ -84,7 +87,7 @@ const createIndex = (name, next) => {
           analysis: {
             analyzer: ANALYZERS
           },
-          refresh_interval: '30s'
+          refresh_interval: '60s'
         }
       }
     }, next);
@@ -224,9 +227,9 @@ const readStreams = {
         originalId: doc.newid,
         approxBirth: !!+doc.approx_birth_num,
         approxDeath: !!+doc.approx_death_num,
-        continent: doc.continent,
-        period: doc.bigperiod !== 'missing' ? doc.bigperiod : undefined,
-        availableLanguages: doc.id_langue.split('|').map(item => item.toLowerCase()),
+        continent: doc.Continent,
+        period: doc.BigPeriod !== 'missing' ? doc.BigPeriod : undefined,
+        availableLanguages: doc.ID_LANGUE.split('|').map(item => item.toLowerCase()),
         words: pluralLangSplitter(doc.count_words),
         length: pluralLangSplitter(doc.length),
         notoriety: pluralLangSplitter(doc.notoriety),
@@ -240,7 +243,7 @@ const readStreams = {
       const occupations = new Map();
 
       for (let i = 1; i <= 3; i++) {
-        const subCategory = doc['occupationb_' + i];
+        const subCategory = doc['occupationB_' + i];
 
         if (!subCategory || subCategory === '.')
           continue;
@@ -334,17 +337,17 @@ async.series([
       async.apply(createIndex, 'path')
     ], next);
   },
-  // function indexLocation(next) {
-  //   console.log('Indexing locations...');
+  function indexLocation(next) {
+    console.log('Indexing locations...');
 
-  //   return readStreams
-  //     .location()
-  //     .pipe(writeStreams.location)
-  //     .on('error', err => {
-  //       throw err;
-  //     })
-  //     .on('close', () => next());
-  // },
+    return readStreams
+      .location()
+      .pipe(writeStreams.location)
+      .on('error', err => {
+        throw err;
+      })
+      .on('close', () => next());
+  },
   function indexPeople(next) {
     console.log('Indexing people...');
 
@@ -356,17 +359,17 @@ async.series([
       })
       .on('close', () => next());
   },
-  // function indexPath(next) {
-  //   console.log('Indexing paths...');
+  function indexPath(next) {
+    console.log('Indexing paths...');
 
-  //   return readStreams
-  //     .path()
-  //     .pipe(writeStreams.path)
-  //     .on('error', err => {
-  //       throw err;
-  //     })
-  //     .on('close', () => next());
-  // }
+    return readStreams
+      .path()
+      .pipe(writeStreams.path)
+      .on('error', err => {
+        throw err;
+      })
+      .on('close', () => next());
+  }
 ], err => {
   CLIENT.close();
 

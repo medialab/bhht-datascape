@@ -32,7 +32,7 @@
         "type": "keyword"
       },
       "languagesCount": {
-        "type": "byte"
+        "type": "short"
       },
       "mainLanguage": {
         "type": "keyword"
