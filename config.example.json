@@ -1,5 +1,5 @@
 {
-  "elasticsearch": {
+  "elasticsearch": {
     "host": "localhost",
     "port": 9200,
     "user": "user",

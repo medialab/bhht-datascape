@@ -20,10 +20,14 @@ app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(compress());
 
+const dolman = wrap(app);
+
 /**
  * Mounting routers.
  */
-app.get('/hello', (req, res) => res.json({hello: 'world'}));
+const dataController = require('./controllers/data');
+
+app.use('/data', dolman.router(dataController));
 
 /**
  * Exporting the application.
