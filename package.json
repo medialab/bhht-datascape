@@ -8,6 +8,7 @@
     "build:indices": "node ./scripts/build-indices.js",
     "db:start": "docker-compose -p bhht up",
     "db:clean": "docker-compose -p bhht down",
+    "dev": "node ./scripts/api.js",
     "lint": "eslint lib scripts test",
     "test": "mocha"
   },
@@ -26,9 +27,13 @@
   "homepage": "https://github.com/medialab/bhht-datascape#readme",
   "dependencies": {
     "async": "^2.1.5",
+    "body-parser": "^1.17.1",
+    "compression": "^1.6.2",
     "csv": "^1.1.1",
+    "dolman": "^0.4.0",
     "elasticsearch": "^12.1.3",
     "elasticsearch-streams": "0.0.9",
+    "express": "^4.15.2",
     "lodash": "^4.17.4",
     "numeral": "^2.0.4",
     "through2": "^2.0.3",
