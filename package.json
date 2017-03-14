@@ -29,6 +29,7 @@
     "async": "^2.1.5",
     "body-parser": "^1.17.1",
     "compression": "^1.6.2",
+    "cors": "^2.8.1",
     "csv": "^1.1.1",
     "dolman": "^0.4.0",
     "elasticsearch": "^12.1.3",
