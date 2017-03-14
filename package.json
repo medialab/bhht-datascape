@@ -10,6 +10,7 @@
     "db:clean": "docker-compose -p bhht down",
     "dev": "node ./scripts/api.js",
     "lint": "eslint lib scripts test",
+    "postinstall": "cp -n config.example.json config.json; cd client && npm install;",
     "test": "mocha"
   },
   "repository": {
