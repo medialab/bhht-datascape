@@ -10,6 +10,8 @@ const express = require('express'),
       compress = require('compression'),
       cors = require('cors');
 
+const typology = require('./typology');
+
 /**
  * Describing the application.
  */
@@ -20,14 +22,14 @@ app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(compress());
 
-const dolman = wrap(app);
+const dolman = wrap(app, {typology});
 
 /**
  * Mounting routers.
  */
-const dataController = require('./controllers/data');
+const macroController = require('./controllers/macro');
 
-app.use('/data', dolman.router(dataController));
+app.use('/macro', dolman.router(macroController));
 
 /**
  * Exporting the application.

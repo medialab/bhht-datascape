@@ -1,8 +1,8 @@
 /**
- * BHHT Datascape Data Controller
- * ===============================
+ * BHHT Datascape Macro Controller
+ * ================================
  *
- * Controller returning data from the ElasticSearch index.
+ * Controller serving the data required to render the macro view.
  */
 const model = require('../model');
 

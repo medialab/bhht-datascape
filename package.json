@@ -39,6 +39,7 @@
     "lodash": "^4.17.4",
     "numeral": "^2.0.4",
     "through2": "^2.0.3",
+    "typology": "^1.2.0",
     "yargs": "^7.0.2"
   },
   "devDependencies": {
