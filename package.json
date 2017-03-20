@@ -8,7 +8,7 @@
     "build:indices": "node ./scripts/build-indices.js",
     "db:start": "docker-compose -p bhht up",
     "db:clean": "docker-compose -p bhht down",
-    "dev": "node ./scripts/api.js",
+    "dev": "kotatsu start --progress ./scripts/api.js",
     "lint": "eslint lib scripts test",
     "postinstall": "cp -n config.example.json config.json; cd client && npm install;",
     "test": "mocha"
@@ -45,6 +45,7 @@
   "devDependencies": {
     "@yomguithereal/eslint-config": "^3.0.0",
     "eslint": "^3.17.1",
+    "kotatsu": "^0.15.0",
     "mocha": "^3.2.0"
   },
   "eslintConfig": {
