@@ -11,7 +11,9 @@ const client = new Client({
     baseUrl: '//localhost:4000'
   },
   services: {
-    topPeople: '/data/top-people'
+    macro: {
+      histogram: '/macro/histogram'
+    }
   }
 });
 

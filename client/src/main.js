@@ -6,20 +6,31 @@
  */
 import React from 'react';
 import {render} from 'react-dom';
+import {Provider} from 'react-redux';
+import {createStore, applyMiddleware} from 'redux';
+import thunk from 'redux-thunk';
 import Application from './components/Application.jsx';
+import reducer from './modules';
 
 // Requiring style
-// import '../style/app.scss';
+import '../style/app.scss';
 
 // Mount node
 const MOUNT_NODE = document.getElementById('app');
 
+// Creating redux store
+const STORE = createStore(
+  reducer,
+  applyMiddleware(thunk)
+);
+window.STORE = STORE;
+
 // Function rendering the application
 function renderApplication(Component) {
   const block = (
-    // <Provider store={STORE}>
+    <Provider store={STORE}>
       <Component />
-    // </Provider>
+    </Provider>
   );
 
   render(block, MOUNT_NODE);
@@ -38,8 +49,8 @@ if (module.hot) {
   });
 
   // Reloading reducers
-  // module.hot.accept('./modules', () => {
-  //   const nextReducer = require('./modules').default;
-  //   STORE.replaceReducer(nextReducer);
-  // });
+  module.hot.accept('./modules', () => {
+    const nextReducer = require('./modules').default;
+    STORE.replaceReducer(nextReducer);
+  });
 }
