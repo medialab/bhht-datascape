@@ -19,12 +19,16 @@ function createOverlapFilter(min, max) {
   };
 }
 
+function alt(min, max) {
+  return {from: '' + min, to: '' + max};
+}
+
 function createFiltersBucket(step) {
   const filters = [];
 
-  for (let max = MIN, min = null; max < MAX; max += step) {
+  for (let max = MIN, min = null; max <= MAX; max += step) {
     if (min !== null) {
-      filters.push(createOverlapFilter(min, max));
+      filters.push(alt(min, max));
     }
 
     min = max;
