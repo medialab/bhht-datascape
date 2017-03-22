@@ -26,6 +26,7 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: decide if life date_range is useful
 // TODO: quid of people not have birth/death pseudo dates?
 // TODO: rename path to point?
+// TODO: rename subCategory to subcategory
 
 /**
  * Constants.
@@ -35,7 +36,7 @@ const BASE_PEOPLE = 'base1_individus.csv',
       BASE_PATHS = 'base3_trajectoires.csv';
 
 const MAPPINGS = require('../specs/mappings.json'),
-      CATEGORIES = require('../specs/categories.json'),
+      CATEGORIES = require('../specs/meta.json').categories,
       ANALYZERS = require('../specs/analyzers.json');
 
 const BULK_SIZE = 1000,

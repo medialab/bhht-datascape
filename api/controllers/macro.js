@@ -8,9 +8,21 @@ const model = require('../models/macro');
 
 module.exports = [
   {
-    url: '/top-people',
+    url: '/histogram',
+    validate: {
+      query: {
+        mode: 'macro:mode'
+      }
+    },
     action(req, res) {
-      return res.ok({hello: 'world'});
+      const mode = req.query.mode;
+
+      return model.histogram(mode, (err, histogram) => {
+        if (err)
+          return res.serverError(err);
+
+        return res.ok(histogram);
+      });
     }
   }
 ];

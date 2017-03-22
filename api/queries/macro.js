@@ -5,41 +5,244 @@
  * Functions used to format ElasticSearch queries related to the macro view's
  * data & information.
  */
-const {min: MIN, max: MAX} = require('../../specs/dates.json');
+const {
+  dates: {
+    min: MIN_DATE,
+    max: MAX_DATE
+  },
+  langs: LANGS
+} = require('../../specs/meta.json');
 
-function createOverlapFilter(min, max) {
+/**
+ * Constants.
+ */
+const STEP = 10;
+
+/**
+ * Function creating a single overlap filter for some queries.
+ */
+// function createOverlapFilter(min, max) {
+//   return {
+//     range: {
+//       life: {
+//         lt: '' + max,
+//         gte: '' + min,
+//         format: 'yyyy'
+//       }
+//     }
+//   };
+// }
+
+/**
+ * Function creating a single range for some queries.
+ */
+function createRange(min, max) {
   return {
-    range: {
-      life: {
-        lt: '' + max,
-        gte: '' + min,
-        format: 'yyyy'
-      }
-    }
+    from: '' + min,
+    to: '' + max
   };
 }
 
-function alt(min, max) {
-  return {from: '' + min, to: '' + max};
-}
+/**
+ * Function creating date histogram ranges.
+ */
+function createHistogramRanges(method, step) {
+  const ranges = [];
 
-function createFiltersBucket(step) {
-  const filters = [];
+  const MIN = Math.floor(MIN_DATE / step) * step,
+        MAX = Math.ceil(MAX_DATE / step) * step;
 
   for (let max = MIN, min = null; max <= MAX; max += step) {
-    if (min !== null) {
-      filters.push(alt(min, max));
-    }
+    if (min !== null)
+      ranges.push(method(min, max));
 
     min = max;
   }
 
-  return filters;
+  return ranges;
 }
 
-console.log(JSON.stringify(createFiltersBucket(10)))
+/**
+ * Bucket maps of the different macro query modes.
+ */
+const QUERY_BUCKETS = {
+  global: agg => agg,
+  categories: agg => {
+    return {
+      categories: {
+        terms: {
+          field: 'category'
+        },
+        aggs: agg
+      }
+    };
+  },
+  subcategories: agg => {
+    return {
+      subcategories: {
+        terms: {
+          field: 'subCategory'
+        },
+        aggs: agg
+      }
+    };
+  },
+  gender: agg => {
+    return {
+      genders: {
+        terms: {
+          field: 'gender'
+        },
+        aggs: agg
+      }
+    };
+  },
+  languages: agg => {
+    const forLang = lang => ({
+      bool: {
+        must: [
+          {
+            range: {
+              availableLanguagesCount: {
+                lt: 2
+              }
+            }
+          },
+          {
+            term: {
+              availableLanguages: lang
+            }
+          }
+        ]
+      }
+    });
+
+    const filters = {};
+
+    LANGS.forEach(lang => (filters[lang] = forLang(lang)));
+
+    filters.multi = {
+      range: {
+        availableLanguagesCount: {
+          gt: 1
+        }
+      }
+    };
+
+    return {
+      languages: {
+        filters: {
+          filters
+        },
+        aggs: agg
+      }
+    };
+  }
+};
+
+/**
+ * Function creating a query returning histogram data for the desired mode.
+ */
+function createStockHistogramQuery(mode) {
+  const ranges = createHistogramRanges(createRange, STEP);
+
+  const rangeAggregation = {
+    histogram: {
+      date_range: {
+        field: 'decades',
+        format: 'yyyy',
+        ranges
+      }
+    }
+  };
+
+  return {
+    size: 0,
+    aggs: QUERY_BUCKETS[mode](rangeAggregation)
+  };
+}
+
+/**
+ * Mode-related query result mappers.
+ */
+const histogramBucketMapper = bucket => {
+  return {
+    from: bucket.from_as_string,
+    to: bucket.to_as_string,
+    count: bucket.doc_count
+  };
+};
+
+const MAPPERS = {
+  global: aggs => {
+    const histogram = aggs
+      .histogram
+      .buckets
+      .map(histogramBucketMapper);
+
+    return [{name: 'global', histogram}];
+  },
+  categories: aggs => {
+    return aggs
+      .categories
+      .buckets
+      .map(category => {
+        return {
+          name: category.key,
+          histogram: category.histogram.buckets.map(histogramBucketMapper)
+        };
+      });
+  },
+  subcategories: aggs => {
+    return aggs
+      .subcategories
+      .buckets
+      .map(subcategory => {
+        return {
+          name: subcategory.key,
+          histogram: subcategory.histogram.buckets.map(histogramBucketMapper)
+        };
+      });
+  },
+  gender: aggs => {
+    return aggs
+      .genders
+      .buckets
+      .map(gender => {
+        return {
+          name: gender.key,
+          histogram: gender.histogram.buckets.map(histogramBucketMapper)
+        };
+      });
+  },
+  languages: aggs => {
+    const langs = aggs
+      .languages
+      .buckets;
+
+    const lines = [];
+
+    for (const lang in langs)
+      lines.push({
+        name: lang,
+        histogram: langs[lang].histogram.buckets.map(histogramBucketMapper)
+      });
+
+    return lines;
+  }
+};
+
+/**
+ * Function mapping a query result to a more legible format.
+ */
+function mapStockHistogramQueryResult(mode, result) {
+  const mapper = MAPPERS[mode] || (x => x);
+
+  return mapper(result.aggregations);
+}
 
 /**
  * Exporting.
  */
-exports.createFiltersBucket = createFiltersBucket;
+exports.createStockHistogramQuery = createStockHistogramQuery;
+exports.mapStockHistogramQueryResult = mapStockHistogramQueryResult;

@@ -1,3 +1,4 @@
+/* eslint no-console: 0 */
 /**
  * BHHT Datascape API Start Script
  * ================================
@@ -21,4 +22,13 @@ if (module.hot) {
     server.on('request', app);
     console.log('Server reloaded!');
   });
+}
+
+// Handling dev environment
+const PROD = process.env.NODE_ENV === 'production';
+
+if (!PROD) {
+  const util = require('util');
+  util.inspect.defaultOptions.depth = null;
+  util.inspect.defaultOptions.colors = true;
 }
