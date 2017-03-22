@@ -62,6 +62,16 @@
         "type": "date",
         "format": "yyyy"
       },
+      "life": {
+        "type": "date_range",
+        "format": "yyyy"
+      },
+      "category": {
+        "type": "keyword"
+      },
+      "subCategory": {
+        "type": "keyword"
+      },
       "occupations": {
         "type": "nested",
         "properties": {
@@ -99,6 +109,13 @@
       },
       "availableLanguages": {
         "type": "keyword"
+      },
+      "availableLanguagesCount": {
+        "type": "short"
+      },
+      "decades": {
+        "type": "date",
+        "format": "yyyy"
       },
       "words": {
         "type": "object",

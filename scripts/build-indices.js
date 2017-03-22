@@ -11,7 +11,6 @@ const yargs = require('yargs'),
       joinPath = require('path').join,
       through = require('through2'),
       padStart = require('lodash/padStart'),
-      ElasticSearchClient = require('elasticsearch').Client,
       WritableBulk = require('elasticsearch-streams').WritableBulk,
       TransformToBulk = require('elasticsearch-streams').TransformToBulk,
       createWikipediaLabel = require('../lib/helpers').createWikipediaLabel,
@@ -22,8 +21,11 @@ require('util').inspect.defaultOptions.colors = true;
 
 // TODO: language the n traj field
 // TODO: make a from/to and rename min/max => date for paths
-// TODO: family bool for path
+// TODO: add birth/death to trajectory?
 // TODO: date quality for path
+// TODO: decide if life date_range is useful
+// TODO: quid of people not have birth/death pseudo dates?
+// TODO: rename path to point?
 
 /**
  * Constants.
@@ -233,8 +235,20 @@ const readStreams = {
         ranking: pluralLangSplitter(doc.ranking_notoriety)
       };
 
+      people.availableLanguagesCount = people.availableLanguages.length;
+
       // Trimming
       emptyFilter(people);
+
+      // Life range
+      if (people.pseudoBirthDate) {
+        people.life = {
+          gte: people.pseudoBirthDate
+        };
+
+        if (people.pseudoDeathDate)
+          people.life.lte = people.pseudoDeathDate;
+      }
 
       // Gathering occupations
       const occupations = new Map();
@@ -267,6 +281,29 @@ const readStreams = {
 
       if (occupations.size)
         people.occupations = [...occupations.values()];
+
+      // Caching main category & subcategory
+      if (people.occupations && people.occupations.length) {
+        const firstOccupation = people.occupations[0];
+
+        people.category = firstOccupation.category;
+        people.subCategory = firstOccupation.subCategory;
+      }
+
+      // Storing decades
+      if (people.pseudoBirthDate) {
+        const deathDate = +(people.pseudoDeathDate || '2020');
+
+        const firstDecade = Math.floor(+people.pseudoBirthDate / 10) * 10,
+              lastDecade = Math.ceil(+deathDate / 10) * 10;
+
+        const decades = [];
+
+        for (let year = firstDecade; year <= lastDecade; year += 10)
+          decades.push('' + year);
+
+        people.decades = decades;
+      }
 
       peopleLogger(nb => `  -> (${prettyNumber(nb)}) people processed.`);
 
