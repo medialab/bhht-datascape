@@ -9,12 +9,12 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {loadHistogram} from '../../../modules/macro';
 
+import MacroViewLineChart from './MacroViewLineChart';
+
 const enhance = C => {
   return connect(
     state => {
-      return {
-        mode: state.macro.mode
-      };
+      return state.macro;
     },
     dispatch => {
       return {
@@ -37,8 +37,14 @@ class MacroView extends Component {
   }
 
   render() {
+    const {
+      histogram
+    } = this.props;
+
     return (
-      <div>MacroView</div>
+      <div>
+        {histogram && <MacroViewLineChart data={histogram} />}
+      </div>
     );
   }
 }

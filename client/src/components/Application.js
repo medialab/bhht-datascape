@@ -6,7 +6,7 @@
  */
 import React, {Component} from 'react';
 import {HashRouter, Route, Link} from 'react-router-dom';
-import MacroView from './views/macro/MacroView.jsx';
+import MacroView from './views/macro/MacroView';
 
 export default function Application() {
   return (

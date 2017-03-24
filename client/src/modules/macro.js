@@ -18,7 +18,7 @@ const MACRO_HISTOGRAM_LOADING = 'Macro§HistogramLoading';
  */
 const DEFAULT_STATE = {
   histogram: null,
-  mode: 'global',
+  mode: 'categories',
   loading: false
 };
 

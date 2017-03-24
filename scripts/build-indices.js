@@ -27,6 +27,7 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: quid of people not have birth/death pseudo dates?
 // TODO: rename path to point?
 // TODO: rename subCategory to subcategory
+// TODO: fix date format to Y rather than yyyy which is not fitting for historical dates
 
 /**
  * Constants.

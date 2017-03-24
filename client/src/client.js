@@ -5,10 +5,11 @@
  * Djax client to query the API.
  */
 import Client from 'djax-client';
+import CONFIG from '../config.json';
 
 const client = new Client({
   settings: {
-    baseUrl: '//localhost:4000'
+    baseUrl: CONFIG.api.endpoint
   },
   services: {
     macro: {

@@ -150,7 +150,7 @@ function createStockHistogramQuery(mode) {
     histogram: {
       date_range: {
         field: 'decades',
-        format: 'yyyy',
+        format: 'y',
         ranges
       }
     }
