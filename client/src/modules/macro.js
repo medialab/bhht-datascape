@@ -13,15 +13,19 @@ import {resolver} from './helpers';
  */
 const MACRO_HISTOGRAM_LOADED = 'Macro§HistogramLoaded';
 const MACRO_HISTOGRAM_LOADING = 'Macro§HistogramLoading';
+const MACRO_TOP_PEOPLE_LOADED = 'Macro§TopPeopleLoaded';
+const MACRO_TOP_PEOPLE_LOADING = 'Macro§TopPeopleLoading';
 const MACRO_CHANGE_MODE = 'Macro§ChangeMode';
 
 /**
  * Default state.
  */
 const DEFAULT_STATE = {
-  histogram: null,
   mode: 'global',
-  loading: false
+  histogram: null,
+  topPeople: null,
+  loadingHistogram: false,
+  loadingTopPeople: false
 };
 
 /**
@@ -61,7 +65,7 @@ export default resolver(DEFAULT_STATE, {
     return {
       ...state,
       histogram: null,
-      loading: true
+      loadingHistogram: true
     };
   },
 
@@ -69,8 +73,26 @@ export default resolver(DEFAULT_STATE, {
   [MACRO_HISTOGRAM_LOADED](state, action) {
     return {
       ...state,
-      loading: false,
+      loadingHistogram: false,
       histogram: action.data
+    };
+  },
+
+  // When top people are loading
+  [MACRO_TOP_PEOPLE_LOADING](state) {
+    return {
+      ...state,
+      topPeople: null,
+      loadingTopPeople: true
+    };
+  },
+
+  // When top people data is received
+  [MACRO_TOP_PEOPLE_LOADED](state, action) {
+    return {
+      ...state,
+      loadingTopPeople: false,
+      topPeople: action.data
     };
   },
 
@@ -95,6 +117,19 @@ export function loadHistogram(mode) {
         return;
 
       dispatch({type: MACRO_HISTOGRAM_LOADED, data: response.result});
+    });
+  };
+}
+
+export function loadTopPeople() {
+  return dispatch => {
+    dispatch({type: MACRO_TOP_PEOPLE_LOADING});
+
+    client.macro.topPeople((err, response) => {
+      if (err)
+        return;
+
+      dispatch({type: MACRO_TOP_PEOPLE_LOADED, data: response.result});
     });
   };
 }

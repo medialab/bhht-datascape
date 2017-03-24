@@ -242,7 +242,51 @@ function mapStockHistogramQueryResult(mode, result) {
 }
 
 /**
+ * Function creating a query retrieving the top people.
+ */
+function createTopPeopleQuery() {
+  return {
+    size: 0,
+    aggs: {
+      topPeople: {
+        top_hits: {
+          sort: [
+            {
+              'notoriety.en': {
+                order: 'desc'
+              }
+            }
+          ],
+          size: 50,
+          _source: {
+            includes: [
+              'label',
+              'name'
+            ]
+          }
+        }
+      }
+    }
+  };
+}
+
+/**
+ * Function mapping the result of a top people query.
+ */
+function mapTopPeopleQueryResult(result) {
+  return result
+    .aggregations
+    .topPeople
+    .hits
+    .hits
+    .map(hit => hit._source);
+}
+
+/**
  * Exporting.
  */
 exports.createStockHistogramQuery = createStockHistogramQuery;
 exports.mapStockHistogramQueryResult = mapStockHistogramQueryResult;
+
+exports.createTopPeopleQuery = createTopPeopleQuery;
+exports.mapTopPeopleQueryResult = mapTopPeopleQueryResult;

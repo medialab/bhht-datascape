@@ -13,7 +13,8 @@ const client = new Client({
   },
   services: {
     macro: {
-      histogram: '/macro/histogram'
+      histogram: '/macro/histogram',
+      topPeople: '/macro/top-people'
     }
   }
 });

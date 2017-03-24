@@ -24,5 +24,16 @@ module.exports = [
         return res.ok(histogram);
       });
     }
+  },
+  {
+    url: '/top-people',
+    action(req, res) {
+      return model.topPeople((err, people) => {
+        if (err)
+          return res.serverError(err);
+
+        return res.ok(people);
+      });
+    }
   }
 ];

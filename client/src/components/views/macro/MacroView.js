@@ -9,8 +9,10 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Measure from 'react-measure';
 import MacroViewLineChart from './MacroViewLineChart';
+import MacroViewTopList from './MacroViewTopList';
 import {
   loadHistogram,
+  loadTopPeople,
   changeMode,
   histogramDataSelector
 } from '../../../modules/macro';
@@ -64,13 +66,15 @@ const enhance = C => {
     state => {
       return {
         mode: state.macro.mode,
-        histogramData: histogramDataSelector(state)
+        histogramData: histogramDataSelector(state),
+        topPeople: state.macro.topPeople
       };
     },
     dispatch => {
       return {
         actions: bindActionCreators({
           loadHistogram,
+          loadTopPeople,
           changeMode
         }, dispatch)
       };
@@ -89,12 +93,14 @@ class MacroView extends Component {
     } = this.props;
 
     actions.loadHistogram(mode);
+    actions.loadTopPeople();
   }
 
   render() {
     const {
       actions,
       histogramData,
+      topPeople,
       mode
     } = this.props;
 
@@ -113,6 +119,9 @@ class MacroView extends Component {
           </Measure>
         )}
         <MacroViewModeSelector selected={mode} onChange={e => actions.changeMode(e.target.value)} />
+        {topPeople && (
+          <MacroViewTopList data={topPeople} />
+        )}
       </div>
     );
   }

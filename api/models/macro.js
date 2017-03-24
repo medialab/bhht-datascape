@@ -9,7 +9,9 @@ const client = require('../client');
 
 const {
   createStockHistogramQuery,
-  mapStockHistogramQueryResult
+  mapStockHistogramQueryResult,
+  createTopPeopleQuery,
+  mapTopPeopleQueryResult
 } = require('../queries/macro');
 
 /**
@@ -37,5 +39,21 @@ exports.histogram = function(mode, callback) {
     const histogram = mapStockHistogramQueryResult(mode, result);
 
     return callback(null, histogram);
+  });
+};
+
+/**
+ * Function retrieving the top people.
+ */
+exports.topPeople = function(callback) {
+  const query = createTopPeopleQuery();
+
+  client.search({index: 'people', body: query}, (err, result) => {
+    if (err)
+      return callback(err);
+
+    const people = mapTopPeopleQueryResult(result);
+
+    return callback(null, people);
   });
 };
