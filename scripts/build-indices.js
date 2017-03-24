@@ -28,6 +28,8 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: rename path to point?
 // TODO: rename subCategory to subcategory
 // TODO: fix date format to Y rather than yyyy which is not fitting for historical dates
+// TODO: create date range for path using min/max
+// TODO: check path has no date < 0
 
 /**
  * Constants.

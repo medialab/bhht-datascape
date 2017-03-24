@@ -16,6 +16,7 @@ const MACRO_HISTOGRAM_LOADING = 'Macro§HistogramLoading';
 const MACRO_TOP_PEOPLE_LOADED = 'Macro§TopPeopleLoaded';
 const MACRO_TOP_PEOPLE_LOADING = 'Macro§TopPeopleLoading';
 const MACRO_CHANGE_MODE = 'Macro§ChangeMode';
+const MACRO_UPDATE_PERIOD = 'Macro§UpdatePeriod';
 
 /**
  * Default state.
@@ -25,7 +26,8 @@ const DEFAULT_STATE = {
   histogram: null,
   topPeople: null,
   loadingHistogram: false,
-  loadingTopPeople: false
+  loadingTopPeople: false,
+  period: ['-2200', '2010']
 };
 
 /**
@@ -102,6 +104,14 @@ export default resolver(DEFAULT_STATE, {
       ...state,
       mode: action.mode
     };
+  },
+
+  // When period is updated
+  [MACRO_UPDATE_PERIOD](state, action) {
+    return {
+      ...state,
+      period: action.period
+    };
   }
 });
 
@@ -121,11 +131,13 @@ export function loadHistogram(mode) {
   };
 }
 
-export function loadTopPeople() {
+export function loadTopPeople(period) {
   return dispatch => {
     dispatch({type: MACRO_TOP_PEOPLE_LOADING});
 
-    client.macro.topPeople((err, response) => {
+    const data = {period};
+
+    client.macro.topPeople({data}, (err, response) => {
       if (err)
         return;
 
@@ -140,4 +152,8 @@ export function changeMode(mode) {
 
     return dispatch(loadHistogram(mode));
   };
+}
+
+export function updatePeriod(period) {
+  return {type: MACRO_UPDATE_PERIOD, period};
 }

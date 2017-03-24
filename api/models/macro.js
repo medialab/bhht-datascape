@@ -10,8 +10,12 @@ const client = require('../client');
 const {
   createStockHistogramQuery,
   mapStockHistogramQueryResult,
+
   createTopPeopleQuery,
-  mapTopPeopleQueryResult
+  mapTopPeopleQueryResult,
+
+  createTopLocationsQuery,
+  mapTopLocationsQueryResult
 } = require('../queries/macro');
 
 /**
@@ -45,8 +49,8 @@ exports.histogram = function(mode, callback) {
 /**
  * Function retrieving the top people.
  */
-exports.topPeople = function(callback) {
-  const query = createTopPeopleQuery();
+exports.topPeople = function(params, callback) {
+  const query = createTopPeopleQuery(params);
 
   client.search({index: 'people', body: query}, (err, result) => {
     if (err)
@@ -55,5 +59,21 @@ exports.topPeople = function(callback) {
     const people = mapTopPeopleQueryResult(result);
 
     return callback(null, people);
+  });
+};
+
+/**
+ * Function retrieving the top locations.
+ */
+exports.topLocations = function(params, callback) {
+  const query = createTopLocationsQuery(params);
+
+  client.search({index: 'path', body: query}, (err, result) => {
+    if (err)
+      return callback(err);
+
+    const locations = mapTopLocationsQueryResult(result);
+
+    return callback(null, locations);
   });
 };

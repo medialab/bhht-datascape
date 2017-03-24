@@ -31,8 +31,13 @@ export default function MacroViewLineChart(props) {
   const {
     data: {values, names},
     dimensions,
-    mode
+    mode,
+    period,
+    onBrush
   } = props;
+
+  const startIndex = values.findIndex(value => value.from === period[0]),
+        endIndex = values.findIndex(value => value.from === period[1]);
 
   return (
     <LineChart
@@ -41,8 +46,7 @@ export default function MacroViewLineChart(props) {
       data={values}
       margin={{top: 5, right: 50, left: 50, bottom: 5}}>
       <XAxis
-        dataKey="from"
-        type="category" />
+        dataKey="from" />
       <YAxis
         tickFormatter={NUMBER_FORMAT} />
       <CartesianGrid strokeDasharray="3 3" />
@@ -58,7 +62,18 @@ export default function MacroViewLineChart(props) {
             stroke={palettes[mode][i]} />
         );
       })}
-      <Brush dataKey='from' height={30} stroke="#ccc"/>
+      <Brush
+        dataKey='from'
+        height={30}
+        stroke="#ccc"
+        startIndex={startIndex}
+        endIndex={endIndex}
+        onChange={range => {
+          onBrush([
+            values[range.startIndex].from,
+            values[range.endIndex].from
+          ]);
+        }} />
     </LineChart>
   );
 }

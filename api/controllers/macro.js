@@ -27,12 +27,37 @@ module.exports = [
   },
   {
     url: '/top-people',
+    validate: {
+      query: {
+        period: 'string'
+      }
+    },
     action(req, res) {
-      return model.topPeople((err, people) => {
+      const period = req.query.period.split(',');
+
+      return model.topPeople({period}, (err, people) => {
         if (err)
           return res.serverError(err);
 
         return res.ok(people);
+      });
+    }
+  },
+  {
+    url: '/top-locations',
+    validate: {
+      query: {
+        period: 'string'
+      }
+    },
+    action(req, res) {
+      const period = req.query.period.split(',');
+
+      return model.topLocations({period}, (err, locations) => {
+        if (err)
+          return res.serverError(err);
+
+        return res.ok(locations);
       });
     }
   }

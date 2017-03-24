@@ -7,6 +7,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import debounce from 'lodash/debounce';
 import Measure from 'react-measure';
 import MacroViewLineChart from './MacroViewLineChart';
 import MacroViewTopList from './MacroViewTopList';
@@ -14,6 +15,7 @@ import {
   loadHistogram,
   loadTopPeople,
   changeMode,
+  updatePeriod,
   histogramDataSelector
 } from '../../../modules/macro';
 
@@ -67,7 +69,8 @@ const enhance = C => {
       return {
         mode: state.macro.mode,
         histogramData: histogramDataSelector(state),
-        topPeople: state.macro.topPeople
+        topPeople: state.macro.topPeople,
+        period: state.macro.period
       };
     },
     dispatch => {
@@ -75,7 +78,8 @@ const enhance = C => {
         actions: bindActionCreators({
           loadHistogram,
           loadTopPeople,
-          changeMode
+          changeMode,
+          updatePeriod
         }, dispatch)
       };
     }
@@ -86,14 +90,23 @@ const enhance = C => {
  * Main component.
  */
 class MacroView extends Component {
+  constructor(props, context) {
+    super(props, context);
+
+    this.debouncedLoadTopPeople = debounce(() => {
+      this.props.actions.loadTopPeople(this.props.period);
+    }, 500);
+  }
+
   componentDidMount() {
     const {
       actions,
-      mode
+      mode,
+      period
     } = this.props;
 
     actions.loadHistogram(mode);
-    actions.loadTopPeople();
+    actions.loadTopPeople(period);
   }
 
   render() {
@@ -101,7 +114,8 @@ class MacroView extends Component {
       actions,
       histogramData,
       topPeople,
-      mode
+      mode,
+      period
     } = this.props;
 
     return (
@@ -113,7 +127,12 @@ class MacroView extends Component {
                 <MacroViewLineChart
                   dimensions={dimensions}
                   data={histogramData}
-                  mode={mode} />
+                  mode={mode}
+                  period={period}
+                  onBrush={newPeriod => {
+                    actions.updatePeriod(newPeriod);
+                    this.debouncedLoadTopPeople(newPeriod);
+                  }} />
               </div>
             )}
           </Measure>

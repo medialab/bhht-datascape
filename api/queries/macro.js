@@ -5,6 +5,8 @@
  * Functions used to format ElasticSearch queries related to the macro view's
  * data & information.
  */
+const {createWikipediaLabel} = require('../../lib/helpers');
+
 const {
   dates: {
     min: MIN_DATE,
@@ -27,7 +29,7 @@ const STEP = 10;
 //       life: {
 //         lt: '' + max,
 //         gte: '' + min,
-//         format: 'yyyy'
+//         format: 'y'
 //       }
 //     }
 //   };
@@ -244,25 +246,42 @@ function mapStockHistogramQueryResult(mode, result) {
 /**
  * Function creating a query retrieving the top people.
  */
-function createTopPeopleQuery() {
+function createTopPeopleQuery(params) {
+  const {
+    period
+  } = params;
+
   return {
     size: 0,
     aggs: {
-      topPeople: {
-        top_hits: {
-          sort: [
-            {
-              'notoriety.en': {
-                order: 'desc'
+      prefilter: {
+        filter: {
+          range: {
+            life: {
+              lt: period[1],
+              gte: period[0],
+              format: 'y'
+            }
+          }
+        },
+        aggs: {
+          topPeople: {
+            top_hits: {
+              sort: [
+                {
+                  'notoriety.en': {
+                    order: 'desc'
+                  }
+                }
+              ],
+              size: 50,
+              _source: {
+                includes: [
+                  'label',
+                  'name'
+                ]
               }
             }
-          ],
-          size: 50,
-          _source: {
-            includes: [
-              'label',
-              'name'
-            ]
           }
         }
       }
@@ -276,10 +295,68 @@ function createTopPeopleQuery() {
 function mapTopPeopleQueryResult(result) {
   return result
     .aggregations
+    .prefilter
     .topPeople
     .hits
     .hits
     .map(hit => hit._source);
+}
+
+/**
+ * Function creating a query retrieving the top locations.
+ */
+function createTopLocationsQuery(params) {
+  const {
+    period
+  } = params;
+
+  return {
+    size: 0,
+    aggs: {
+      prefilter: {
+        filter: {
+          bool: {
+            must: [
+              {
+                range: {
+                  minDate: {
+                    format: 'y',
+                    gte: period[0],
+                    lt: period[1]
+                  }
+                }
+              }
+            ]
+          }
+        },
+        aggs: {
+          topLocations: {
+            terms: {
+              field: 'location',
+              size: 50
+            }
+          }
+        }
+      }
+    }
+  };
+}
+
+/**
+ * Function mapping the result of a top locations query.
+ */
+function mapTopLocationsQueryResult(result) {
+  return result
+    .aggregations
+    .prefilter
+    .topLocations
+    .buckets
+    .map(bucket => {
+      return {
+        name: bucket.key,
+        label: createWikipediaLabel(bucket.key)
+      };
+    });
 }
 
 /**
@@ -290,3 +367,6 @@ exports.mapStockHistogramQueryResult = mapStockHistogramQueryResult;
 
 exports.createTopPeopleQuery = createTopPeopleQuery;
 exports.mapTopPeopleQueryResult = mapTopPeopleQueryResult;
+
+exports.createTopLocationsQuery = createTopLocationsQuery;
+exports.mapTopLocationsQueryResult = mapTopLocationsQueryResult;

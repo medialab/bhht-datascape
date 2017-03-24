@@ -21,6 +21,11 @@ module.exports = {
       }
     ]
   },
+  resolve: {
+    alias: {
+      specs: path.join(__dirname, '..', 'specs')
+    }
+  },
   plugins: [
     new webpack.NamedModulesPlugin()
   ],
