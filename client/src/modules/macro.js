@@ -23,11 +23,6 @@ const DEFAULT_STATE = {
 };
 
 /**
- * Selectors.
- */
-const modeSelector = state => state.macro.mode;
-
-/**
  * Reducer.
  */
 export default resolver(DEFAULT_STATE, {
@@ -53,10 +48,8 @@ export default resolver(DEFAULT_STATE, {
 /**
  * Actions.
  */
-export function loadHistogram() {
-  return (dispatch, getState) => {
-    const mode = modeSelector(getState());
-
+export function loadHistogram(mode) {
+  return dispatch => {
     dispatch({type: MACRO_HISTOGRAM_LOADING});
 
     client.macro.histogram({data: {mode}}, (err, response) => {

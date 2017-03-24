@@ -12,7 +12,9 @@ import {loadHistogram} from '../../../modules/macro';
 const enhance = C => {
   return connect(
     state => {
-      return {};
+      return {
+        mode: state.macro.mode
+      };
     },
     dispatch => {
       return {
@@ -25,8 +27,13 @@ const enhance = C => {
 };
 
 class MacroView extends Component {
-  componentWillMount() {
-    this.props.actions.loadHistogram();
+  componentDidMount() {
+    const {
+      actions,
+      mode
+    } = this.props;
+
+    actions.loadHistogram(mode);
   }
 
   render() {
