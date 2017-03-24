@@ -5,6 +5,7 @@
  * Line chart displaying the histogram's data.
  */
 import React from 'react';
+import {format} from 'd3-format';
 import {
   LineChart,
   CartesianGrid,
@@ -12,62 +13,52 @@ import {
   YAxis,
   Tooltip,
   Legend,
-  Line
+  Line,
+  Brush
 } from 'recharts';
 
 import palettes from '../../../palettes';
 
 /**
- * Helpers.
+ * Constants.
  */
-function convertHistogramData(data) {
-  const firstHistogram = data[0].histogram;
-
-  const values = new Array(firstHistogram.length);
-
-  for (let i = 0, l = values.length; i < l; i++) {
-    for (let j = 0, m = data.length; j < m; j++) {
-      values[i] = values[i] || {from: firstHistogram[i].from};
-      values[i][data[j].name] = data[j].histogram[i].count;
-    }
-  }
-
-  return values;
-}
+const NUMBER_FORMAT = format(',');
 
 /**
  * Main component.
  */
 export default function MacroViewLineChart(props) {
   const {
-    data
+    data: {values, names},
+    dimensions,
+    mode
   } = props;
-
-  const lines = convertHistogramData(data);
 
   return (
     <LineChart
-      width={730}
+      width={dimensions.width}
       height={250}
-      data={lines}
-      margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+      data={values}
+      margin={{top: 5, right: 50, left: 50, bottom: 5}}>
       <XAxis
         dataKey="from"
         type="category" />
-      <YAxis />
+      <YAxis
+        tickFormatter={NUMBER_FORMAT} />
       <CartesianGrid strokeDasharray="3 3" />
-      <Tooltip />
+      <Tooltip isAnimationActive={false} />
       <Legend />
-      {data.map((line, i) => {
+      {names.map((name, i) => {
         return (
           <Line
-            key={line.name}
+            key={name}
             dot={false}
             type="monotone"
-            dataKey={line.name}
-            stroke={palettes[5][i]} />
+            dataKey={name}
+            stroke={palettes[mode][i]} />
         );
       })}
+      <Brush dataKey='from' height={30} stroke="#ccc"/>
     </LineChart>
   );
 }

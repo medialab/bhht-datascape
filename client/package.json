@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server -d --progress --colors --hot --hot-only",
-    "postinstall": "cp -n config.example.json config.json"
+    "postinstall": "cp -n config.example.json config.json; exit 0"
   },
   "author": {
     "name": "Guillaume Plique",
@@ -23,11 +23,12 @@
     "node-sass": "^4.5.0",
     "sass-loader": "^6.0.3",
     "style-loader": "^0.13.2",
-    "webpack": "^2.2.1",
+    "webpack": "2.2.1",
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
     "bulma": "^0.4.0",
+    "d3-format": "^1.1.1",
     "djax-client": "^0.2.1",
     "history": "^4.6.1",
     "lodash": "^4.17.4",
@@ -40,6 +41,7 @@
     "recharts": "^0.21.2",
     "recompose": "^0.22.0",
     "redux": "^3.6.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "reselect": "^2.5.4"
   }
 }

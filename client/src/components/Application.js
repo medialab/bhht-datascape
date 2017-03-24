@@ -11,7 +11,7 @@ import MacroView from './views/macro/MacroView';
 export default function Application() {
   return (
     <div id="application">
-      <nav className="nav has-shadow">
+      <nav className="nav">
         <div className="container is-fluid">
           <div className="nav-left">
             <a className="nav-item">
