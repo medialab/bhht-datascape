@@ -1,3 +1,4 @@
+/* eslint react/jsx-no-bind: 0 */
 /**
  * BHHT Datascape Macro View Component
  * ====================================
@@ -23,7 +24,7 @@ import {
 /**
  * Constants.
  */
-const MODES = [
+const MODES = [
   {
     name: 'global',
     label: 'Global'

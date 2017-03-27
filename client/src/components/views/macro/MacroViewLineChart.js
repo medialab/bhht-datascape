@@ -1,3 +1,4 @@
+/* eslint react/jsx-no-bind: 0 */
 /**
  * BHHT Datascape Macro View Line Chart Component
  * ===============================================
@@ -63,7 +64,7 @@ export default function MacroViewLineChart(props) {
         );
       })}
       <Brush
-        dataKey='from'
+        dataKey="from"
         height={30}
         stroke="#ccc"
         startIndex={startIndex}

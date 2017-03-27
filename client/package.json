@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server -d --progress --colors --hot --hot-only",
+    "lint": "eslint src",
     "postinstall": "cp -n config.example.json config.json; exit 0"
   },
   "author": {
@@ -13,12 +14,16 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@yomguithereal/eslint-config": "^3.0.0",
     "babel-core": "^6.24.0",
+    "babel-eslint": "^7.2.1",
     "babel-loader": "^6.4.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
     "css-loader": "^0.27.3",
+    "eslint": "^3.18.0",
+    "eslint-plugin-react": "^6.10.3",
     "mocha": "^3.2.0",
     "node-sass": "^4.5.0",
     "sass-loader": "^6.0.3",
@@ -34,7 +39,6 @@
     "lodash": "^4.17.4",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "react-infinite": "^0.10.0",
     "react-measure": "^1.4.6",
     "react-redux": "^5.0.3",
     "react-router": "^4.0.0",
@@ -45,5 +49,11 @@
     "redux-debounce": "^1.0.1",
     "redux-thunk": "^2.2.0",
     "reselect": "^2.5.4"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@yomguithereal/eslint-config/es7",
+      "@yomguithereal/eslint-config/react"
+    ]
   }
 }

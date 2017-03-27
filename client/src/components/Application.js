@@ -4,8 +4,8 @@
  *
  * Root component of the application.
  */
-import React, {Component} from 'react';
-import {HashRouter, Route, Link} from 'react-router-dom';
+import React from 'react';
+import {HashRouter, Route} from 'react-router-dom';
 import MacroView from './views/macro/MacroView';
 
 export default function Application() {
