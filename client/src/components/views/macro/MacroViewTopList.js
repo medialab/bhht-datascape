@@ -11,16 +11,20 @@ import React from 'react';
  */
 export default function MacroViewTopList(props) {
   const {
-    data
+    data,
+    title
   } = props;
 
   return (
     <div>
-      {data.map(line => {
-        return (
-          <div key={line.name}>{line.label}</div>
-        );
-      })}
+      <h2 className="title">{title}</h2>
+      <div className="top-list">
+        {(data || []).map((line, index) => {
+          return (
+            <div key={line.name}>{index + 1}. {line.label}</div>
+          );
+        })}
+      </div>
     </div>
   );
 }

@@ -42,6 +42,7 @@ export default function MacroViewLineChart(props) {
 
   return (
     <LineChart
+      syncId="macro"
       width={dimensions.width}
       height={250}
       data={values}

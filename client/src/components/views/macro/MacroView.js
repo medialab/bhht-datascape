@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 import debounce from 'lodash/debounce';
 import Measure from 'react-measure';
 import MacroViewLineChart from './MacroViewLineChart';
+import MacroViewSmallMultiples from './MacroViewSmallMultiples';
 import MacroViewTopList from './MacroViewTopList';
 import {
   loadHistogram,
@@ -130,36 +131,47 @@ class MacroView extends Component {
 
     return (
       <div>
-        {histogramData && (
+        <MacroViewModeSelector selected={mode} onChange={e => actions.changeMode(e.target.value)} />
+        <div style={{height: '250px'}}>
+          {histogramData && (
+            <Measure style={{height: '250px'}}>
+              {dimensions => (
+                <div style={{width: '100%'}}>
+                  <MacroViewLineChart
+                    dimensions={dimensions}
+                    data={histogramData}
+                    mode={mode}
+                    period={period}
+                    onBrush={newPeriod => {
+                      actions.updatePeriod(newPeriod);
+                      this.debouncedLoadTopPeople(newPeriod);
+                      this.debouncedLoadTopLocations(newPeriod);
+                    }} />
+                </div>
+              )}
+            </Measure>
+          )}
+        </div>
+        {histogramData && mode !== 'global' && (
           <Measure>
             {dimensions => (
               <div style={{width: '100%'}}>
-                <MacroViewLineChart
+                <MacroViewSmallMultiples
                   dimensions={dimensions}
                   data={histogramData}
                   mode={mode}
-                  period={period}
-                  onBrush={newPeriod => {
-                    actions.updatePeriod(newPeriod);
-                    this.debouncedLoadTopPeople(newPeriod);
-                    this.debouncedLoadTopLocations(newPeriod);
-                  }} />
+                  period={period} />
               </div>
             )}
           </Measure>
         )}
-        <MacroViewModeSelector selected={mode} onChange={e => actions.changeMode(e.target.value)} />
         <div className="columns">
-          {topPeople && (
-            <div className="column">
-              <MacroViewTopList data={topPeople} />
-            </div>
-          )}
-          {topLocations && (
-            <div className="column">
-              <MacroViewTopList data={topLocations} />
-            </div>
-          )}
+          <div className="column">
+            <MacroViewTopList title="Top 100 people" data={topPeople} />
+          </div>
+          <div className="column">
+            <MacroViewTopList title="Top 100 locations" data={topLocations} />
+          </div>
         </div>
       </div>
     );

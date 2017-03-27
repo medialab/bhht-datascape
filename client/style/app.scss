@@ -17,3 +17,12 @@
  * Loading libraries.
  */
 @import '~bulma';
+
+/**
+ * Components.
+ */
+.top-list {
+  height: 300px;
+  overflow-y: scroll;
+  border: 1px solid black;
+}

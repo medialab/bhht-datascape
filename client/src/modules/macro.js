@@ -52,8 +52,9 @@ export const histogramDataSelector = createSelector(
 
     for (let i = 0, l = values.length; i < l; i++) {
       for (let j = 0, m = data.length; j < m; j++) {
-        values[i] = values[i] || {from: firstHistogram[i].from};
+        values[i] = values[i] || {from: firstHistogram[i].from, sum: 0};
         values[i][data[j].name] = data[j].histogram[i].count;
+        values[i].sum += data[j].histogram[i].count;
       }
     }
 
