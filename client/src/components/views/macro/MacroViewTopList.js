@@ -5,6 +5,7 @@
  * Infinite list displaying the top people.
  */
 import React from 'react';
+import Link from '../../Link';
 
 /**
  * Main component.
@@ -12,7 +13,8 @@ import React from 'react';
 export default function MacroViewTopList(props) {
   const {
     data,
-    title
+    title,
+    entityName
   } = props;
 
   return (
@@ -21,7 +23,11 @@ export default function MacroViewTopList(props) {
       <div className="top-list">
         {(data || []).map((line, index) => {
           return (
-            <div key={line.name}>{index + 1}. {line.label}</div>
+            <div key={line.name}>
+              <Link to={`${entityName}/${line.name}`}>
+                {index + 1}. {line.label}
+              </Link>
+            </div>
           );
         })}
       </div>

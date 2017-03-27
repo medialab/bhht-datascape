@@ -6,9 +6,11 @@
  */
 import {combineReducers} from 'redux';
 import macro from './macro';
+import router from './router';
 
 const combined = combineReducers({
-  macro
+  macro,
+  router
 });
 
 export default combined;

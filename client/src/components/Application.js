@@ -5,28 +5,47 @@
  * Root component of the application.
  */
 import React from 'react';
-import {HashRouter, Route} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {compose} from 'recompose';
 import MacroView from './views/macro/MacroView';
+import PeopleView from './views/people/PeopleView';
+import LocationView from './views/location/LocationView';
 
-export default function Application() {
+/**
+ * View map.
+ */
+const MAP = {
+  macro: MacroView,
+  people: PeopleView,
+  location: LocationView
+};
+
+/**
+ * Main component.
+ */
+const enhance = compose(
+  connect(
+    state => {
+      return {
+        view: state.router.view
+      };
+    },
+    dispatch => {
+      return {};
+    }
+  )
+);
+
+function Application({view}) {
+  const Component = MAP[view];
+
   return (
     <div id="application">
-
-      <HashRouter>
-        <div className="container is-fluid">
-          <Route exact path="/" component={MacroView} />
-        </div>
-      </HashRouter>
+      <div className="container is-fluid">
+        <Component />
+      </div>
     </div>
   );
 }
 
-// <nav className="nav">
-//   <div className="container is-fluid">
-//     <div className="nav-left">
-//       <a className="nav-item">
-//         A Brief History of Human Time
-//       </a>
-//     </div>
-//   </div>
-// </nav>
+export default enhance(Application);

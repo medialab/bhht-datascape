@@ -8,6 +8,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {compose} from 'recompose';
 import Measure from 'react-measure';
 import MacroViewLineChart from './MacroViewLineChart';
 import MacroViewSmallMultiples from './MacroViewSmallMultiples';
@@ -69,8 +70,8 @@ function MacroViewModeSelector({selected, onChange}) {
 /**
  * Connector.
  */
-const enhance = C => {
-  return connect(
+const enhance = compose(
+  connect(
     state => {
       return {
         mode: state.macro.mode,
@@ -91,17 +92,13 @@ const enhance = C => {
         }, dispatch)
       };
     }
-  )(C);
-};
+  )
+);
 
 /**
  * Main component.
  */
 class MacroView extends Component {
-  constructor(props, context) {
-    super(props, context);
-  }
-
   componentDidMount() {
     const {
       actions,
@@ -150,10 +147,16 @@ class MacroView extends Component {
         </div>
         <div className="columns">
           <div className="column">
-            <MacroViewTopList title="Top 100 people" data={topPeople} />
+            <MacroViewTopList
+              title="Top 100 people"
+              entityName="people"
+              data={topPeople} />
           </div>
           <div className="column">
-            <MacroViewTopList title="Top 100 locations" data={topLocations} />
+            <MacroViewTopList
+              title="Top 100 locations"
+              entityName="location"
+              data={topLocations} />
           </div>
         </div>
         {histogramData && mode !== 'global' && (

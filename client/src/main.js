@@ -8,12 +8,18 @@ import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
+import createHistory from 'history/createHashHistory';
 import thunk from 'redux-thunk';
 import Application from './components/Application';
 import reducer from './modules';
+import {initRouter} from './modules/router';
+import historyMiddleware from './middlewares/history';
 
 // Requiring style
 import '../style/app.scss';
+
+// History
+const HISTORY = createHistory();
 
 // Mount node
 const MOUNT_NODE = document.getElementById('app');
@@ -21,9 +27,11 @@ const MOUNT_NODE = document.getElementById('app');
 // Creating redux store
 const STORE = createStore(
   reducer,
-  applyMiddleware(thunk)
+  applyMiddleware(thunk, historyMiddleware(HISTORY))
 );
 window.STORE = STORE;
+
+STORE.dispatch(initRouter());
 
 // Function rendering the application
 function renderApplication(Component) {

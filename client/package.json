@@ -41,14 +41,13 @@
     "react-dom": "^15.4.2",
     "react-measure": "^1.4.6",
     "react-redux": "^5.0.3",
-    "react-router": "^4.0.0",
-    "react-router-dom": "^4.0.0",
     "recharts": "^0.21.2",
     "recompose": "^0.22.0",
     "redux": "^3.6.0",
     "redux-debounce": "^1.0.1",
     "redux-thunk": "^2.2.0",
-    "reselect": "^2.5.4"
+    "reselect": "^2.5.4",
+    "url-mapper": "^1.1.1"
   },
   "eslintConfig": {
     "extends": [
