@@ -19,6 +19,13 @@
 @import '~bulma';
 
 /**
+ * Preventing selection on viz.
+ */
+svg {
+  user-select: none;
+}
+
+/**
  * Components.
  */
 .top-list {

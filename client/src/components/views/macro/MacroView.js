@@ -8,7 +8,6 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import debounce from 'lodash/debounce';
 import Measure from 'react-measure';
 import MacroViewLineChart from './MacroViewLineChart';
 import MacroViewSmallMultiples from './MacroViewSmallMultiples';
@@ -97,14 +96,6 @@ const enhance = C => {
 class MacroView extends Component {
   constructor(props, context) {
     super(props, context);
-
-    this.debouncedLoadTopPeople = debounce(() => {
-      this.props.actions.loadTopPeople(this.props.period);
-    }, 500);
-
-    this.debouncedLoadTopLocations = debounce(() => {
-      this.props.actions.loadTopLocations(this.props.period);
-    }, 500);
   }
 
   componentDidMount() {
@@ -144,8 +135,8 @@ class MacroView extends Component {
                     period={period}
                     onBrush={newPeriod => {
                       actions.updatePeriod(newPeriod);
-                      this.debouncedLoadTopPeople(newPeriod);
-                      this.debouncedLoadTopLocations(newPeriod);
+                      actions.loadTopPeople(newPeriod);
+                      actions.loadTopLocations(newPeriod);
                     }} />
                 </div>
               )}

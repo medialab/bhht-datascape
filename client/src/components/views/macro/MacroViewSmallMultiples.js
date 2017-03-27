@@ -6,6 +6,7 @@
  * Component displaying small multiples for each of the histograms.
  */
 import React from 'react';
+import {pure} from 'recompose';
 import {format} from 'd3-format';
 import {
   AreaChart,
@@ -21,12 +22,13 @@ import palettes from '../../../palettes';
 /**
  * Constants.
  */
-const NUMBER_FORMAT = format(',');
+const NUMBER_FORMAT = format(','),
+      RATIO_FORMAT = format('.4f');
 
 /**
  * Main component.
  */
-export default function MacroViewSmallMultiples(props) {
+export default pure(function MacroViewSmallMultiples(props) {
   const {
     data: {values, names},
     dimensions,
@@ -47,25 +49,32 @@ export default function MacroViewSmallMultiples(props) {
             key={name}
             syncId="macro-small-multiples"
             width={dimensions.width}
-            height={150}
+            height={100}
             data={slice}
             margin={{top: 5, right: 50, left: 50, bottom: 5}}>
             <XAxis
               dataKey="from" />
             <YAxis
               domain={[0, 1]}
-              tickFormatter={NUMBER_FORMAT} />
+              tickFormatter={NUMBER_FORMAT}
+              ticks={[0, 0.5, 1]}
+              interval={0} />
             <CartesianGrid strokeDasharray="3 3" />
             <Area
               dot={false}
+              name={name}
               type="monotone"
               dataKey={point => (point[name] / point.sum) || null}
               stroke={palettes[mode][i]}
-              fill={palettes[mode][i]} />
-            <Tooltip isAnimationActive={false} />
+              fill={palettes[mode][i]}
+              isAnimationActive={false}
+              animationDuration={0} />
+            <Tooltip
+              isAnimationActive={false}
+              formatter={RATIO_FORMAT} />
           </AreaChart>
         );
       })}
     </div>
   );
-}
+});
