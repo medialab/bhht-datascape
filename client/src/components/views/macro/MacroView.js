@@ -14,6 +14,7 @@ import MacroViewTopList from './MacroViewTopList';
 import {
   loadHistogram,
   loadTopPeople,
+  loadTopLocations,
   changeMode,
   updatePeriod,
   histogramDataSelector
@@ -70,6 +71,7 @@ const enhance = C => {
         mode: state.macro.mode,
         histogramData: histogramDataSelector(state),
         topPeople: state.macro.topPeople,
+        topLocations: state.macro.topLocations,
         period: state.macro.period
       };
     },
@@ -78,6 +80,7 @@ const enhance = C => {
         actions: bindActionCreators({
           loadHistogram,
           loadTopPeople,
+          loadTopLocations,
           changeMode,
           updatePeriod
         }, dispatch)
@@ -96,6 +99,10 @@ class MacroView extends Component {
     this.debouncedLoadTopPeople = debounce(() => {
       this.props.actions.loadTopPeople(this.props.period);
     }, 500);
+
+    this.debouncedLoadTopLocations = debounce(() => {
+      this.props.actions.loadTopLocations(this.props.period);
+    }, 500);
   }
 
   componentDidMount() {
@@ -107,6 +114,7 @@ class MacroView extends Component {
 
     actions.loadHistogram(mode);
     actions.loadTopPeople(period);
+    actions.loadTopLocations(period);
   }
 
   render() {
@@ -114,6 +122,7 @@ class MacroView extends Component {
       actions,
       histogramData,
       topPeople,
+      topLocations,
       mode,
       period
     } = this.props;
@@ -132,15 +141,25 @@ class MacroView extends Component {
                   onBrush={newPeriod => {
                     actions.updatePeriod(newPeriod);
                     this.debouncedLoadTopPeople(newPeriod);
+                    this.debouncedLoadTopLocations(newPeriod);
                   }} />
               </div>
             )}
           </Measure>
         )}
         <MacroViewModeSelector selected={mode} onChange={e => actions.changeMode(e.target.value)} />
-        {topPeople && (
-          <MacroViewTopList data={topPeople} />
-        )}
+        <div className="columns">
+          {topPeople && (
+            <div className="column">
+              <MacroViewTopList data={topPeople} />
+            </div>
+          )}
+          {topLocations && (
+            <div className="column">
+              <MacroViewTopList data={topLocations} />
+            </div>
+          )}
+        </div>
       </div>
     );
   }

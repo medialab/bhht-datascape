@@ -274,7 +274,7 @@ function createTopPeopleQuery(params) {
                   }
                 }
               ],
-              size: 50,
+              size: 100,
               _source: {
                 includes: [
                   'label',
@@ -333,7 +333,7 @@ function createTopLocationsQuery(params) {
           topLocations: {
             terms: {
               field: 'location',
-              size: 50
+              size: 100
             }
           }
         }

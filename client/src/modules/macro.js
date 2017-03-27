@@ -15,6 +15,8 @@ const MACRO_HISTOGRAM_LOADED = 'Macro§HistogramLoaded';
 const MACRO_HISTOGRAM_LOADING = 'Macro§HistogramLoading';
 const MACRO_TOP_PEOPLE_LOADED = 'Macro§TopPeopleLoaded';
 const MACRO_TOP_PEOPLE_LOADING = 'Macro§TopPeopleLoading';
+const MACRO_TOP_LOCATIONS_LOADED = 'Macro§TopLocationsLoaded';
+const MACRO_TOP_LOCATIONS_LOADING = 'Macro§TopLocationsLoading';
 const MACRO_CHANGE_MODE = 'Macro§ChangeMode';
 const MACRO_UPDATE_PERIOD = 'Macro§UpdatePeriod';
 
@@ -25,8 +27,10 @@ const DEFAULT_STATE = {
   mode: 'global',
   histogram: null,
   topPeople: null,
+  topLocations: null,
   loadingHistogram: false,
   loadingTopPeople: false,
+  loadingTopLocations: false,
   period: ['-2200', '2010']
 };
 
@@ -98,6 +102,24 @@ export default resolver(DEFAULT_STATE, {
     };
   },
 
+  // When top locations are loading
+  [MACRO_TOP_LOCATIONS_LOADING](state) {
+    return {
+      ...state,
+      topLocations: null,
+      loadingTopLocations: true
+    };
+  },
+
+  // When top locations data is received
+  [MACRO_TOP_LOCATIONS_LOADED](state, action) {
+    return {
+      ...state,
+      loadingTopLocations: false,
+      topLocations: action.data
+    };
+  },
+
   // When mode is changes
   [MACRO_CHANGE_MODE](state, action) {
     return {
@@ -145,6 +167,22 @@ export function loadTopPeople(period) {
     });
   };
 }
+
+export function loadTopLocations(period) {
+  return dispatch => {
+    dispatch({type: MACRO_TOP_LOCATIONS_LOADING});
+
+    const data = {period};
+
+    client.macro.topLocations({data}, (err, response) => {
+      if (err)
+        return;
+
+      dispatch({type: MACRO_TOP_LOCATIONS_LOADED, data: response.result});
+    });
+  };
+}
+
 
 export function changeMode(mode) {
   return dispatch => {
