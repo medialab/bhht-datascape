@@ -25,6 +25,7 @@ import palettes from '../../../palettes';
  * Constants.
  */
 const NUMBER_FORMAT = format(',');
+const LABEL_FORMAT = label => `Year ${label}`;
 
 /**
  * Main component.
@@ -63,7 +64,8 @@ export default class MacroViewLineChart extends Component {
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip
           isAnimationActive={false}
-          formatter={NUMBER_FORMAT} />
+          formatter={NUMBER_FORMAT}
+          labelFormatter={LABEL_FORMAT} />
         <Legend />
         {names.map((name, i) => {
           return (

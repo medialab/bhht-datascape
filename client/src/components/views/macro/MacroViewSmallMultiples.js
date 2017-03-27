@@ -23,7 +23,8 @@ import palettes from '../../../palettes';
  * Constants.
  */
 const NUMBER_FORMAT = format(','),
-      RATIO_FORMAT = format('.4f');
+      RATIO_FORMAT = format('.4f'),
+      LABEL_FORMAT = label => `Year ${label}`;
 
 /**
  * Main component.
@@ -71,7 +72,8 @@ export default pure(function MacroViewSmallMultiples(props) {
               animationDuration={0} />
             <Tooltip
               isAnimationActive={false}
-              formatter={RATIO_FORMAT} />
+              formatter={RATIO_FORMAT}
+              labelFormatter={LABEL_FORMAT} />
           </AreaChart>
         );
       })}

@@ -11,15 +11,7 @@ import MacroView from './views/macro/MacroView';
 export default function Application() {
   return (
     <div id="application">
-      <nav className="nav">
-        <div className="container is-fluid">
-          <div className="nav-left">
-            <a className="nav-item">
-              A Brief History of Human Time
-            </a>
-          </div>
-        </div>
-      </nav>
+
       <HashRouter>
         <div className="container is-fluid">
           <Route exact path="/" component={MacroView} />
@@ -28,3 +20,13 @@ export default function Application() {
     </div>
   );
 }
+
+// <nav className="nav">
+//   <div className="container is-fluid">
+//     <div className="nav-left">
+//       <a className="nav-item">
+//         A Brief History of Human Time
+//       </a>
+//     </div>
+//   </div>
+// </nav>

@@ -52,13 +52,17 @@ const MODES = [
  */
 function MacroViewModeSelector({selected, onChange}) {
   return (
-    <select value={selected} onChange={onChange}>
-      {MODES.map(mode => {
-        return (
-          <option key={mode.name} value={mode.name}>{mode.label}</option>
-        );
-      })}
-    </select>
+    <div className="control">
+      <span className="select">
+        <select value={selected} onChange={onChange}>
+          {MODES.map(mode => {
+            return (
+              <option key={mode.name} value={mode.name}>{mode.label}</option>
+            );
+          })}
+        </select>
+      </span>
+    </div>
   );
 }
 
@@ -122,6 +126,7 @@ class MacroView extends Component {
 
     return (
       <div>
+        <h1 className="title">Macro View</h1>
         <MacroViewModeSelector selected={mode} onChange={e => actions.changeMode(e.target.value)} />
         <div style={{height: '250px'}}>
           {histogramData && (
@@ -143,6 +148,14 @@ class MacroView extends Component {
             </Measure>
           )}
         </div>
+        <div className="columns">
+          <div className="column">
+            <MacroViewTopList title="Top 100 people" data={topPeople} />
+          </div>
+          <div className="column">
+            <MacroViewTopList title="Top 100 locations" data={topLocations} />
+          </div>
+        </div>
         {histogramData && mode !== 'global' && (
           <Measure>
             {dimensions => (
@@ -156,14 +169,6 @@ class MacroView extends Component {
             )}
           </Measure>
         )}
-        <div className="columns">
-          <div className="column">
-            <MacroViewTopList title="Top 100 people" data={topPeople} />
-          </div>
-          <div className="column">
-            <MacroViewTopList title="Top 100 locations" data={topLocations} />
-          </div>
-        </div>
       </div>
     );
   }
