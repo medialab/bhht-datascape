@@ -5,6 +5,7 @@
  * Link referring to the internal routing scheme.
  */
 import React from 'react';
+import path from 'path';
 
 export default function Link(props) {
   const {
@@ -12,7 +13,7 @@ export default function Link(props) {
     ...rest
   } = props;
 
-  const href = `/#/${to}`;
+  const href = path.resolve('/#/', to);
 
   return (
     <a href={href} className="link" {...rest}>
