@@ -121,13 +121,52 @@ const QUERY_BUCKETS = {
 
     const filters = {};
 
-    LANGS.forEach(lang => (filters[lang] = forLang(lang)));
+    LANGS.forEach(lang => {
+      if (lang === 'en')
+        return;
 
-    filters.multi = {
-      range: {
-        availableLanguagesCount: {
-          gt: 1
-        }
+      filters[lang] = forLang(lang)
+    });
+
+    filters.multiWithEn = {
+      bool: {
+        must: [
+          {
+            range: {
+              availableLanguagesCount: {
+                gt: 1
+              }
+            }
+          },
+          {
+            term: {
+              availableLanguages: 'en'
+            }
+          }
+        ]
+      }
+    };
+
+    filters.multiWithoutEn = {
+      bool: {
+        must: [
+          {
+            range: {
+              availableLanguagesCount: {
+                gt: 1
+              }
+            }
+          },
+          {
+            bool: {
+              must_not: {
+                term: {
+                  availableLanguages: 'en'
+                }
+              }
+            }
+          }
+        ]
       }
     };
 
