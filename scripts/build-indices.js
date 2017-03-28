@@ -30,6 +30,7 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: fix date format to Y rather than yyyy which is not fitting for historical dates
 // TODO: create date range for path using min/max
 // TODO: check path has no date < 0
+// TODO: rename birthPlace to birthLocation for consistency
 
 /**
  * Constants.

@@ -9,6 +9,8 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
+import {createWikipediaURL, createWikipediaLabel} from 'lib/helpers';
+import Link from '../../Link';
 import {loadPeopleInfo} from '../../../modules/people';
 
 /**
@@ -34,6 +36,17 @@ const enhance = compose(
 );
 
 /**
+ * Helper components.
+ */
+function PeopleViewInfo({title, value}) {
+  return (
+    <p>
+      <strong>{title}:</strong> {value}
+    </p>
+  );
+}
+
+/**
  * Main component.
  */
 class PeopleView extends Component {
@@ -46,6 +59,11 @@ class PeopleView extends Component {
     actions.loadPeopleInfo(name);
   }
 
+  componentWillUpdate(nextProps) {
+    if (nextProps.name !== this.props.name && this.props.name)
+      this.props.actions.loadPeopleInfo(nextProps.name);
+  }
+
   render() {
     const {
       loading,
@@ -55,8 +73,39 @@ class PeopleView extends Component {
     if (loading || !info)
       return <div>Loading...</div>;
 
+    const isAlive = info.dead ? 'No' : 'Yes';
+
     return (
-      <h1 className="title">{info.label}</h1>
+      <div>
+        <h1 className="title">{info.label}</h1>
+        <div>
+          <strong>Wikipedia pages:</strong>
+          {' '}
+          {info.availableLanguages.map(lang => {
+            const url = createWikipediaURL(lang, info.name);
+
+            return (
+              <span key={lang}>
+                <a href={url} target="_blank">{lang}</a>
+                {' '}
+              </span>
+            );
+          })}
+        </div>
+        <PeopleViewInfo title="Wikipedia name" value={info.name} />
+        <PeopleViewInfo title="Wikipedia ID" value={info.wikipediaId} />
+        <PeopleViewInfo title="Gender" value={info.gender} />
+        <PeopleViewInfo title="Alive" value={isAlive} />
+        <PeopleViewInfo title="Translations" value={info.languagesCount} />
+        {info.birthPlace &&
+          <PeopleViewInfo
+            title="Birth place"
+            value={<Link to={`location/${info.birthPlace}`}>{createWikipediaLabel(info.birthPlace)}</Link>} />}
+        {info.deathPlace &&
+          <PeopleViewInfo
+            title="Death place"
+            value={<Link to={`location/${info.deathPlace}`}>{createWikipediaLabel(info.deathPlace)}</Link>} />}
+      </div>
     );
   }
 }

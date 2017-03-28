@@ -46,6 +46,11 @@ class LocationView extends Component {
     actions.loadLocationInfo(name);
   }
 
+  componentWillUpdate(nextProps) {
+    if (nextProps.name !== this.props.name && this.props.name)
+      this.props.actions.loadPeopleInfo(nextProps.name);
+  }
+
   render() {
     const {
       loading,
@@ -56,7 +61,12 @@ class LocationView extends Component {
       return <div>Loading...</div>;
 
     return (
-      <h1 className="title">{info.label}</h1>
+      <div>
+        <h1 className="title">{info.label}</h1>
+        <p>
+          {info.position.lat}, {info.position.lon}
+        </p>
+      </div>
     );
   }
 }
