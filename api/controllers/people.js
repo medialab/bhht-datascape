@@ -8,12 +8,12 @@ const model = require('../models/people');
 
 module.exports = [
   {
-    url: '/:id',
+    url: '/:name',
     method: 'GET',
     action(req, res) {
-      const id = req.params.id;
+      const name = req.params.name;
 
-      return model.get(id, (err, person) => {
+      return model.get(name, (err, person) => {
         if (err)
           return res.serverError(err);
 

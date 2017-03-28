@@ -16,6 +16,12 @@ const client = new Client({
       histogram: '/macro/histogram',
       topPeople: '/macro/top-people',
       topLocations: '/macro/top-locations'
+    },
+    people: {
+      get: '/people/:name'
+    },
+    location: {
+      get: 'location/:name'
     }
   }
 });

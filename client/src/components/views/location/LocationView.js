@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
+import {loadLocationInfo} from '../../../modules/location';
 
 /**
  * Connector.
@@ -17,13 +18,15 @@ const enhance = compose(
   connect(
     state => {
       return {
-
+        name: state.router.params.name,
+        loading: state.location.loadingInfo,
+        info: state.location.info
       };
     },
     dispatch => {
       return {
         actions: bindActionCreators({
-
+          loadLocationInfo
         }, dispatch)
       };
     }
@@ -34,9 +37,26 @@ const enhance = compose(
  * Main component.
  */
 class LocationView extends Component {
+  componentDidMount() {
+    const {
+      actions,
+      name
+    } = this.props;
+
+    actions.loadLocationInfo(name);
+  }
+
   render() {
+    const {
+      loading,
+      info
+    } = this.props;
+
+    if (loading || !info)
+      return <div>Loading...</div>;
+
     return (
-      <h1 className="title">Location View</h1>
+      <h1 className="title">{info.label}</h1>
     );
   }
 }
