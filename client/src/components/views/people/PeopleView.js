@@ -86,7 +86,12 @@ class PeopleView extends Component {
 
             return (
               <span key={lang}>
-                <a href={url} target="_blank">{lang}</a>
+                <a
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  {lang}
+                </a>
                 {' '}
               </span>
             );

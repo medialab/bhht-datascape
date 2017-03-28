@@ -125,7 +125,7 @@ const QUERY_BUCKETS = {
       if (lang === 'en')
         return;
 
-      filters[lang] = forLang(lang)
+      filters[lang] = forLang(lang);
     });
 
     filters.multiWithEn = {

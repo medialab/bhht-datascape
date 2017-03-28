@@ -9,7 +9,7 @@
     "db:start": "docker-compose -p bhht up",
     "db:clean": "docker-compose -p bhht down",
     "dev": "kotatsu start --progress ./scripts/api.js",
-    "lint": "eslint api lib scripts test && cd client && npm run lint",
+    "lint": "eslint api lib scripts test; cd client && npm run lint",
     "postinstall": "cp -n config.example.json config.json; cd client && npm install;",
     "test": "mocha"
   },
