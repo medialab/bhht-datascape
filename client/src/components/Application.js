@@ -30,7 +30,7 @@ const enhance = compose(
         view: state.router.view
       };
     },
-    dispatch => {
+    () => {
       return {};
     }
   )

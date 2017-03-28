@@ -103,12 +103,20 @@ class MacroView extends Component {
     const {
       actions,
       mode,
-      period
+      period,
+      histogramData,
+      topPeople,
+      topLocations
     } = this.props;
 
-    actions.loadHistogram(mode);
-    actions.loadTopPeople(period);
-    actions.loadTopLocations(period);
+    if (!histogramData)
+      actions.loadHistogram(mode);
+
+    if (!topPeople)
+      actions.loadTopPeople(period);
+
+    if (!topLocations)
+      actions.loadTopLocations(period);
   }
 
   render() {

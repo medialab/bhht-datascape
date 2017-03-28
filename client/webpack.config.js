@@ -23,6 +23,7 @@ module.exports = {
   },
   resolve: {
     alias: {
+      lib: path.join(__dirname, '..', 'lib'),
       specs: path.join(__dirname, '..', 'specs')
     }
   },
