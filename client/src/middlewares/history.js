@@ -23,7 +23,7 @@ export default function historyMiddleware(history) {
       if (route)
         store.dispatch(changeView(route.match, route.values));
       else
-        history.push('/');
+        history.replace('/');
     };
 
     history.listen(historyListener);
