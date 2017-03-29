@@ -109,7 +109,7 @@ class PeopleView extends Component {
         {info.deathPlace &&
           <PeopleViewInfo
             title="Death place"
-            value={<Link to={`location/${info.deathPlace}`}>{createWikipediaLabel(info.deathPlace)}</Link>} />}
+            value={<Link to={`/location/${info.deathPlace}`}>{createWikipediaLabel(info.deathPlace)}</Link>} />}
       </div>
     );
   }

@@ -13,7 +13,7 @@ export default function Link(props) {
     ...rest
   } = props;
 
-  const href = path.resolve('/#/', to);
+  const href = path.join('/#/', to);
 
   return (
     <a href={href} className="link" {...rest}>
