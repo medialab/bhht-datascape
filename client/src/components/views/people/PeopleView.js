@@ -10,7 +10,9 @@ import {bindActionCreators} from 'redux';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
 import {createWikipediaURL, createWikipediaLabel} from 'lib/helpers';
+import Measure from 'react-measure';
 import Link from '../../Link';
+import PeopleViewChronology from './PeopleViewChronology';
 import {loadPeopleInfo} from '../../../modules/people';
 
 /**
@@ -100,6 +102,8 @@ class PeopleView extends Component {
         <PeopleViewInfo title="Wikipedia name" value={info.name} />
         <PeopleViewInfo title="Wikipedia ID" value={info.wikipediaId} />
         <PeopleViewInfo title="Gender" value={info.gender} />
+        <PeopleViewInfo title="Pseudo birth date" value={info.pseudoBirthDate} />
+        <PeopleViewInfo title="Pseudo death date" value={info.pseudoDeathDate} />
         <PeopleViewInfo title="Alive" value={isAlive} />
         <PeopleViewInfo title="Translations" value={info.languagesCount} />
         {info.birthPlace &&
@@ -110,6 +114,13 @@ class PeopleView extends Component {
           <PeopleViewInfo
             title="Death place"
             value={<Link to={`/location/${info.deathPlace}`}>{createWikipediaLabel(info.deathPlace)}</Link>} />}
+        <Measure>
+          {dimensions => (
+            <div style={{width: '100%'}}>
+              <PeopleViewChronology date={info.pseudoBirthDate} dimensions={dimensions} />
+            </div>
+          )}
+        </Measure>
       </div>
     );
   }
