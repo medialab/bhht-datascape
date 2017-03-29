@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
+import WorldMap from '../../WorldMap';
 import {loadLocationInfo} from '../../../modules/location';
 
 /**
@@ -60,12 +61,26 @@ class LocationView extends Component {
     if (loading || !info)
       return <div>Loading...</div>;
 
+    const markers = [
+      {
+        key: name,
+        position: [
+          +info.position.lat,
+          +info.position.lon
+        ],
+        label: info.label
+      }
+    ];
+
     return (
       <div>
         <h1 className="title">{info.label}</h1>
         <p>
           {info.position.lat}, {info.position.lon}
         </p>
+        <WorldMap
+          center={markers[0].position}
+          markers={markers} />
       </div>
     );
   }
