@@ -18,10 +18,12 @@ const client = new Client({
       topLocations: '/macro/top-locations'
     },
     people: {
-      get: '/people/:name'
+      get: '/people/:name',
+      suggestions: '/people/suggestions'
     },
     location: {
-      get: 'location/:name'
+      get: 'location/:name',
+      suggestions: '/location/suggestions'
     }
   }
 });

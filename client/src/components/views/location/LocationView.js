@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
+import {createWikipediaURL} from 'lib/helpers';
 import WorldMap from '../../WorldMap';
 import {loadLocationInfo} from '../../../modules/location';
 
@@ -72,9 +73,19 @@ class LocationView extends Component {
       }
     ];
 
+    const url = createWikipediaURL('en', info.name);
+
     return (
       <div>
         <h1 className="title">{info.label}</h1>
+        <p>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer">
+            {url}
+          </a>
+        </p>
         <p>
           {info.position.lat}, {info.position.lon}
         </p>

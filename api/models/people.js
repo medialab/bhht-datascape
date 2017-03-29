@@ -11,13 +11,73 @@ const client = require('../client');
  * Function retrieving information for the given people.
  */
 exports.get = function(id, callback) {
-  return client.get({index: 'people', type: 'people', id}, (err, result) => {
-    if (err) {
-      if (err.status === 404)
+  return client.get({index: 'people', type: 'people', id}, (err1, people) => {
+    if (err1) {
+      if (err1.status === 404)
         return callback(null, null);
-      return callback(err);
+      return callback(err1);
     }
 
-    return callback(null, result._source);
+    const person = people._source;
+
+    const pathBody = {
+      query: {
+        term: {
+          people: id
+        }
+      },
+      sort: [
+        {
+          order: 'asc'
+        }
+      ],
+      size: 5000
+    };
+
+    return client.search({index: 'path', body: pathBody}, (err2, pathResult) => {
+      if (err2)
+        return callback(err2);
+
+      person.paths = pathResult.hits.hits.map(hit => {
+        return {
+          location: hit._source.location
+        };
+      });
+
+      return callback(null, person);
+    });
+  });
+};
+
+/**
+ * Function retrieving suggestions for people.
+ */
+exports.suggestions = function(query, callback) {
+  const body = {
+    size: 20,
+    query: {
+      match: {
+        label: query
+      }
+    },
+    sort: [
+      {
+        'notoriety.en': 'desc'
+      }
+    ]
+  };
+
+  return client.search({index: 'people', body}, (err, result) => {
+    if (err)
+      return callback(err);
+
+    const people = result.hits.hits.map(hit => {
+      return {
+        label: hit._source.label,
+        name: hit._source.name
+      };
+    });
+
+    return callback(null, people);
   });
 };

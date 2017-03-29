@@ -21,3 +21,31 @@ exports.get = function(id, callback) {
     return callback(null, result._source);
   });
 };
+
+/**
+ * Function retrieving suggestions for locations.
+ */
+exports.suggestions = function(query, callback) {
+  const body = {
+    size: 20,
+    query: {
+      match: {
+        label: query
+      }
+    }
+  };
+
+  return client.search({index: 'location', body}, (err, result) => {
+    if (err)
+      return callback(err);
+
+    const people = result.hits.hits.map(hit => {
+      return {
+        label: hit._source.label,
+        name: hit._source.name
+      };
+    });
+
+    return callback(null, people);
+  });
+};

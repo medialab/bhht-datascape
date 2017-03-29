@@ -17,6 +17,7 @@
  * Loading libraries.
  */
 @import '~bulma';
+@import './react-autosuggest.css';
 
 /**
  * Preventing selection on viz.
@@ -40,4 +41,8 @@ svg {
 
 .world-map {
   height: 400px;
+}
+
+.leaflet-map-pane {
+  z-index: auto !important;
 }

@@ -4,9 +4,11 @@
  *
  * Root component of the application.
  */
-import React from 'react';
+import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+import Link from './Link';
+import FuzzySearcher from './FuzzySearcher';
 import MacroView from './views/macro/MacroView';
 import PeopleView from './views/people/PeopleView';
 import LocationView from './views/location/LocationView';
@@ -36,16 +38,53 @@ const enhance = compose(
   )
 );
 
-function Application({view}) {
-  const Component = MAP[view];
+class Application extends Component {
+  getChildContext() {
+    return {
+      history: this.props.history
+    };
+  }
 
-  return (
-    <div id="application">
-      <div className="container is-fluid">
-        <Component />
+  render() {
+    const {view} = this.props;
+
+    const RouteComponent = MAP[view];
+
+    return (
+      <div id="application">
+        <nav className="nav has-shadow">
+          <div className="nav-left">
+            <Link className="nav-item" to="/">
+              BHHT Datascape
+            </Link>
+          </div>
+          <div className="nav-center">
+            <div className="nav-item">
+              <FuzzySearcher
+                entityName="people"
+                placeholder="Search a person..."
+                style={{marginRight: '10px'}} />
+              <FuzzySearcher
+                entityName="location"
+                placeholder="Search a location..." />
+            </div>
+          </div>
+          <div className="nav-right" />
+        </nav>
+        <div className="container is-fluid">
+          <RouteComponent />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
+
+Application.propTypes = {
+  history: PropTypes.object.isRequired
+};
+
+Application.childContextTypes = {
+  history: PropTypes.object.isRequired
+};
 
 export default enhance(Application);

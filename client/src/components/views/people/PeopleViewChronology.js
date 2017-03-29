@@ -24,7 +24,7 @@ export default function PeopleViewChronology(props) {
   return (
     <ScatterChart
       width={dimensions.width}
-      height={100}
+      height={60}
       margin={{top: 10, right: 0, bottom: 10, left: 0}}>
       <XAxis
         dataKey="date"

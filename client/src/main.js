@@ -37,7 +37,7 @@ STORE.dispatch(initRouter());
 function renderApplication(Component) {
   const block = (
     <Provider store={STORE}>
-      <Component />
+      <Component history={HISTORY} />
     </Provider>
   );
 

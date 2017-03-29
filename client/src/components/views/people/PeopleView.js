@@ -13,6 +13,7 @@ import {createWikipediaURL, createWikipediaLabel} from 'lib/helpers';
 import Measure from 'react-measure';
 import Link from '../../Link';
 import PeopleViewChronology from './PeopleViewChronology';
+import PeopleViewTrajectory from './PeopleViewTrajectory';
 import {loadPeopleInfo} from '../../../modules/people';
 
 /**
@@ -121,6 +122,8 @@ class PeopleView extends Component {
             </div>
           )}
         </Measure>
+        <h4 className="title is-4">Contact points</h4>
+        <PeopleViewTrajectory points={info.paths} />
       </div>
     );
   }

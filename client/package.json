@@ -39,6 +39,7 @@
     "leaflet": "^1.0.3",
     "lodash": "^4.17.4",
     "react": "^15.4.2",
+    "react-autosuggest": "^9.0.0",
     "react-dom": "^15.4.2",
     "react-leaflet": "^1.1.4",
     "react-measure": "^1.4.6",
@@ -55,6 +56,10 @@
     "extends": [
       "@yomguithereal/eslint-config/es7",
       "@yomguithereal/eslint-config/react"
-    ]
+    ],
+    "rules": {
+      "react/no-set-state": 0,
+      "react/forbid-prop-types": 0
+    }
   }
 }
