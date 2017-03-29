@@ -52,7 +52,7 @@ class Application extends Component {
 
     return (
       <div id="application">
-        <nav className="nav has-shadow">
+        <nav className="nav">
           <div className="nav-left">
             <Link className="nav-item" to="/">
               BHHT Datascape
