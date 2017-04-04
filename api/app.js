@@ -8,6 +8,7 @@ const express = require('express'),
       wrap = require('dolman'),
       bodyParser = require('body-parser'),
       compress = require('compression'),
+      morgan = require('morgan'),
       cors = require('cors');
 
 const typology = require('./typology');
@@ -21,6 +22,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(compress());
+app.use(morgan());
 
 const dolman = wrap(app, {typology});
 
