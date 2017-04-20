@@ -5,14 +5,16 @@
  *
  * Script starting the API.
  */
-const http = require('http');
+const http = require('http'),
+      config = require('../config.json').api;
+
 let app = require('../api/app');
 
 const server = http.createServer(app);
 
-server.listen(4000);
+server.listen(config.port);
 
-console.log('Listening on port 4000...');
+console.log(`Listening on port ${config.port}...`);
 
 // Handling HMR
 if (module.hot) {

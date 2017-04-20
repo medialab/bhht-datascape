@@ -4,5 +4,8 @@
     "port": 9200,
     "user": "user",
     "password": "password"
+  },
+  "api": {
+    "port": 4000
   }
 }
