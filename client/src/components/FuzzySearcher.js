@@ -4,7 +4,8 @@
  *
  * Generic component used to query the database for suggestions.
  */
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import Autosuggest from 'react-autosuggest';
 import debounce from 'lodash/debounce';
 import client from '../client';
