@@ -11,6 +11,7 @@
     "dev": "kotatsu start --progress ./scripts/api.js",
     "lint": "eslint api lib scripts test; cd client && npm run lint",
     "postinstall": "cp -n config.example.json config.json; cd client && npm install;",
+    "start": "node ./scripts/api.js",
     "test": "mocha"
   },
   "repository": {
