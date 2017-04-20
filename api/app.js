@@ -22,7 +22,7 @@ app.use(cors());
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(compress());
-app.use(morgan());
+app.use(morgan('dev'));
 
 const dolman = wrap(app, {typology});
 
