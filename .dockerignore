@@ -1,0 +1,6 @@
+client/Dockerfile
+client/config.example.json
+README.md
+Dockerfile
+docker-compose.yml
+elasticsearch.yml
