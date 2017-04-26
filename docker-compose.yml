@@ -1,9 +1,27 @@
 version: '2'
 services:
+  client:
+    build: client
+    restart: unless-stopped
+    links:
+      - api
+    ports:
+      - 80:80
+    volumes_from:
+      - api
+  api:
+    build: .
+    restart: unless-stopped
+    links:
+      - index
+    ports:
+      - 4000:4000
   index:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
+    environment:
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.watcher.enabled=false
     restart: unless-stopped
-    volumes:
-      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
     ports:
       - 9200:9200
