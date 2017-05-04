@@ -10,8 +10,8 @@ RUN mkdir -p /bhht-datascape/ /bhht-datascape/client
 ADD ./package.json /bhht-datascape/
 ADD ./client/package.json /bhht-datascape/client/
 
-RUN cd /bhht-datascape/client/ && npm --quiet install
-RUN cd /bhht-datascape/ && npm --quiet install
+RUN cd /bhht-datascape/client/ && npm --quiet install && npm --quiet install --only dev
+RUN cd /bhht-datascape/ && npm --quiet install && npm --quiet install --only dev
 
 ADD . /bhht-datascape
 

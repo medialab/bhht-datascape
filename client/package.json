@@ -6,8 +6,7 @@
   "scripts": {
     "build": "webpack -p --progress --colors",
     "dev": "webpack-dev-server -d --progress --colors --hot --hot-only",
-    "lint": "eslint src",
-    "postinstall": "cp -n config.example.json config.json; exit 0"
+    "lint": "eslint src"
   },
   "author": {
     "name": "Guillaume Plique",
