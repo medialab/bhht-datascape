@@ -7,14 +7,14 @@ RUN mkdir -p /bhht-datascape/ /bhht-datascape/client
 ADD ./package.json /bhht-datascape/
 ADD ./client/package.json /bhht-datascape/client/
 
-RUN cd /bhht-datascape/client/ && npm --quiet --dev install 
+RUN cd /bhht-datascape/client/ && npm --quiet --dev install
 RUN cd /bhht-datascape/ && npm --quiet --dev install
 
 ADD . /bhht-datascape
 
 RUN cd /bhht-datascape/client/ && cp config.docker.json config.json
 
-RUN cd /bhht-datascape/client/ && ./node_modules/webpack/bin/webpack.js  -p --progress --color
+RUN cd /bhht-datascape/client/ && ./node_modules/.bin/webpack -p --progress --color
 
 WORKDIR /bhht-datascape
 
