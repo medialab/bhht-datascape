@@ -1,4 +1,5 @@
 const path = require('path'),
+      config = require('config'),
       webpack = require('webpack');
 
 module.exports = {
@@ -28,6 +29,9 @@ module.exports = {
     }
   },
   plugins: [
+    new webpack.DefinePlugin({
+      API_ENDPOINT: JSON.stringify(config.get('api.endpoint'))
+    }),
     new webpack.NamedModulesPlugin()
   ],
   devServer: {

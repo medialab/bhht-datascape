@@ -1,17 +1,11 @@
 {
   "elasticsearch": {
-    "host": "ES_HOST",
-    "port": {
-      "__name": "ES_PORT",
-      "__format": "json"
-    },
-    "user": "ES_USER",
-    "password": "ES_PASSWORD"
+    "host": "localhost",
+    "port": 9200,
+    "user": "user",
+    "password": "password"
   },
   "api": {
-    "port": {
-      "__name": "API_PORT",
-      "__format": "json"
-    }
+    "port": 4000
   }
 }

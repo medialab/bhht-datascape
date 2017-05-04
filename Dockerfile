@@ -1,6 +1,9 @@
 FROM node:7.9.0-alpine
 
+ARG API_ENDPOINT /api
+
 ENV NODE_ENV production
+ENV API_ENDPOINT ${API_ENDPOINT}
 
 RUN mkdir -p /bhht-datascape/ /bhht-datascape/client
 
@@ -14,7 +17,9 @@ ADD . /bhht-datascape
 
 RUN cd /bhht-datascape/client/ && cp config.docker.json config.json
 
-RUN cd /bhht-datascape/client/ && ./node_modules/.bin/webpack -p --progress --color
+WORKDIR /bhht-datascape/client
+
+RUN cd /bhht-datascape/client/ && npm run build
 
 WORKDIR /bhht-datascape
 
