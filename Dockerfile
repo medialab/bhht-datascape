@@ -22,4 +22,4 @@ VOLUME /bhht-datascape/client/
 
 EXPOSE 4000
 
-ENTRYPOINT ["/usr/local/bin/node", "docker-entrypoint.js"]
+ENTRYPOINT ["/usr/local/bin/node", "./scripts/api.js"]

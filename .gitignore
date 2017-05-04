@@ -1,4 +1,4 @@
-config.json
+config/local.json
 scripts/data
 node_modules
 .DS_Store

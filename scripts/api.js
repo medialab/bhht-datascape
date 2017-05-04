@@ -6,7 +6,7 @@
  * Script starting the API.
  */
 const http = require('http'),
-      config = require('../config.json').api;
+      config = require('config').get('api');
 
 let app = require('../api/app');
 

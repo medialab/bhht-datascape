@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "build:indices": "node ./scripts/build-indices.js",
-    "db:start": "docker-compose -p bhht up",
-    "db:clean": "docker-compose -p bhht down",
+    "db:start": "docker-compose -p bhht up index",
+    "db:clean": "docker-compose -p bhht down index",
     "dev": "kotatsu start --progress ./scripts/api.js",
     "lint": "eslint api lib scripts test; cd client && npm run lint",
     "postinstall": "cp -n config.example.json config.json; cd client && npm install;",
@@ -31,6 +31,7 @@
     "async": "^2.1.5",
     "body-parser": "^1.17.1",
     "compression": "^1.6.2",
+    "config": "^1.26.1",
     "cors": "^2.8.1",
     "csv": "^1.1.1",
     "dolman": "^0.4.0",
