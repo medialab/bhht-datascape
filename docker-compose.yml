@@ -12,6 +12,8 @@ services:
   api:
     build: .
     restart: unless-stopped
+    environment:
+      - ES_HOST=index
     links:
       - index
     ports:
