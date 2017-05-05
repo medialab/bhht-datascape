@@ -21,6 +21,8 @@ RUN cd /bhht-datascape/client/ && npm run build
 
 WORKDIR /bhht-datascape
 
+USER node
+
 VOLUME /bhht-datascape/client/
 
 EXPOSE 4000
