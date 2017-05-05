@@ -4,7 +4,7 @@
   "description": "Client for the BHHT datascape.",
   "main": "index.js",
   "scripts": {
-    "build": "webpack -p --progress --colors",
+    "build": "webpack -p --no-colors",
     "dev": "webpack-dev-server -d --progress --colors --hot --hot-only",
     "lint": "eslint src"
   },
