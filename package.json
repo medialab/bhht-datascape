@@ -7,7 +7,7 @@
   "scripts": {
     "build:indices": "node ./scripts/build-indices.js",
     "db:start": "docker-compose -p bhht up index",
-    "db:clean": "docker-compose -p bhht down index",
+    "db:clean": "docker-compose -p bhht down",
     "dev": "kotatsu start --progress ./scripts/api.js",
     "lint": "eslint api lib scripts test; cd client && npm run lint",
     "start": "node ./scripts/api.js",
