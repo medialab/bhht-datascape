@@ -8,6 +8,10 @@
         "type": "text",
         "analyzer": "label"
       },
+      "suggest": {
+        "type": "completion",
+        "analyzer": "label"
+      },
       "position": {
         "type": "geo_point"
       }
@@ -20,6 +24,10 @@
       },
       "label": {
         "type": "text",
+        "analyzer": "label"
+      },
+      "suggest": {
+        "type": "completion",
         "analyzer": "label"
       },
       "wikipediaId": {
@@ -95,10 +103,10 @@
       "region": {
         "type": "keyword"
       },
-      "birthPlace": {
+      "birthLocation": {
         "type": "keyword"
       },
-      "deathPlace": {
+      "deathLocation": {
         "type": "keyword"
       },
       "continent": {

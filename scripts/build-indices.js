@@ -30,7 +30,6 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: fix date format to Y rather than yyyy which is not fitting for historical dates
 // TODO: create date range for path using min/max
 // TODO: check path has no date < 0
-// TODO: rename birthPlace to birthLocation for consistency
 
 /**
  * Constants.
@@ -195,6 +194,8 @@ const readStreams = {
         }
       };
 
+      location.suggest = location.label;
+
       LOCATIONS.set(location.name, location);
 
       locationLogger(nb => `  -> (${prettyNumber(nb)}) locations processed.`);
@@ -223,8 +224,8 @@ const readStreams = {
         pseudoDeathDate: doc.pseudo_death,
         citizenship: doc.citizenship,
         region: doc.region,
-        birthPlace: doc.place_of_birth,
-        deathPlace: doc.place_of_death,
+        birthLocation: doc.place_of_birth,
+        deathLocation: doc.place_of_death,
         dead: !!+doc.dead,
         languagesCount: doc.noccur_languages ? (+doc.noccur_languages + 1) : 1,
         mainLanguage: doc.language,
@@ -240,6 +241,7 @@ const readStreams = {
         ranking: pluralLangSplitter(doc.ranking_notoriety)
       };
 
+      people.suggest = people.label;
       people.availableLanguagesCount = people.availableLanguages.length;
 
       // Trimming
