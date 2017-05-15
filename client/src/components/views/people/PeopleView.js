@@ -107,14 +107,14 @@ class PeopleView extends Component {
         <PeopleViewInfo title="Pseudo death date" value={info.pseudoDeathDate} />
         <PeopleViewInfo title="Alive" value={isAlive} />
         <PeopleViewInfo title="Translations" value={info.languagesCount} />
-        {info.birthPlace &&
+        {info.birthLocation &&
           <PeopleViewInfo
             title="Birth place"
-            value={<Link to={`/location/${info.birthPlace}`}>{createWikipediaLabel(info.birthPlace)}</Link>} />}
-        {info.deathPlace &&
+            value={<Link to={`/location/${info.birthLocation}`}>{createWikipediaLabel(info.birthLocation)}</Link>} />}
+        {info.deathLocation &&
           <PeopleViewInfo
             title="Death place"
-            value={<Link to={`/location/${info.deathPlace}`}>{createWikipediaLabel(info.deathPlace)}</Link>} />}
+            value={<Link to={`/location/${info.deathLocation}`}>{createWikipediaLabel(info.deathLocation)}</Link>} />}
         <Measure>
           {dimensions => (
             <div style={{width: '100%'}}>
