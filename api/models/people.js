@@ -54,24 +54,23 @@ exports.get = function(id, callback) {
  */
 exports.suggestions = function(query, callback) {
   const body = {
-    size: 20,
-    query: {
-      match: {
-        label: query
+    suggest: {
+      people: {
+        prefix: query,
+        completion: {
+          field: 'suggest',
+          fuzzy: true,
+          size: 20
+        }
       }
-    },
-    sort: [
-      {
-        'notoriety.en': 'desc'
-      }
-    ]
+    }
   };
 
   return client.search({index: 'people', body}, (err, result) => {
     if (err)
       return callback(err);
 
-    const people = result.hits.hits.map(hit => {
+    const people = result.suggest.people[0].options.map(hit => {
       return {
         label: hit._source.label,
         name: hit._source.name

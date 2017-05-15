@@ -27,10 +27,14 @@ exports.get = function(id, callback) {
  */
 exports.suggestions = function(query, callback) {
   const body = {
-    size: 20,
-    query: {
-      match: {
-        label: query
+    suggest: {
+      location: {
+        prefix: query,
+        completion: {
+          field: 'suggest',
+          fuzzy: true,
+          size: 20
+        }
       }
     }
   };
@@ -39,13 +43,13 @@ exports.suggestions = function(query, callback) {
     if (err)
       return callback(err);
 
-    const people = result.hits.hits.map(hit => {
+    const location = result.suggest.location[0].options.map(hit => {
       return {
         label: hit._source.label,
         name: hit._source.name
       };
     });
 
-    return callback(null, people);
+    return callback(null, location);
   });
 };
