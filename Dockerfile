@@ -5,6 +5,8 @@ ARG API_ENDPOINT=/api
 ENV NODE_ENV production
 ENV API_ENDPOINT=${API_ENDPOINT}
 
+RUN apk add --no-cache su-exec
+
 RUN mkdir -p /bhht-datascape/ /bhht-datascape/client
 
 ADD ./package.json /bhht-datascape/
@@ -19,10 +21,10 @@ RUN cd /bhht-datascape/client/ && npm run build
 
 WORKDIR /bhht-datascape
 
-USER node
-
 VOLUME /bhht-datascape/client/
 
 EXPOSE 4000
 
-ENTRYPOINT ["/usr/local/bin/node", "./scripts/api.js"]
+ENTRYPOINT ["su-exec", "node:node"]
+
+CMD ["/usr/local/bin/node", "./scripts/api.js"]
