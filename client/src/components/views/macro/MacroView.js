@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+import cls from 'classnames';
 import Measure from 'react-measure';
 import MacroViewLineChart from './MacroViewLineChart';
 import MacroViewSmallMultiples from './MacroViewSmallMultiples';
@@ -18,6 +19,7 @@ import {
   loadTopPeople,
   loadTopLocations,
   changeMode,
+  selectValue,
   updatePeriod,
   histogramDataSelector
 } from '../../../modules/macro';
@@ -51,19 +53,48 @@ const MODES = [
 /**
  * Mode selector.
  */
-function MacroViewModeSelector({selected, onChange}) {
+function MacroViewModeSelector(props) {
+  const {
+    selected,
+    values,
+    onChange,
+    onSelect
+  } = props;
+
   return (
-    <div className="control">
-      <span className="select">
-        <select value={selected} onChange={onChange}>
-          {MODES.map(mode => {
+    <nav className="level">
+      <div className="level-left">
+        <div className="control">
+          <span className="select">
+            <select value={selected} onChange={onChange}>
+              {MODES.map(mode => {
+                return (
+                  <option key={mode.name} value={mode.name}>{mode.label}</option>
+                );
+              })}
+            </select>
+          </span>
+        </div>
+      </div>
+      {selected !== 'global' &&
+        <div className="level-item">
+          {values.map(value => {
+            const muted = !value.selected;
+
             return (
-              <option key={mode.name} value={mode.name}>{mode.label}</option>
+              <div className="level-item" key={value.name}>
+                <a
+                  style={{backgroundColor: muted ? null : value.color}}
+                  className={cls('button', 'value-selector', muted && 'muted')}
+                  onClick={() => onSelect(value.name)}>
+                  {value.name}
+                </a>
+              </div>
             );
           })}
-        </select>
-      </span>
-    </div>
+        </div>
+      }
+    </nav>
   );
 }
 
@@ -75,6 +106,7 @@ const enhance = compose(
     state => {
       return {
         mode: state.macro.mode,
+        values: state.macro.values,
         histogramData: histogramDataSelector(state),
         topPeople: state.macro.topPeople,
         topLocations: state.macro.topLocations,
@@ -88,6 +120,7 @@ const enhance = compose(
           loadTopPeople,
           loadTopLocations,
           changeMode,
+          selectValue,
           updatePeriod
         }, dispatch)
       };
@@ -126,13 +159,20 @@ class MacroView extends Component {
       topPeople,
       topLocations,
       mode,
+      values,
       period
     } = this.props;
 
+    const moreThanOneValue = values.filter(value => value.selected).length > 1;
+
     return (
-      <div>
+      <div id="macro-view">
         <h1 className="title">Macro View</h1>
-        <MacroViewModeSelector selected={mode} onChange={e => actions.changeMode(e.target.value)} />
+        <MacroViewModeSelector
+          selected={mode}
+          values={values}
+          onSelect={actions.selectValue}
+          onChange={e => actions.changeMode(e.target.value)} />
         <div style={{height: '250px'}}>
           {histogramData && (
             <Measure style={{height: '250px'}}>
@@ -167,7 +207,7 @@ class MacroView extends Component {
               data={topLocations} />
           </div>
         </div>
-        {histogramData && mode !== 'global' && (
+        {histogramData && moreThanOneValue && (
           <Measure>
             {dimensions => (
               <div style={{width: '100%'}}>

@@ -17,8 +17,6 @@ import {
   Area
 } from 'recharts';
 
-import palettes from '../../../palettes';
-
 /**
  * Constants.
  */
@@ -31,9 +29,8 @@ const NUMBER_FORMAT = format(','),
  */
 export default pure(function MacroViewSmallMultiples(props) {
   const {
-    data: {values, names},
+    data: {values, names, colors},
     dimensions,
-    mode,
     period
   } = props;
 
@@ -66,8 +63,8 @@ export default pure(function MacroViewSmallMultiples(props) {
               name={name}
               type="monotone"
               dataKey={point => (point[name] / point.sum) || null}
-              stroke={palettes[mode][i]}
-              fill={palettes[mode][i]}
+              stroke={colors[i]}
+              fill={colors[i]}
               isAnimationActive={false}
               animationDuration={0} />
             <Tooltip

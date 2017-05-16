@@ -46,3 +46,18 @@ svg {
 .leaflet-map-pane {
   z-index: auto !important;
 }
+
+/**
+ * Views.
+ */
+#macro-view {
+
+  .value-selector {
+    color: white;
+    margin-right: 10px;
+
+    &.muted {
+      color: inherit;
+    }
+  }
+}

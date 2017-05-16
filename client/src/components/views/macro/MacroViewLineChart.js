@@ -14,12 +14,9 @@ import {
   XAxis,
   YAxis,
   Tooltip,
-  Legend,
   Line,
   Brush
 } from 'recharts';
-
-import palettes from '../../../palettes';
 
 /**
  * Constants.
@@ -41,9 +38,8 @@ export default class MacroViewLineChart extends Component {
 
   render() {
     const {
-      data: {values, names},
+      data: {values, names, colors},
       dimensions,
-      mode,
       period
     } = this.props;
 
@@ -66,7 +62,6 @@ export default class MacroViewLineChart extends Component {
           isAnimationActive={false}
           formatter={NUMBER_FORMAT}
           labelFormatter={LABEL_FORMAT} />
-        <Legend />
         {names.map((name, i) => {
           return (
             <Line
@@ -74,7 +69,7 @@ export default class MacroViewLineChart extends Component {
               dot={false}
               type="monotone"
               dataKey={name}
-              stroke={palettes[mode][i]} />
+              stroke={colors[i]} />
           );
         })}
         <Brush

@@ -7,12 +7,14 @@
 import {createSelector} from 'reselect';
 import client from '../client';
 import {resolver} from './helpers';
+import palettes from '../palettes';
 
 /**
  * Constants.
  */
 const MACRO_HISTOGRAM_LOADED = 'Macro§HistogramLoaded';
 const MACRO_HISTOGRAM_LOADING = 'Macro§HistogramLoading';
+const MACRO_SELECT_VALUE = 'Macro§SelectValue';
 const MACRO_TOP_PEOPLE_LOADED = 'Macro§TopPeopleLoaded';
 const MACRO_TOP_PEOPLE_LOADING = 'Macro§TopPeopleLoading';
 const MACRO_TOP_LOCATIONS_LOADED = 'Macro§TopLocationsLoaded';
@@ -38,28 +40,37 @@ const DEFAULT_STATE = {
 /**
  * Selectors.
  */
-const histogramSelector = state => state.macro.histogram;
+const histogramSelector = state => state.macro.histogram,
+      valuesSelector = state => state.macro.values;
 
 export const histogramDataSelector = createSelector(
   histogramSelector,
-  data => {
+  valuesSelector,
+  (data, values) => {
     if (!data)
       return null;
 
+    const selectedValues = new Map();
+
+    values.forEach(value => (value.selected && selectedValues.set(value.name, value)));
+
+    data = data.filter(line => selectedValues.has(line.name));
+
     const firstHistogram = data[0].histogram;
 
-    const values = new Array(firstHistogram.length),
-          names = data.map(line => line.name);
+    const lines = new Array(firstHistogram.length),
+          names = data.map(line => line.name),
+          colors = data.map(line => selectedValues.get(line.name).color);
 
-    for (let i = 0, l = values.length; i < l; i++) {
+    for (let i = 0, l = lines.length; i < l; i++) {
       for (let j = 0, m = data.length; j < m; j++) {
-        values[i] = values[i] || {from: firstHistogram[i].from, sum: 0};
-        values[i][data[j].name] = data[j].histogram[i].count;
-        values[i].sum += data[j].histogram[i].count;
+        lines[i] = lines[i] || {from: firstHistogram[i].from, sum: 0};
+        lines[i][data[j].name] = data[j].histogram[i].count;
+        lines[i].sum += data[j].histogram[i].count;
       }
     }
 
-    return {values, names};
+    return {values: lines, names, colors};
   }
 );
 
@@ -79,12 +90,60 @@ export default resolver(DEFAULT_STATE, {
 
   // When histogram data is received
   [MACRO_HISTOGRAM_LOADED](state, action) {
+    const palette = palettes[state.mode];
+
     return {
       ...state,
       loadingHistogram: false,
       histogram: action.data,
       values: action.data
-        .map(line => ({name: line.name, selected: true}))
+        .map((line, i) => ({name: line.name, selected: true, color: palette[i]}))
+    };
+  },
+
+  // When selecting a value
+  [MACRO_SELECT_VALUE](state, action) {
+
+    // If payload value is `null` or if only one value is selected
+    if (
+      action.value === null ||
+      (
+        state.values.filter(value => value.selected).length === 1 &&
+        state.values.find(value => value.name === action.value).selected
+      )
+    )
+      return {
+        ...state,
+        values: state.values.map(value => {
+          return {
+            ...value,
+            selected: true
+          };
+        })
+      };
+
+    // If every value is selected, we switch to a single value
+    if (state.values.every(value => value.selected)) {
+      return {
+        ...state,
+        values: state.values.map(value => {
+          return {
+            ...value,
+            selected: value.name === action.value ? true : false
+          };
+        })
+      };
+    }
+
+    // Else we just toggle this value
+    return {
+      ...state,
+      values: state.values.map(value => {
+        return {
+          ...value,
+          selected: value.name === action.value ? !value.selected : value.selected
+        };
+      })
     };
   },
 
@@ -195,6 +254,10 @@ export function changeMode(mode) {
 
     return dispatch(loadHistogram(mode));
   };
+}
+
+export function selectValue(value) {
+  return {type: MACRO_SELECT_VALUE, value};
 }
 
 export function updatePeriod(period) {
