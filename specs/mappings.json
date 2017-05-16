@@ -2,15 +2,16 @@
   "location": {
     "properties": {
       "name": {
-        "type": "keyword",
-        "preserve_position_increments": false
+        "type": "keyword"
       },
       "label": {
         "type": "text",
         "analyzer": "label"
       },
       "suggest": {
-        "type": "completion"
+        "type": "completion",
+        "analyzer": "suggestion",
+        "preserve_position_increments": false
       },
       "position": {
         "type": "geo_point"
@@ -28,6 +29,7 @@
       },
       "suggest": {
         "type": "completion",
+        "analyzer": "suggestion",
         "preserve_position_increments": false
       },
       "wikipediaId": {

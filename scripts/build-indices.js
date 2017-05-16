@@ -32,7 +32,6 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: fix date format to Y rather than yyyy which is not fitting for historical dates
 // TODO: create date range for path using min/max
 // TODO: check path has no date < 0
-// TODO: need to tokenize the suggestions
 
 /**
  * Constants.
@@ -43,7 +42,8 @@ const BASE_PEOPLE = 'base1_individus.csv',
 
 const MAPPINGS = require('../specs/mappings.json'),
       CATEGORIES = require('../specs/meta.json').categories,
-      ANALYZERS = require('../specs/analyzers.json');
+      ANALYZERS = require('../specs/analyzers.json'),
+      FILTERS = require('../specs/filters.json');
 
 const BULK_SIZES = {
   people: 700,
@@ -97,7 +97,8 @@ const createIndex = (name, next) => {
         },
         settings: {
           analysis: {
-            analyzer: ANALYZERS
+            analyzer: ANALYZERS,
+            filter: FILTERS
           },
           refresh_interval: '60s'
         }

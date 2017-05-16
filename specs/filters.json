@@ -1,0 +1,6 @@
+{
+  "short": {
+    "type": "length",
+    "min": 1
+  }
+}
