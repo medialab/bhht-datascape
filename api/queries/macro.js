@@ -73,7 +73,8 @@ const QUERY_BUCKETS = {
     return {
       categories: {
         terms: {
-          field: 'category'
+          field: 'category',
+          size: 20
         },
         aggs: agg
       }
@@ -83,7 +84,8 @@ const QUERY_BUCKETS = {
     return {
       subcategories: {
         terms: {
-          field: 'subCategory'
+          field: 'subCategory',
+          size: 20
         },
         aggs: agg
       }

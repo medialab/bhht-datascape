@@ -13,12 +13,14 @@ export default {
     '#98984d'
   ],
   categories: [
-    '#c8567a',
-    '#5ba962',
-    '#ab62c0',
-    '#aa973d',
-    '#648ace',
-    '#cc6541'
+    '#c95c3f',
+    '#6882cf',
+    '#76b341',
+    '#b25fbc',
+    '#4fac83',
+    '#c8577b',
+    '#82813a',
+    '#d19b43'
   ],
   subcategories: [
     '#5bad79',

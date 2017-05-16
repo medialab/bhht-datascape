@@ -62,39 +62,40 @@ function MacroViewModeSelector(props) {
   } = props;
 
   return (
-    <nav className="level">
-      <div className="level-left">
-        <div className="control">
-          <span className="select">
-            <select value={selected} onChange={onChange}>
-              {MODES.map(mode => {
-                return (
-                  <option key={mode.name} value={mode.name}>{mode.label}</option>
-                );
-              })}
-            </select>
-          </span>
-        </div>
-      </div>
-      {selected !== 'global' &&
-        <div className="level-item">
-          {values.map(value => {
-            const muted = !value.selected;
+    <table>
+      <tbody>
+        <tr>
+          <td className="control" style={{whitespace: 'no-wrap'}}>
+            <span className="select">
+              <select value={selected} onChange={onChange}>
+                {MODES.map(mode => {
+                  return (
+                    <option key={mode.name} value={mode.name}>{mode.label}</option>
+                  );
+                })}
+              </select>
+            </span>
+          </td>
+          <td style={{textAlign: 'center', width: '99%'}}>
+            {selected !== 'global' &&
+              values.map(value => {
+                const muted = !value.selected;
 
-            return (
-              <div className="level-item" key={value.name}>
-                <a
-                  style={{backgroundColor: muted ? null : value.color}}
-                  className={cls('button', 'value-selector', muted && 'muted')}
-                  onClick={() => onSelect(value.name)}>
-                  {value.name}
-                </a>
-              </div>
-            );
-          })}
-        </div>
-      }
-    </nav>
+                return (
+                  <a
+                    key={value.name}
+                    style={{backgroundColor: muted ? null : value.color}}
+                    className={cls('button', 'value-selector', muted && 'muted')}
+                    onClick={() => onSelect(value.name)}>
+                    {value.name}
+                  </a>
+                );
+              })
+            }
+          </td>
+        </tr>
+      </tbody>
+    </table>
   );
 }
 
