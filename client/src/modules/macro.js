@@ -25,6 +25,7 @@ const MACRO_UPDATE_PERIOD = 'Macro§UpdatePeriod';
  */
 const DEFAULT_STATE = {
   mode: 'global',
+  values: [],
   histogram: null,
   topPeople: null,
   topLocations: null,
@@ -81,7 +82,9 @@ export default resolver(DEFAULT_STATE, {
     return {
       ...state,
       loadingHistogram: false,
-      histogram: action.data
+      histogram: action.data,
+      values: action.data
+        .map(line => ({name: line.name, selected: true}))
     };
   },
 
@@ -125,7 +128,8 @@ export default resolver(DEFAULT_STATE, {
   [MACRO_CHANGE_MODE](state, action) {
     return {
       ...state,
-      mode: action.mode
+      mode: action.mode,
+      values: []
     };
   },
 

@@ -60,7 +60,7 @@ exports.suggestions = function(query, callback) {
         completion: {
           field: 'suggest',
           fuzzy: true,
-          size: 20
+          size: 50
         }
       }
     }
