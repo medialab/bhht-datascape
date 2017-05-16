@@ -28,7 +28,7 @@ exports.get = function(id, callback) {
 exports.suggestions = function(query, callback) {
   const body = {
     suggest: {
-      location: {
+      locations: {
         prefix: query,
         completion: {
           field: 'suggest',
@@ -43,13 +43,13 @@ exports.suggestions = function(query, callback) {
     if (err)
       return callback(err);
 
-    const location = result.suggest.location[0].options.map(hit => {
+    const locations = result.suggest.locations[0].options.map(hit => {
       return {
         label: hit._source.label,
         name: hit._source.name
       };
     });
 
-    return callback(null, location);
+    return callback(null, locations);
   });
 };
