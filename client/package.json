@@ -61,7 +61,11 @@
     ],
     "rules": {
       "react/no-set-state": 0,
-      "react/forbid-prop-types": 0
+      "react/forbid-prop-types": 0,
+      "react/require-optimization": 0
+    },
+    "globals": {
+      "API_ENDPOINT": true
     }
   }
 }
