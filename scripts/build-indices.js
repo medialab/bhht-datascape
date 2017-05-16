@@ -11,11 +11,13 @@ const yargs = require('yargs'),
       joinPath = require('path').join,
       through = require('through2'),
       padStart = require('lodash/padStart'),
+      MultiSet = require('mnemonist/multi-set'),
       WritableBulk = require('elasticsearch-streams').WritableBulk,
       TransformToBulk = require('elasticsearch-streams').TransformToBulk,
       createWikipediaLabel = require('../lib/helpers').createWikipediaLabel,
       csv = require('csv'),
-      fs = require('fs');
+      fs = require('fs'),
+      _ = require('lodash');
 
 require('util').inspect.defaultOptions.colors = true;
 
@@ -30,6 +32,7 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: fix date format to Y rather than yyyy which is not fitting for historical dates
 // TODO: create date range for path using min/max
 // TODO: check path has no date < 0
+// TODO: need to tokenize the suggestions
 
 /**
  * Constants.
@@ -42,8 +45,13 @@ const MAPPINGS = require('../specs/mappings.json'),
       CATEGORIES = require('../specs/meta.json').categories,
       ANALYZERS = require('../specs/analyzers.json');
 
-const BULK_SIZE = 1000,
-      LOG_RATE = 10 * 1000;
+const BULK_SIZES = {
+  people: 700,
+  location: 1500,
+  path: 1500
+};
+
+const LOG_RATE = 10 * 1000;
 
 /**
  * Describing CLI interface.
@@ -66,7 +74,8 @@ const CLIENT = require('../api/client');
 /**
  * Indices.
  */
-const LOCATIONS = new Map();
+const LOCATIONS = new Map(),
+      LOCATIONS_SCORES = new MultiSet();
 
 /**
  * Helpers.
@@ -176,36 +185,6 @@ const createTransformBulkStream = name => {
 // Readable streams
 const readStreams = {
 
-  // Locations
-  location: () => fs
-    .createReadStream(joinPath(argv.b, BASE_LOCATIONS))
-    .pipe(createCSVParserStream())
-    .pipe(through.obj(function(doc, enc, next) {
-
-      if (LOCATIONS.has(doc.location))
-        return next();
-
-      const location = {
-        name: doc.location,
-        label: createWikipediaLabel(doc.location),
-        position: {
-          lat: doc.lat,
-          lon: doc.lon
-        }
-      };
-
-      location.suggest = location.label;
-
-      LOCATIONS.set(location.name, location);
-
-      locationLogger(nb => `  -> (${prettyNumber(nb)}) locations processed.`);
-
-      this.push(location);
-
-      return next();
-    }))
-    .pipe(createTransformBulkStream('location')),
-
   // People
   people: () => fs
     .createReadStream(joinPath(argv.b, BASE_PEOPLE))
@@ -241,7 +220,10 @@ const readStreams = {
         ranking: pluralLangSplitter(doc.ranking_notoriety)
       };
 
-      people.suggest = people.label;
+      people.suggest = {
+        input: people.label,
+        weight: Math.max.apply(null, [1].concat(_.values(people.notoriety)))
+      };
       people.availableLanguagesCount = people.availableLanguages.length;
 
       // Trimming
@@ -334,6 +316,9 @@ const readStreams = {
         order: +doc.n_traj
       };
 
+      // Incrementing location score
+      LOCATIONS_SCORES.add(doc.location);
+
       emptyFilter(path);
 
       pathLogger(nb => `  -> (${prettyNumber(nb)}) paths processed.`);
@@ -342,7 +327,40 @@ const readStreams = {
 
       return next();
     }))
-    .pipe(createTransformBulkStream('path'))
+    .pipe(createTransformBulkStream('path')),
+
+  // Locations
+  location: () => fs
+    .createReadStream(joinPath(argv.b, BASE_LOCATIONS))
+    .pipe(createCSVParserStream())
+    .pipe(through.obj(function(doc, enc, next) {
+
+      if (LOCATIONS.has(doc.location))
+        return next();
+
+      const location = {
+        name: doc.location,
+        label: createWikipediaLabel(doc.location),
+        position: {
+          lat: doc.lat,
+          lon: doc.lon
+        }
+      };
+
+      location.suggest = {
+        input: location.label,
+        weight: LOCATIONS_SCORES.multiplicity(doc.location)
+      };
+
+      LOCATIONS.set(location.name, location);
+
+      locationLogger(nb => `  -> (${prettyNumber(nb)}) locations processed.`);
+
+      this.push(location);
+
+      return next();
+    }))
+    .pipe(createTransformBulkStream('location')),
 };
 
 // Writable streams
@@ -355,7 +373,7 @@ const createWritableBulkStream = name => {
     }, next);
   });
 
-  stream.highWaterMark = BULK_SIZE;
+  stream.highWaterMark = BULK_SIZES[name];
 
   return stream;
 };
@@ -378,17 +396,6 @@ async.series([
       async.apply(createIndex, 'path')
     ], next);
   },
-  function indexLocation(next) {
-    console.log('Indexing locations...');
-
-    return readStreams
-      .location()
-      .pipe(writeStreams.location)
-      .on('error', err => {
-        throw err;
-      })
-      .on('close', () => next());
-  },
   function indexPeople(next) {
     console.log('Indexing people...');
 
@@ -406,6 +413,17 @@ async.series([
     return readStreams
       .path()
       .pipe(writeStreams.path)
+      .on('error', err => {
+        throw err;
+      })
+      .on('close', () => next());
+  },
+  function indexLocation(next) {
+    console.log('Indexing locations...');
+
+    return readStreams
+      .location()
+      .pipe(writeStreams.location)
       .on('error', err => {
         throw err;
       })
