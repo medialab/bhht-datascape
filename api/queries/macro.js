@@ -88,7 +88,7 @@ const QUERY_BUCKETS = {
     return {
       subcategories: {
         terms: {
-          field: 'subCategory',
+          field: 'subcategory',
           size: 20
         },
         aggs: agg
@@ -236,7 +236,7 @@ function mapStockHistogramQueryResult(mode, result) {
 const MODE_FIELDS = {
   gender: 'gender',
   categories: 'category',
-  subcategories: 'subCategory'
+  subcategories: 'subcategory'
 };
 
 /**
@@ -307,7 +307,7 @@ function createTopPeopleQuery(params) {
                   'name',
                   'gender',
                   'category',
-                  'subCategory'
+                  'subcategory'
                 ]
               }
             }

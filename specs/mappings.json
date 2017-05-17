@@ -50,12 +50,6 @@
       "originalId": {
         "type": "keyword"
       },
-      "approxBirth": {
-        "type": "boolean"
-      },
-      "approxDeath": {
-        "type": "boolean"
-      },
       "birthDate": {
         "type": "date",
         "format": "yyyy"
@@ -64,13 +58,19 @@
         "type": "date",
         "format": "yyyy"
       },
-      "pseudoBirthDate": {
+      "estimatedBirthDate": {
         "type": "date",
         "format": "yyyy"
       },
-      "pseudoDeathDate": {
+      "estimatedDeathDate": {
         "type": "date",
         "format": "yyyy"
+      },
+      "birthDatePrecision": {
+        "type": "keyword"
+      },
+      "deathDatePrecision": {
+        "type": "keyword"
       },
       "life": {
         "type": "date_range",

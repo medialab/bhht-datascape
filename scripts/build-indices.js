@@ -198,8 +198,8 @@ const readStreams = {
         gender: doc.gender,
         birthDate: doc.birth,
         deathDate: doc.death,
-        pseudoBirthDate: doc.pseudo_birth,
-        pseudoDeathDate: doc.pseudo_death,
+        estimatedBirthDate: doc.pseudo_birth,
+        estimatedDeathDate: doc.pseudo_death,
         citizenship: doc.citizenship,
         region: doc.region,
         birthLocation: doc.place_of_birth,
@@ -208,8 +208,6 @@ const readStreams = {
         languagesCount: doc.noccur_languages ? (+doc.noccur_languages + 1) : 1,
         mainLanguage: doc.language,
         originalId: doc.newid,
-        approxBirth: !!+doc.approx_birth_num,
-        approxDeath: !!+doc.approx_death_num,
         continent: doc.Continent,
         period: doc.BigPeriod !== 'missing' ? doc.BigPeriod : undefined,
         availableLanguages: doc.ID_LANGUE.split('|').map(item => item.toLowerCase()),
@@ -219,6 +217,8 @@ const readStreams = {
         compoundNotoriety: 0,
         ranking: pluralLangSplitter(doc.ranking_notoriety)
       };
+
+      // TODO: change date, estimatedDate, add dateType
 
       people.availableLanguagesCount = people.availableLanguages.length;
 
@@ -240,13 +240,13 @@ const readStreams = {
       };
 
       // Life range
-      if (people.pseudoBirthDate) {
+      if (people.estimatedBirthDate) {
         people.life = {
-          gte: people.pseudoBirthDate
+          gte: people.estimatedBirthDate
         };
 
-        if (people.pseudoDeathDate)
-          people.life.lte = people.pseudoDeathDate;
+        if (people.estimatedDeathDate)
+          people.life.lte = people.estimatedDeathDate;
       }
 
       // Gathering occupations
@@ -290,10 +290,10 @@ const readStreams = {
       }
 
       // Storing decades
-      if (people.pseudoBirthDate) {
-        const deathDate = +(people.pseudoDeathDate || '2020');
+      if (people.estimatedBirthDate) {
+        const deathDate = +(people.estimatedDeathDate || '2020');
 
-        const firstDecade = Math.floor(+people.pseudoBirthDate / 10) * 10,
+        const firstDecade = Math.floor(+people.estimatedBirthDate / 10) * 10,
               lastDecade = Math.ceil(+deathDate / 10) * 10;
 
         const decades = [];

@@ -109,7 +109,7 @@ class PeopleView extends Component {
         </div>
         <PeopleViewInfo title="Gender" value={info.gender} />
         <PeopleViewInfo title="Category" value={info.category} />
-        <PeopleViewInfo title="SubCategory" value={info.subCategory} />
+        <PeopleViewInfo title="SubCategory" value={info.subcategory} />
         <PeopleViewInfo title="Pseudo birth date" value={info.pseudoBirthDate} />
         <PeopleViewInfo title="Pseudo death date" value={info.pseudoDeathDate} />
         <PeopleViewInfo title="Alive" value={isAlive} />
@@ -145,7 +145,7 @@ class PeopleView extends Component {
         <h4 className="title is-4">Occupations</h4>
         {info.occupations.map(occupation => (
           <div key={occupation.order}>
-            {occupation.order}. <strong>{occupation.category}</strong> (<em>{occupation.subCategory}</em>) [{occupation.weight}]
+            {occupation.order}. <strong>{occupation.category}</strong> (<em>{occupation.subcategory}</em>) [{occupation.weight}]
           </div>
         ))}
         <br />
