@@ -142,6 +142,13 @@ class PeopleView extends Component {
           );
         })}
         <br />
+        <h4 className="title is-4">Occupations</h4>
+        {info.occupations.map(occupation => (
+          <div key={occupation.order}>
+            {occupation.order}. <strong>{occupation.category}</strong> (<em>{occupation.subCategory}</em>) [{occupation.weight}]
+          </div>
+        ))}
+        <br />
         <h4 className="title is-4">Contact points</h4>
         {info.paths && !!info.paths.length && <PeopleViewTrajectory points={info.paths} />}
       </div>
