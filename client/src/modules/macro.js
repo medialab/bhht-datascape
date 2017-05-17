@@ -223,10 +223,14 @@ export function loadTopPeople(mode, period, values) {
 
     const data = {mode, period};
 
-    if (mode !== 'global' && values && values.length)
+    if (mode !== 'global' && values && values.length) {
       data.values = values
         .filter(value => value.selected)
         .map(value => value.name);
+
+      if (data.values.length === values.length)
+        delete data.values;
+    }
 
     client.macro.topPeople({data}, (err, response) => {
       if (err)
@@ -243,10 +247,14 @@ export function loadTopLocations(mode, period, values) {
 
     const data = {mode, period};
 
-    if (mode !== 'global' && values && values.length)
+    if (mode !== 'global' && values && values.length) {
       data.values = values
         .filter(value => value.selected)
         .map(value => value.name);
+
+      if (data.values.length === values.length)
+        delete data.values;
+    }
 
     client.macro.topLocations({data}, (err, response) => {
       if (err)

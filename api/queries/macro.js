@@ -8,7 +8,6 @@
 const {createWikipediaLabel} = require('../../lib/helpers');
 
 const {
-  createBoolQueryMembersForLang,
   createBoolQueryForLang
 } = require('./lang');
 
@@ -267,19 +266,17 @@ function createTopPeopleQuery(params) {
   };
 
   if (values && values.length) {
-    const target = filter.bool.must;
-
     if (mode === 'languages') {
-      target.push({
+      filter.bool.must.push({
         bool: {
-          should: values.map(createBoolQueryMembersForLang)
+          should: values.map(createBoolQueryForLang)
         }
       });
     }
     else {
       const field = MODE_FIELDS[mode];
 
-      target.push({
+      filter.bool.must.push({
         terms: {
           [field]: values
         }
@@ -287,6 +284,7 @@ function createTopPeopleQuery(params) {
     }
   }
 
+  // TODO: sort by lang notoriety
   return {
     size: 0,
     aggs: {
