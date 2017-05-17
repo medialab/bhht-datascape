@@ -15,6 +15,7 @@ const yargs = require('yargs'),
       WritableBulk = require('elasticsearch-streams').WritableBulk,
       TransformToBulk = require('elasticsearch-streams').TransformToBulk,
       createWikipediaLabel = require('../lib/helpers').createWikipediaLabel,
+      tokenizeWikipediaLabel = require('../lib/helpers').tokenizeWikipediaLabel,
       csv = require('csv'),
       fs = require('fs'),
       _ = require('lodash');
@@ -221,8 +222,10 @@ const readStreams = {
         ranking: pluralLangSplitter(doc.ranking_notoriety)
       };
 
+      const lastMeaningfulToken = _.last(tokenizeWikipediaLabel(people.label));
+
       people.suggest = {
-        input: people.label,
+        input: [people.label, lastMeaningfulToken],
         weight: Math.max.apply(null, [1].concat(_.values(people.notoriety)))
       };
       people.availableLanguagesCount = people.availableLanguages.length;
