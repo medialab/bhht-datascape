@@ -27,9 +27,6 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: add birth/death to trajectory?
 // TODO: date quality for path
 // TODO: decide if life date_range is useful
-// TODO: quid of people not have birth/death pseudo dates?
-// TODO: rename path to point?
-// TODO: rename subCategory to subcategory
 // TODO: fix date format to Y rather than yyyy which is not fitting for historical dates
 // TODO: create date range for path using min/max
 // TODO: check path has no date < 0
@@ -219,19 +216,28 @@ const readStreams = {
         words: pluralLangSplitter(doc.count_words),
         length: pluralLangSplitter(doc.length),
         notoriety: pluralLangSplitter(doc.notoriety),
+        compoundNotoriety: 0,
         ranking: pluralLangSplitter(doc.ranking_notoriety)
       };
 
-      const lastMeaningfulToken = _.last(tokenizeWikipediaLabel(people.label));
-
-      people.suggest = {
-        input: [people.label, lastMeaningfulToken],
-        weight: Math.max.apply(null, [1].concat(_.values(people.notoriety)))
-      };
       people.availableLanguagesCount = people.availableLanguages.length;
 
       // Trimming
       emptyFilter(people);
+
+      // Computing compound notoriety
+      for (const lang in people.notoriety)
+        people.compoundNotoriety += people.notoriety[lang];
+
+      // Autocomplete suggestions
+      const lastMeaningfulToken = _.last(tokenizeWikipediaLabel(people.label));
+
+      people.suggest = {
+        input: (lastMeaningfulToken && lastMeaningfulToken.length > 3) ?
+          [people.label, lastMeaningfulToken] :
+          people.label,
+        weight: people.compoundNotoriety
+      };
 
       // Life range
       if (people.pseudoBirthDate) {
@@ -247,28 +253,28 @@ const readStreams = {
       const occupations = new Map();
 
       for (let i = 1; i <= 3; i++) {
-        const subCategory = doc['occupationB_' + i];
+        const subcategory = doc['occupationB_' + i];
 
-        if (!subCategory || subCategory === '.')
+        if (!subcategory || subcategory === '.')
           continue;
 
-        if (!occupations.has(subCategory)) {
-          const category = CATEGORIES[subCategory];
+        if (!occupations.has(subcategory)) {
+          const category = CATEGORIES[subcategory];
 
           if (!category) {
             console.log(doc);
-            throw new Error(`Unknown category for "${subCategory}" subCategory.`);
+            throw new Error(`Unknown category for "${subcategory}" subcategory.`);
           }
 
-          occupations.set(subCategory, {
+          occupations.set(subcategory, {
             order: occupations.size + 1,
             weight: 1,
             category,
-            subCategory
+            subcategory
           });
         }
         else {
-          occupations.get(subCategory).weight++;
+          occupations.get(subcategory).weight++;
         }
       }
 
@@ -280,7 +286,7 @@ const readStreams = {
         const mainOccupation = _.maxBy(people.occupations, 'weight');
 
         people.category = mainOccupation.category;
-        people.subCategory = mainOccupation.subCategory;
+        people.subcategory = mainOccupation.subcategory;
       }
 
       // Storing decades

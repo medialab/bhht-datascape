@@ -205,6 +205,9 @@
           }
         }
       },
+      "compoundNotoriety": {
+        "type": "double"
+      },
       "ranking": {
         "type": "object",
         "properties": {
