@@ -7,7 +7,7 @@
  */
 import React, {Component} from 'react';
 import {format} from 'd3-format';
-import debounce from 'lodash/debounce';
+import debounce from 'debounce';
 import {
   LineChart,
   CartesianGrid,

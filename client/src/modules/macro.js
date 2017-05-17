@@ -217,11 +217,16 @@ export function loadHistogram(mode) {
   };
 }
 
-export function loadTopPeople(period) {
+export function loadTopPeople(mode, period, values) {
   return dispatch => {
     dispatch({type: MACRO_TOP_PEOPLE_LOADING});
 
-    const data = {period};
+    const data = {mode, period};
+
+    if (mode !== 'global' && values && values.length)
+      data.values = values
+        .filter(value => value.selected)
+        .map(value => value.name);
 
     client.macro.topPeople({data}, (err, response) => {
       if (err)
@@ -232,11 +237,16 @@ export function loadTopPeople(period) {
   };
 }
 
-export function loadTopLocations(period) {
+export function loadTopLocations(mode, period, values) {
   return dispatch => {
     dispatch({type: MACRO_TOP_LOCATIONS_LOADING});
 
-    const data = {period};
+    const data = {mode, period};
+
+    if (mode !== 'global' && values && values.length)
+      data.values = values
+        .filter(value => value.selected)
+        .map(value => value.name);
 
     client.macro.topLocations({data}, (err, response) => {
       if (err)

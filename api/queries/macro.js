@@ -8,6 +8,11 @@
 const {createWikipediaLabel} = require('../../lib/helpers');
 
 const {
+  createBoolQueryMembersForLang,
+  createBoolQueryForLang
+} = require('./lang');
+
+const {
   dates: {
     min: MIN_DATE,
     max: MAX_DATE
@@ -102,75 +107,17 @@ const QUERY_BUCKETS = {
     };
   },
   languages: agg => {
-    const forLang = lang => ({
-      bool: {
-        must: [
-          {
-            range: {
-              availableLanguagesCount: {
-                lt: 2
-              }
-            }
-          },
-          {
-            term: {
-              availableLanguages: lang
-            }
-          }
-        ]
-      }
-    });
-
     const filters = {};
 
     LANGS.forEach(lang => {
       if (lang === 'en')
         return;
 
-      filters[lang] = forLang(lang);
+      filters[lang] = createBoolQueryForLang(lang);
     });
 
-    filters.multiWithEn = {
-      bool: {
-        must: [
-          {
-            range: {
-              availableLanguagesCount: {
-                gt: 1
-              }
-            }
-          },
-          {
-            term: {
-              availableLanguages: 'en'
-            }
-          }
-        ]
-      }
-    };
-
-    filters.multiWithoutEn = {
-      bool: {
-        must: [
-          {
-            range: {
-              availableLanguagesCount: {
-                gt: 1
-              }
-            }
-          },
-          {
-            bool: {
-              must_not: {
-                term: {
-                  availableLanguages: 'en'
-                }
-              }
-            }
-          }
-        ]
-      }
-    };
+    filters.multiWithEn = createBoolQueryForLang('multiWithEn');
+    filters.multiWithoutEn = createBoolQueryForLang('multiWithoutEn');
 
     return {
       languages: {
@@ -285,18 +232,28 @@ function mapStockHistogramQueryResult(mode, result) {
 }
 
 /**
+ * Mapping some modes to their respective field to filter.
+ */
+const MODE_FIELDS = {
+  gender: 'gender',
+  categories: 'category',
+  subcategories: 'subCategory'
+};
+
+/**
  * Function creating a query retrieving the top people.
  */
 function createTopPeopleQuery(params) {
   const {
-    period
+    mode,
+    period,
+    values
   } = params;
 
-  return {
-    size: 0,
-    aggs: {
-      prefilter: {
-        filter: {
+  const filter = {
+    bool: {
+      must: [
+        {
           range: {
             life: {
               lt: period[1],
@@ -304,7 +261,37 @@ function createTopPeopleQuery(params) {
               format: 'y'
             }
           }
-        },
+        }
+      ]
+    }
+  };
+
+  if (values && values.length) {
+    const target = filter.bool.must;
+
+    if (mode === 'languages') {
+      target.push({
+        bool: {
+          should: values.map(createBoolQueryMembersForLang)
+        }
+      });
+    }
+    else {
+      const field = MODE_FIELDS[mode];
+
+      target.push({
+        terms: {
+          [field]: values
+        }
+      });
+    }
+  }
+
+  return {
+    size: 0,
+    aggs: {
+      prefilter: {
+        filter,
         aggs: {
           topPeople: {
             top_hits: {

@@ -29,13 +29,21 @@ module.exports = [
     url: '/top-people',
     validate: {
       query: {
-        period: 'string'
+        mode: 'macro:mode',
+        period: 'string',
+        values: '?string'
       }
     },
     action(req, res) {
       const period = req.query.period.split(',');
 
-      return model.topPeople({period}, (err, people) => {
+      const values = req.query.values ?
+        req.query.values.split(',') :
+        [];
+
+      const mode = req.query.mode;
+
+      return model.topPeople({mode, period, values}, (err, people) => {
         if (err)
           return res.serverError(err);
 
@@ -47,13 +55,21 @@ module.exports = [
     url: '/top-locations',
     validate: {
       query: {
-        period: 'string'
+        mode: 'macro:mode',
+        period: 'string',
+        values: '?string'
       }
     },
     action(req, res) {
       const period = req.query.period.split(',');
 
-      return model.topLocations({period}, (err, locations) => {
+      const values = req.query.values ?
+        req.query.values.split(',') :
+        [];
+
+      const mode = req.query.mode;
+
+      return model.topLocations({mode, period, values}, (err, locations) => {
         if (err)
           return res.serverError(err);
 

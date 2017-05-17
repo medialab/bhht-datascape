@@ -9,6 +9,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+import debounce from 'debounce';
 import cls from 'classnames';
 import Measure from 'react-measure';
 import MacroViewLineChart from './MacroViewLineChart';
@@ -138,6 +139,7 @@ class MacroView extends Component {
       actions,
       mode,
       period,
+      values,
       histogramData,
       topPeople,
       topLocations
@@ -147,10 +149,18 @@ class MacroView extends Component {
       actions.loadHistogram(mode);
 
     if (!topPeople)
-      actions.loadTopPeople(period);
+      actions.loadTopPeople(mode, period, values);
 
     if (!topLocations)
-      actions.loadTopLocations(period);
+      actions.loadTopLocations(mode, period, values);
+
+    this.debouncedLoadTopPeople = debounce(() => {
+      this.props.actions.loadTopPeople(
+        this.props.mode,
+        this.props.period,
+        this.props.values
+      );
+    }, 500);
   }
 
   render() {
@@ -172,7 +182,10 @@ class MacroView extends Component {
         <MacroViewModeSelector
           selected={mode}
           values={values}
-          onSelect={actions.selectValue}
+          onSelect={value => {
+            actions.selectValue(value);
+            this.debouncedLoadTopPeople();
+          }}
           onChange={e => actions.changeMode(e.target.value)} />
         <div style={{height: '250px'}}>
           {histogramData && (
@@ -186,8 +199,8 @@ class MacroView extends Component {
                     period={period}
                     onBrush={newPeriod => {
                       actions.updatePeriod(newPeriod);
-                      actions.loadTopPeople(newPeriod);
-                      actions.loadTopLocations(newPeriod);
+                      actions.loadTopPeople(mode, newPeriod, values);
+                      actions.loadTopLocations(mode, newPeriod, values);
                     }} />
                 </div>
               )}

@@ -7,7 +7,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import Autosuggest from 'react-autosuggest';
-import debounce from 'lodash/debounce';
+import debounce from 'debounce';
 import client from '../client';
 
 /**
