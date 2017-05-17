@@ -30,7 +30,7 @@ module.exports = [
     url: '/:name',
     method: 'GET',
     action(req, res) {
-      const name = req.params.name;
+      const name = encodeURIComponent(req.params.name);
 
       return model.get(name, (err, person) => {
         if (err)

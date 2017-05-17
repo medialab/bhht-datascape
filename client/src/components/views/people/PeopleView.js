@@ -123,7 +123,7 @@ class PeopleView extends Component {
           )}
         </Measure>
         <h4 className="title is-4">Contact points</h4>
-        <PeopleViewTrajectory points={info.paths} />
+        {info.paths && !!info.paths.length && <PeopleViewTrajectory points={info.paths} />}
       </div>
     );
   }
