@@ -274,10 +274,10 @@ const readStreams = {
 
       // Caching main category & subcategory
       if (people.occupations && people.occupations.length) {
-        const firstOccupation = people.occupations[0];
+        const mainOccupation = _.maxBy(people.occupations, 'weight');
 
-        people.category = firstOccupation.category;
-        people.subCategory = firstOccupation.subCategory;
+        people.category = mainOccupation.category;
+        people.subCategory = mainOccupation.subCategory;
       }
 
       // Storing decades
