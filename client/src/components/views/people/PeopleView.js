@@ -107,8 +107,6 @@ class PeopleView extends Component {
             );
           })}
         </div>
-        <PeopleViewInfo title="Wikipedia name" value={info.name} />
-        <PeopleViewInfo title="Wikipedia ID" value={info.wikipediaId} />
         <PeopleViewInfo title="Gender" value={info.gender} />
         <PeopleViewInfo title="Category" value={info.category} />
         <PeopleViewInfo title="SubCategory" value={info.subCategory} />
