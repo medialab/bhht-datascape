@@ -5,7 +5,8 @@
  * Model in charge of retrieving precise information concerning a single
  * person of the database.
  */
-const client = require('../client');
+const async = require('async'),
+      client = require('../client');
 
 /**
  * Function retrieving information for the given people.
@@ -34,15 +35,65 @@ exports.get = function(id, callback) {
       size: 5000
     };
 
-    return client.search({index: 'path', body: pathBody}, (err2, pathResult) => {
+    return async.parallel({
+
+      // Retrieving the paths
+      paths(next) {
+        return client.search({index: 'path', body: pathBody}, (err3, pathResult) => {
+          if (err3)
+            return callback(err3);
+
+          person.paths = pathResult.hits.hits.map(hit => {
+            return {
+              location: hit._source.location
+            };
+          });
+
+          return next();
+        });
+      },
+
+      // Retrieving aggregate information concerning ranks
+      rankings(next) {
+        let lang;
+
+        const filters = {};
+
+        for (lang in person.notoriety)
+          filters[lang] = {
+            exists: {
+              field: `notoriety.${lang}`
+            }
+          };
+
+        const agg = {
+          size: 0,
+          aggs: {
+            notorieties: {
+              filters: {
+                filters
+              }
+            }
+          }
+        };
+
+        return client.search({index: 'people', body: agg}, (err3, aggResult) => {
+          if (err3)
+            return callback(err3);
+
+          const buckets = aggResult.aggregations.notorieties.buckets;
+
+          person.maxNotoriety = {};
+
+          for (lang in buckets)
+            person.maxNotoriety[lang] = buckets[lang].doc_count;
+
+          return next();
+        });
+      }
+    }, err2 => {
       if (err2)
         return callback(err2);
-
-      person.paths = pathResult.hits.hits.map(hit => {
-        return {
-          location: hit._source.location
-        };
-      });
 
       return callback(null, person);
     });

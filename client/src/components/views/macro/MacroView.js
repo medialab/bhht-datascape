@@ -187,7 +187,7 @@ class MacroView extends Component {
             this.debouncedLoadTopPeople();
           }}
           onChange={e => {
-            actions.changeMode(e.target.value)
+            actions.changeMode(e.target.value);
             this.debouncedLoadTopPeople();
           }} />
         <div style={{height: '250px'}}>
