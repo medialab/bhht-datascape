@@ -186,7 +186,10 @@ class MacroView extends Component {
             actions.selectValue(value);
             this.debouncedLoadTopPeople();
           }}
-          onChange={e => actions.changeMode(e.target.value)} />
+          onChange={e => {
+            actions.changeMode(e.target.value)
+            this.debouncedLoadTopPeople();
+          }} />
         <div style={{height: '250px'}}>
           {histogramData && (
             <Measure style={{height: '250px'}}>

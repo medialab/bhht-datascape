@@ -19,7 +19,7 @@ function MacroViewTopListPeopleItem({rank, link, item}) {
           {item.label}
         </strong>
         &nbsp;({item.gender === 'Female' ? 'F' : 'M'})
-        - <em><small>{item.category} / {item.subCategory}</small></em>
+        {item.category && <span> - <em><small>{item.category} / {item.subCategory}</small></em></span>}
       </Link>
     </div>
   );
