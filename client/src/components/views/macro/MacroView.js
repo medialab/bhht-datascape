@@ -178,7 +178,7 @@ class MacroView extends Component {
 
     return (
       <div id="macro-view">
-        <h1 className="title">Macro View</h1>
+        <h1 className="title">A brief history of human time</h1>
         <MacroViewModeSelector
           selected={mode}
           values={values}
