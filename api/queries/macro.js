@@ -306,7 +306,10 @@ function createTopPeopleQuery(params) {
               _source: {
                 includes: [
                   'label',
-                  'name'
+                  'name',
+                  'gender',
+                  'category',
+                  'subCategory'
                 ]
               }
             }

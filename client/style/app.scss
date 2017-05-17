@@ -29,12 +29,6 @@ svg {
 /**
  * Components.
  */
-.top-list {
-  height: 300px;
-  overflow-y: scroll;
-  border: 1px solid black;
-}
-
 .link {
   color: black;
 }
@@ -60,6 +54,19 @@ svg {
 
     &.muted {
       color: inherit;
+    }
+  }
+
+  .top-list {
+    padding: 5px;
+    height: 300px;
+    overflow-y: scroll;
+    // border: 1px solid black;
+
+    .top-list-item {
+      border: 1px solid black;
+      padding: 5px;
+      margin-bottom: 5px;
     }
   }
 }
