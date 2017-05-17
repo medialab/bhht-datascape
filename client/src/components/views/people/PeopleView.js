@@ -9,12 +9,19 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
+import {format} from 'd3-format';
 import {createWikipediaURL, createWikipediaLabel} from 'lib/helpers';
 import Measure from 'react-measure';
 import Link from '../../Link';
 import PeopleViewChronology from './PeopleViewChronology';
 import PeopleViewTrajectory from './PeopleViewTrajectory';
+import PeopleViewNotorietyIndicator from './PeopleViewNotorietyIndicator';
 import {loadPeopleInfo} from '../../../modules/people';
+
+/**
+ * Formats.
+ */
+const NUMBER_FORMAT = format(',');
 
 /**
  * Connector.
@@ -103,6 +110,8 @@ class PeopleView extends Component {
         <PeopleViewInfo title="Wikipedia name" value={info.name} />
         <PeopleViewInfo title="Wikipedia ID" value={info.wikipediaId} />
         <PeopleViewInfo title="Gender" value={info.gender} />
+        <PeopleViewInfo title="Category" value={info.category} />
+        <PeopleViewInfo title="SubCategory" value={info.subCategory} />
         <PeopleViewInfo title="Pseudo birth date" value={info.pseudoBirthDate} />
         <PeopleViewInfo title="Pseudo death date" value={info.pseudoDeathDate} />
         <PeopleViewInfo title="Alive" value={isAlive} />
@@ -122,6 +131,19 @@ class PeopleView extends Component {
             </div>
           )}
         </Measure>
+        <h4 className="title is-4">Notoriety</h4>
+        {Object.keys(info.notoriety).map(lang => {
+          return (
+            <div key={lang} style={{width: '50%'}}>
+              <strong>{lang}</strong>
+              &nbsp;(<em>{NUMBER_FORMAT(info.ranking[lang])}</em> on <em>{NUMBER_FORMAT(info.maxNotoriety[lang])}</em>)
+              <PeopleViewNotorietyIndicator
+                notoriety={info.maxNotoriety[lang] - info.ranking[lang]}
+                max={info.maxNotoriety[lang]} />
+            </div>
+          );
+        })}
+        <br />
         <h4 className="title is-4">Contact points</h4>
         {info.paths && !!info.paths.length && <PeopleViewTrajectory points={info.paths} />}
       </div>
