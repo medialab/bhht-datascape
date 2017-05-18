@@ -48,6 +48,10 @@ const MODES = [
   {
     name: 'languages',
     label: 'By language'
+  },
+  {
+    name: 'precision',
+    label: 'By date precision'
   }
 ];
 

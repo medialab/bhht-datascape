@@ -105,6 +105,16 @@ const QUERY_BUCKETS = {
       }
     };
   },
+  precision: agg => {
+    return {
+      precisions: {
+        terms: {
+          field: 'datePrecision'
+        },
+        aggs: agg
+      }
+    };
+  },
   languages: agg => {
     const filters = {};
 
@@ -204,6 +214,17 @@ const MAPPERS = {
         };
       });
   },
+  precision: aggs => {
+    return aggs
+      .precisions
+      .buckets
+      .map(precision => {
+        return {
+          name: precision.key,
+          histogram: precision.histogram.buckets.map(histogramBucketMapper)
+        };
+      });
+  },
   languages: aggs => {
     const langs = aggs
       .languages
@@ -236,7 +257,8 @@ function mapStockHistogramQueryResult(mode, result) {
 const MODE_FIELDS = {
   gender: 'gender',
   categories: 'category',
-  subcategories: 'subcategory'
+  subcategories: 'subcategory',
+  precision: 'datePrecision'
 };
 
 /**

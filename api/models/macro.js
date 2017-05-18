@@ -26,7 +26,8 @@ const MACRO_MODES = new Set([
   'categories',
   'subcategories',
   'gender',
-  'languages'
+  'languages',
+  'precision'
 ]);
 exports.MACRO_MODES = MACRO_MODES;
 

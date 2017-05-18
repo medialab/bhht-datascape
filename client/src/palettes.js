@@ -48,5 +48,10 @@ export default {
     '#c8577b',
     '#82813a',
     '#d19b43'
+  ],
+  precision: [
+    '#7aa457',
+    '#a46cb7',
+    '#cb6a49'
   ]
 };
