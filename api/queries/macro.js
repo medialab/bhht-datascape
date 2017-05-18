@@ -284,7 +284,16 @@ function createTopPeopleQuery(params) {
     }
   }
 
-  // TODO: sort by lang notoriety
+  let notorietyField = 'compoundNotoriety';
+
+  if (
+    mode === 'languages' &&
+    values.length === 1 &&
+    values[0] !== 'multiWithoutEn' &&
+    values[0] !== 'multiWithEn'
+  )
+    notorietyField = `notoriety.${values[0]}`;
+
   return {
     size: 0,
     aggs: {
@@ -295,7 +304,7 @@ function createTopPeopleQuery(params) {
             top_hits: {
               sort: [
                 {
-                  'notoriety.en': {
+                  [notorietyField]: {
                     order: 'desc'
                   }
                 }
