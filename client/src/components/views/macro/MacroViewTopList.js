@@ -6,6 +6,7 @@
  */
 import React from 'react';
 import Link from '../../Link';
+import {formatLifetime} from '../../../helpers';
 
 /**
  * People item.
@@ -19,6 +20,7 @@ function MacroViewTopListPeopleItem({rank, link, item}) {
           {item.label}
         </strong>
         &nbsp;({item.gender === 'Female' ? 'F' : 'M'})
+        <small> ({formatLifetime(item)})</small>
         {item.category && <span> - <em><small>{item.category} / {item.subcategory}</small></em></span>}
       </Link>
     </div>

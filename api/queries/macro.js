@@ -338,7 +338,12 @@ function createTopPeopleQuery(params) {
                   'name',
                   'gender',
                   'category',
-                  'subcategory'
+                  'subcategory',
+                  'birth',
+                  'death',
+                  'birthDatePrecision',
+                  'deathDatePrecision',
+                  'dead'
                 ]
               }
             }

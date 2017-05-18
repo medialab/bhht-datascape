@@ -17,6 +17,7 @@ import PeopleViewChronology from './PeopleViewChronology';
 import PeopleViewTrajectory from './PeopleViewTrajectory';
 import PeopleViewNotorietyIndicator from './PeopleViewNotorietyIndicator';
 import {loadPeopleInfo} from '../../../modules/people';
+import {formatDate, formatLifetime} from '../../../helpers';
 
 /**
  * Formats.
@@ -87,7 +88,10 @@ class PeopleView extends Component {
 
     return (
       <div>
-        <h1 className="title">{info.label}</h1>
+        <h1 className="title">
+          {info.label}
+          <small> ({formatLifetime(info)})</small>
+        </h1>
         <div>
           <strong>Wikipedia pages:</strong>
           {' '}
@@ -110,6 +114,8 @@ class PeopleView extends Component {
         <PeopleViewInfo title="Gender" value={info.gender} />
         <PeopleViewInfo title="Category" value={info.category} />
         <PeopleViewInfo title="SubCategory" value={info.subcategory} />
+        <PeopleViewInfo title="Birth date" value={formatDate(info.birthDatePrecision, info.birth)} />
+        <PeopleViewInfo title="Death date" value={formatDate(info.deathDatePrecision, info.death)} />
         <PeopleViewInfo title="Estimated birth date" value={info.estimatedBirthDate} />
         <PeopleViewInfo title="Estimated death date" value={info.estimatedDeathDate} />
         <PeopleViewInfo title="Alive" value={isAlive} />
