@@ -110,8 +110,8 @@ class PeopleView extends Component {
         <PeopleViewInfo title="Gender" value={info.gender} />
         <PeopleViewInfo title="Category" value={info.category} />
         <PeopleViewInfo title="SubCategory" value={info.subcategory} />
-        <PeopleViewInfo title="Pseudo birth date" value={info.pseudoBirthDate} />
-        <PeopleViewInfo title="Pseudo death date" value={info.pseudoDeathDate} />
+        <PeopleViewInfo title="Estimated birth date" value={info.estimatedBirthDate} />
+        <PeopleViewInfo title="Estimated death date" value={info.estimatedDeathDate} />
         <PeopleViewInfo title="Alive" value={isAlive} />
         <PeopleViewInfo title="Translations" value={info.languagesCount} />
         {info.birthLocation &&
@@ -125,7 +125,7 @@ class PeopleView extends Component {
         <Measure>
           {dimensions => (
             <div style={{width: '100%'}}>
-              <PeopleViewChronology date={info.pseudoBirthDate} dimensions={dimensions} />
+              <PeopleViewChronology date={info.estimatedBirthDate} dimensions={dimensions} />
             </div>
           )}
         </Measure>

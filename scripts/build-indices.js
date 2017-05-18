@@ -15,7 +15,7 @@ const yargs = require('yargs'),
       WritableBulk = require('elasticsearch-streams').WritableBulk,
       TransformToBulk = require('elasticsearch-streams').TransformToBulk,
       createWikipediaLabel = require('../lib/helpers').createWikipediaLabel,
-      tokenizeWikipediaLabel = require('../lib/helpers').tokenizeWikipediaLabel,
+      lastMeaningfulTokenFromWikipediaLabel = require('../lib/helpers').lastMeaningfulTokenFromWikipediaLabel,
       csv = require('csv'),
       fs = require('fs'),
       _ = require('lodash');
@@ -27,7 +27,6 @@ require('util').inspect.defaultOptions.colors = true;
 // TODO: add birth/death to trajectory?
 // TODO: date quality for path
 // TODO: decide if life date_range is useful
-// TODO: fix date format to Y rather than yyyy which is not fitting for historical dates
 // TODO: create date range for path using min/max
 // TODO: check path has no date < 0
 
@@ -42,6 +41,12 @@ const MAPPINGS = require('../specs/mappings.json'),
       CATEGORIES = require('../specs/meta.json').categories,
       ANALYZERS = require('../specs/analyzers.json'),
       FILTERS = require('../specs/filters.json');
+
+const DATE_PRECISION_HIERARCHY = {
+  century: 1,
+  circa: 2,
+  exact: 3
+};
 
 const BULK_SIZES = {
   people: 700,
@@ -196,10 +201,12 @@ const readStreams = {
         label: createWikipediaLabel(doc.name),
         wikipediaId: doc.id,
         gender: doc.gender,
-        birthDate: doc.birth,
-        deathDate: doc.death,
-        estimatedBirthDate: doc.pseudo_birth,
-        estimatedDeathDate: doc.pseudo_death,
+        birth: doc.birth,
+        death: doc.death,
+        birthDatePrecision: doc.birth_type,
+        deathDatePrecision: doc.death_type,
+        estimatedBirthDate: doc.estimated_birth,
+        estimatedDeathDate: doc.estimated_death,
         citizenship: doc.citizenship,
         region: doc.region,
         birthLocation: doc.place_of_birth,
@@ -218,22 +225,42 @@ const readStreams = {
         ranking: pluralLangSplitter(doc.ranking_notoriety)
       };
 
-      // TODO: change date, estimatedDate, add dateType
-
       people.availableLanguagesCount = people.availableLanguages.length;
 
       // Trimming
       emptyFilter(people);
 
+      // Casting birth & death
+      if (people.birth)
+        people.birth = +people.birth;
+      if (people.death)
+        people.death = +people.death;
+
       // Computing compound notoriety
       for (const lang in people.notoriety)
         people.compoundNotoriety += people.notoriety[lang];
 
+      // Retaining worst date precision
+      if (people.birthDatePrecision || people.deathDatePrecision) {
+        const b = people.birthDatePrecision ?
+          DATE_PRECISION_HIERARCHY[people.birthDatePrecision] :
+          Infinity;
+
+        const d = people.deathDatePrecision ?
+          DATE_PRECISION_HIERARCHY[people.deathDatePrecision] :
+          Infinity;
+
+        if (b <= d)
+          people.datePrecision = people.birthDatePrecision;
+        else
+          people.datePrecision = people.deathDatePrecision;
+      }
+
       // Autocomplete suggestions
-      const lastMeaningfulToken = _.last(tokenizeWikipediaLabel(people.label));
+      const lastMeaningfulToken = lastMeaningfulTokenFromWikipediaLabel(people.label);
 
       people.suggest = {
-        input: (lastMeaningfulToken && lastMeaningfulToken.length > 3) ?
+        input: lastMeaningfulToken ?
           [people.label, lastMeaningfulToken] :
           people.label,
         weight: people.compoundNotoriety
@@ -321,8 +348,8 @@ const readStreams = {
         lang: 'en',
         people: doc.name,
         location: doc.location,
-        minDate: doc.min,
-        maxDate: doc.max,
+        min: doc.min,
+        max: doc.max,
         order: +doc.n_traj
       };
 

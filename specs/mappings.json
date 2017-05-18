@@ -50,13 +50,11 @@
       "originalId": {
         "type": "keyword"
       },
-      "birthDate": {
-        "type": "date",
-        "format": "yyyy"
+      "birth": {
+        "type": "short"
       },
-      "deathDate": {
-        "type": "date",
-        "format": "yyyy"
+      "death": {
+        "type": "short"
       },
       "estimatedBirthDate": {
         "type": "date",
@@ -72,6 +70,9 @@
       "deathDatePrecision": {
         "type": "keyword"
       },
+      "datePrecision": {
+        "type": "keyword"
+      },
       "life": {
         "type": "date_range",
         "format": "yyyy"
@@ -79,7 +80,7 @@
       "category": {
         "type": "keyword"
       },
-      "subCategory": {
+      "subcategory": {
         "type": "keyword"
       },
       "occupations": {
@@ -94,7 +95,7 @@
           "category": {
             "type": "keyword"
           },
-          "subCategory": {
+          "subcategory": {
             "type": "keyword"
           }
         }
@@ -157,25 +158,25 @@
         "type": "object",
         "properties": {
           "en": {
-            "type": "long"
+            "type": "integer"
           },
           "fr": {
-            "type": "long"
+            "type": "integer"
           },
           "es": {
-            "type": "long"
+            "type": "integer"
           },
           "it": {
-            "type": "long"
+            "type": "integer"
           },
           "sv": {
-            "type": "long"
+            "type": "integer"
           },
           "de": {
-            "type": "long"
+            "type": "integer"
           },
           "pt": {
-            "type": "long"
+            "type": "integer"
           }
         }
       },
@@ -183,54 +184,54 @@
         "type": "object",
         "properties": {
           "en": {
-            "type": "double"
+            "type": "integer"
           },
           "fr": {
-            "type": "double"
+            "type": "integer"
           },
           "es": {
-            "type": "double"
+            "type": "integer"
           },
           "it": {
-            "type": "double"
+            "type": "integer"
           },
           "sv": {
-            "type": "double"
+            "type": "integer"
           },
           "de": {
-            "type": "double"
+            "type": "integer"
           },
           "pt": {
-            "type": "double"
+            "type": "integer"
           }
         }
       },
       "compoundNotoriety": {
-        "type": "double"
+        "type": "integer"
       },
       "ranking": {
         "type": "object",
         "properties": {
           "en": {
-            "type": "long"
+            "type": "integer"
           },
           "fr": {
-            "type": "long"
+            "type": "integer"
           },
           "es": {
-            "type": "long"
+            "type": "integer"
           },
           "it": {
-            "type": "long"
+            "type": "integer"
           },
           "sv": {
-            "type": "long"
+            "type": "integer"
           },
           "de": {
-            "type": "long"
+            "type": "integer"
           },
           "pt": {
-            "type": "long"
+            "type": "integer"
           }
         }
       }
@@ -247,11 +248,11 @@
       "location": {
         "type": "keyword"
       },
-      "minDate": {
+      "min": {
         "type": "date",
         "format": "yyyy"
       },
-      "maxDate": {
+      "max": {
         "type": "date",
         "format": "yyyy"
       },

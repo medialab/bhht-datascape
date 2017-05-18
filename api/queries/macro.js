@@ -348,7 +348,7 @@ function createTopLocationsQuery(params) {
             must: [
               {
                 range: {
-                  minDate: {
+                  min: {
                     format: 'y',
                     gte: period[0],
                     lt: period[1]
