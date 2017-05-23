@@ -160,7 +160,9 @@ class PeopleView extends Component {
         ))}
         <hr />
         <h4 className="title is-4">Contact points</h4>
-        {info.paths && !!info.paths.length && <PeopleViewTrajectory points={info.paths} />}
+        {(info.path && !!info.paths.length) ?
+          <PeopleViewTrajectory points={info.paths} /> :
+          (<p><em>This person does not have contact points.</em></p>)}
       </div>
     );
   }
