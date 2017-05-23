@@ -8,14 +8,14 @@
 const {createWikipediaLabel} = require('../../lib/helpers');
 
 const {
+  createHistogramRanges
+} = require('./histogram');
+
+const {
   createBoolQueryForLang
 } = require('./lang');
 
 const {
-  dates: {
-    min: MIN_DATE,
-    max: MAX_DATE
-  },
   langs: LANGS
 } = require('../../specs/meta.json');
 
@@ -23,50 +23,6 @@ const {
  * Constants.
  */
 const STEP = 10;
-
-/**
- * Function creating a single overlap filter for some queries.
- */
-// function createOverlapFilter(min, max) {
-//   return {
-//     range: {
-//       life: {
-//         lt: '' + max,
-//         gte: '' + min,
-//         format: 'y'
-//       }
-//     }
-//   };
-// }
-
-/**
- * Function creating a single range for some queries.
- */
-function createRange(min, max) {
-  return {
-    from: '' + min,
-    to: '' + max
-  };
-}
-
-/**
- * Function creating date histogram ranges.
- */
-function createHistogramRanges(method, step) {
-  const ranges = [];
-
-  const MIN = Math.floor(MIN_DATE / step) * step,
-        MAX = Math.ceil(MAX_DATE / step) * step;
-
-  for (let max = MIN, min = null; max <= MAX; max += step) {
-    if (min !== null)
-      ranges.push(method(min, max));
-
-    min = max;
-  }
-
-  return ranges;
-}
 
 /**
  * Bucket maps of the different macro query modes.
@@ -143,7 +99,7 @@ const QUERY_BUCKETS = {
  * Function creating a query returning histogram data for the desired mode.
  */
 function createStockHistogramQuery(mode) {
-  const ranges = createHistogramRanges(createRange, STEP);
+  const ranges = createHistogramRanges(STEP);
 
   const rangeAggregation = {
     histogram: {

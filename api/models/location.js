@@ -5,20 +5,51 @@
  * Model in charge of retrieving precise information concerning a single
  * location of the database.
  */
-const client = require('../client');
+const async = require('async'),
+      client = require('../client');
+
+const {
+  createFrequentationQuery
+} = require('../queries/location');
 
 /**
  * Function retrieving information for the given location.
  */
 exports.get = function(id, callback) {
-  return client.get({index: 'location', type: 'location', id}, (err, result) => {
-    if (err) {
-      if (err.status === 404)
-        return callback(null, null);
-      return callback(err);
-    }
 
-    return callback(null, result._source);
+  async.parallel({
+    info: next => {
+      return client.get({index: 'location', type: 'location', id}, (err, result) => {
+        if (err) {
+          if (err.status === 404)
+            return next(null, null);
+          return next(err);
+        }
+
+        return next(null, result._source);
+      });
+    },
+    frequentation: async.apply(exports.frequentation, id)
+  }, (err, data) => {
+    if (err)
+      return callback(err);
+
+    const location = data.info;
+
+    // Mapping frequentation data
+    location.frequentation = data
+      .frequentation
+      .aggregations
+      .histogram
+      .buckets
+      .map(bucket => {
+        return {
+          from: '' + bucket.from,
+          count: bucket.doc_count
+        };
+      });
+
+    return callback(null, location);
   });
 };
 
@@ -51,5 +82,19 @@ exports.suggestions = function(query, callback) {
     });
 
     return callback(null, locations);
+  });
+};
+
+/**
+ * Function retrieving frequentation stats for the given location.
+ */
+exports.frequentation = function(location, callback) {
+  const query = createFrequentationQuery(location);
+
+  return client.search({index: 'path', body: query}, (err, result) => {
+    if (err)
+      return callback(err);
+
+    return callback(null, result);
   });
 };

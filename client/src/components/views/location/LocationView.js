@@ -6,11 +6,13 @@
  * Component rendering a single location's information page.
  */
 import React, {Component} from 'react';
+import Measure from 'react-measure';
 import {bindActionCreators} from 'redux';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
 import {createWikipediaURL} from 'lib/helpers';
 import WorldMap from '../../WorldMap';
+import LocationViewFrequentationChart from './LocationViewFrequentationChart';
 import {loadLocationInfo} from '../../../modules/location';
 
 /**
@@ -89,6 +91,21 @@ class LocationView extends Component {
         <p>
           {info.position.lat}, {info.position.lon}
         </p>
+        <hr />
+        <h4 className="title is-4">Frequentation</h4>
+        <Measure style={{height: '150px'}}>
+          {dimensions => {
+            return (
+              <div style={{width: '100%'}}>
+                <LocationViewFrequentationChart
+                  dimensions={dimensions}
+                  values={info.frequentation} />
+              </div>
+            );
+          }}
+        </Measure>
+        <hr />
+        <h4 className="title is-4">Map</h4>
         <WorldMap
           center={markers[0].position}
           markers={markers} />
