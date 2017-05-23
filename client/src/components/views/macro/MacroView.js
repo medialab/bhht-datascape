@@ -6,6 +6,7 @@
  * Component rendering the macro view.
  */
 import React, {Component} from 'react';
+import Select from 'react-select';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
@@ -16,13 +17,19 @@ import MacroViewLineChart from './MacroViewLineChart';
 import MacroViewSmallMultiples from './MacroViewSmallMultiples';
 import MacroViewTopList from './MacroViewTopList';
 import {
+
+  // Actions
+  touchHistogram,
   loadHistogram,
   loadTopPeople,
   loadTopLocations,
   changeMode,
   selectValue,
   updatePeriod,
-  histogramDataSelector
+
+  // Selectors
+  histogramDataSelector,
+  availableYearsSelector
 } from '../../../modules/macro';
 
 /**
@@ -105,6 +112,59 @@ function MacroViewModeSelector(props) {
 }
 
 /**
+ * Period selector.
+ */
+const optionMapper = year => ({value: year, label: year});
+
+function MacroViewPeriodSelector(props) {
+  const {
+    availableYears,
+    period,
+    onChange
+  } = props;
+
+  const start = +period[0],
+        end = +period[1];
+
+  const startOptions = availableYears
+    .filter(year => +year < end)
+    .map(optionMapper);
+
+  const endOptions = availableYears
+    .filter(year => +year > start)
+    .map(optionMapper);
+
+  const changeStart = year => {
+    return onChange([year.value, period[1]]);
+  };
+
+  const changeEnd = year => {
+    return onChange([period[0], year.value]);
+  };
+
+  return (
+    <div className="columns is-gapless">
+      <div className="column is-1">
+        <Select
+          placeholder="Start..."
+          clearable={false}
+          value={period[0]}
+          options={startOptions}
+          onChange={changeStart} />
+      </div>
+      <div className="column is-1">
+        <Select
+          placeholder="End..."
+          clearable={false}
+          value={period[1]}
+          options={endOptions}
+          onChange={changeEnd} />
+      </div>
+    </div>
+  );
+}
+
+/**
  * Connector.
  */
 const enhance = compose(
@@ -116,12 +176,14 @@ const enhance = compose(
         histogramData: histogramDataSelector(state),
         topPeople: state.macro.topPeople,
         topLocations: state.macro.topLocations,
-        period: state.macro.period
+        period: state.macro.period,
+        availableYears: availableYearsSelector(state)
       };
     },
     dispatch => {
       return {
         actions: bindActionCreators({
+          touchHistogram,
           loadHistogram,
           loadTopPeople,
           loadTopLocations,
@@ -175,10 +237,24 @@ class MacroView extends Component {
       topLocations,
       mode,
       values,
-      period
+      period,
+      availableYears
     } = this.props;
 
     const moreThanOneValue = values.filter(value => value.selected).length > 1;
+
+    const onPeriodSelectorChange = newPeriod => {
+      actions.touchHistogram();
+      actions.updatePeriod(newPeriod);
+      actions.loadTopPeople(mode, newPeriod, values);
+      actions.loadTopLocations(mode, newPeriod, values);
+    };
+
+    const onBrush = newPeriod => {
+      actions.updatePeriod(newPeriod);
+      actions.loadTopPeople(mode, newPeriod, values);
+      actions.loadTopLocations(mode, newPeriod, values);
+    };
 
     return (
       <div id="macro-view">
@@ -194,6 +270,11 @@ class MacroView extends Component {
             actions.changeMode(e.target.value);
             this.debouncedLoadTopPeople();
           }} />
+        <br />
+        <MacroViewPeriodSelector
+          availableYears={availableYears}
+          period={period}
+          onChange={onPeriodSelectorChange} />
         <div style={{height: '250px'}}>
           {histogramData && (
             <Measure style={{height: '250px'}}>
@@ -204,11 +285,7 @@ class MacroView extends Component {
                     data={histogramData}
                     mode={mode}
                     period={period}
-                    onBrush={newPeriod => {
-                      actions.updatePeriod(newPeriod);
-                      actions.loadTopPeople(mode, newPeriod, values);
-                      actions.loadTopLocations(mode, newPeriod, values);
-                    }} />
+                    onBrush={onBrush} />
                 </div>
               )}
             </Measure>

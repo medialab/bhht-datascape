@@ -75,6 +75,19 @@ export const histogramDataSelector = createSelector(
   }
 );
 
+export const availableYearsSelector = createSelector(
+  histogramSelector,
+  data => {
+    if (!data)
+      return [];
+
+    const firstHistogram = data[0].histogram,
+          lastYear = firstHistogram[firstHistogram.length - 1].to;
+
+    return firstHistogram.map(line => line.from).concat(lastYear);
+  }
+);
+
 /**
  * Reducer.
  */
@@ -205,6 +218,14 @@ export default resolver(DEFAULT_STATE, {
 /**
  * Actions.
  */
+export function touchHistogram() {
+  return (dispatch, getState) => {
+    const data = getState().macro.histogram.slice();
+
+    return dispatch({type: MACRO_HISTOGRAM_LOADED, data});
+  };
+}
+
 export function loadHistogram(mode) {
   return dispatch => {
     dispatch({type: MACRO_HISTOGRAM_LOADING});
