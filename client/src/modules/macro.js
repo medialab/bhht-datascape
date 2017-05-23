@@ -4,6 +4,7 @@
  *
  * Redux module in charge of the macro view.
  */
+import META from 'specs/meta.json';
 import {createSelector} from 'reselect';
 import client from '../client';
 import {resolver} from './helpers';
@@ -34,7 +35,7 @@ const DEFAULT_STATE = {
   loadingHistogram: false,
   loadingTopPeople: false,
   loadingTopLocations: false,
-  period: ['-2200', '2010']
+  period: ['' + META.dates.min, '' + META.dates.max]
 };
 
 /**
@@ -64,7 +65,7 @@ export const histogramDataSelector = createSelector(
 
     for (let i = 0, l = lines.length; i < l; i++) {
       for (let j = 0, m = data.length; j < m; j++) {
-        lines[i] = lines[i] || {from: firstHistogram[i].from, sum: 0};
+        lines[i] = lines[i] || {from: firstHistogram[i].from, to: firstHistogram[i].to, sum: 0};
         lines[i][data[j].name] = data[j].histogram[i].count;
         lines[i].sum += data[j].histogram[i].count;
       }

@@ -35,7 +35,7 @@ export default pure(function MacroViewSmallMultiples(props) {
   } = props;
 
   const startIndex = values.findIndex(value => value.from === period[0]),
-        endIndex = values.findIndex(value => value.from === period[1]);
+        endIndex = values.findIndex(value => value.to === period[1]);
 
   const slice = values.slice(startIndex, endIndex + 1);
 

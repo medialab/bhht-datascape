@@ -11,9 +11,9 @@ import {compose} from 'recompose';
 import {connect} from 'react-redux';
 import {format} from 'd3-format';
 import {createWikipediaURL, createWikipediaLabel} from 'lib/helpers';
-import Measure from 'react-measure';
+// import Measure from 'react-measure';
 import Link from '../../Link';
-import PeopleViewChronology from './PeopleViewChronology';
+// import PeopleViewChronology from './PeopleViewChronology';
 import PeopleViewTrajectory from './PeopleViewTrajectory';
 import PeopleViewNotorietyIndicator from './PeopleViewNotorietyIndicator';
 import {loadPeopleInfo} from '../../../modules/people';
@@ -86,6 +86,16 @@ class PeopleView extends Component {
 
     const isAlive = info.dead ? 'No' : 'Yes';
 
+    // const chronology = (
+    //   <Measure>
+    //     {dimensions => (
+    //       <div style={{width: '100%'}}>
+    //         <PeopleViewChronology date={info.estimatedBirthDate} dimensions={dimensions} />
+    //       </div>
+    //     )}
+    //   </Measure>
+    // );
+
     return (
       <div>
         <h1 className="title">
@@ -128,13 +138,7 @@ class PeopleView extends Component {
           <PeopleViewInfo
             title="Death place"
             value={<Link to={`/location/${info.deathLocation}`}>{createWikipediaLabel(info.deathLocation)}</Link>} />}
-        <Measure>
-          {dimensions => (
-            <div style={{width: '100%'}}>
-              <PeopleViewChronology date={info.estimatedBirthDate} dimensions={dimensions} />
-            </div>
-          )}
-        </Measure>
+        <hr />
         <h4 className="title is-4">Notoriety</h4>
         {Object.keys(info.notoriety).map(lang => {
           return (
@@ -147,14 +151,14 @@ class PeopleView extends Component {
             </div>
           );
         })}
-        <br />
+        <hr />
         <h4 className="title is-4">Occupations</h4>
         {info.occupations.map(occupation => (
           <div key={occupation.order}>
             {occupation.order}. <strong>{occupation.category}</strong> (<em>{occupation.subcategory}</em>) [{occupation.weight}]
           </div>
         ))}
-        <br />
+        <hr />
         <h4 className="title is-4">Contact points</h4>
         {info.paths && !!info.paths.length && <PeopleViewTrajectory points={info.paths} />}
       </div>

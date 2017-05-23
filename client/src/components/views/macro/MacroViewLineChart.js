@@ -44,7 +44,7 @@ export default class MacroViewLineChart extends Component {
     } = this.props;
 
     const startIndex = values.findIndex(value => value.from === period[0]),
-          endIndex = values.findIndex(value => value.from === period[1]);
+          endIndex = values.findIndex(value => value.to === period[1]);
 
     return (
       <LineChart
