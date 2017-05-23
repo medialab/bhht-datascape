@@ -36,7 +36,7 @@ export function formatDate(precision, date) {
     return `${date}${countInflector(date)} century`;
 
   if (precision === 'circa')
-    return `~${date}`;
+    return `circa ${date}`;
 
   return date;
 }
