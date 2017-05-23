@@ -1,0 +1,26 @@
+[
+  {
+    "id": "egyptian",
+    "label": "Egyptian dynasty",
+    "start": "-1400",
+    "end": "-1200"
+  },
+  {
+    "id": "finding-4",
+    "label": "Finding n°4",
+    "start": "1400",
+    "end": "1500"
+  },
+  {
+    "id": "xix",
+    "label": "XIXth century",
+    "start": "1800",
+    "end": "1900"
+  },
+  {
+    "id": "xx",
+    "label": "XXth century",
+    "start": "1900",
+    "end": "2000"
+  }
+]

@@ -33,6 +33,11 @@ import {
 } from '../../../modules/macro';
 
 /**
+ * Data.
+ */
+import PRESETS from './presets.json';
+
+/**
  * Constants.
  */
 const MODES = [
@@ -114,6 +119,13 @@ function MacroViewModeSelector(props) {
 /**
  * Period selector.
  */
+const PRESET_OPTIONS = PRESETS.map(preset => {
+  return {
+    value: [preset.start, preset.end],
+    label: preset.label
+  };
+});
+
 const optionMapper = year => ({value: year, label: year});
 
 function MacroViewPeriodSelector(props) {
@@ -134,12 +146,16 @@ function MacroViewPeriodSelector(props) {
     .filter(year => +year > start)
     .map(optionMapper);
 
-  const changeStart = year => {
-    return onChange([year.value, period[1]]);
+  const changeStart = option => {
+    return onChange([option.value, period[1]]);
   };
 
-  const changeEnd = year => {
-    return onChange([period[0], year.value]);
+  const changeEnd = option => {
+    return onChange([period[0], option.value]);
+  };
+
+  const changePeriod = option => {
+    return onChange(option.value);
   };
 
   return (
@@ -159,6 +175,12 @@ function MacroViewPeriodSelector(props) {
           value={period[1]}
           options={endOptions}
           onChange={changeEnd} />
+      </div>
+      <div className="column is-3">
+        <Select
+          placeholder="Choose a preselected period..."
+          options={PRESET_OPTIONS}
+          onChange={changePeriod} />
       </div>
     </div>
   );
