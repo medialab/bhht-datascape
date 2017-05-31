@@ -13,6 +13,7 @@ import palettes from '../palettes';
 /**
  * Constants.
  */
+const MACRO_HISTOGRAM_TOUCHED = 'Macro§HistogramTouched';
 const MACRO_HISTOGRAM_LOADED = 'Macro§HistogramLoaded';
 const MACRO_HISTOGRAM_LOADING = 'Macro§HistogramLoading';
 const MACRO_SELECT_VALUE = 'Macro§SelectValue';
@@ -92,6 +93,15 @@ export const availableYearsSelector = createSelector(
  * Reducer.
  */
 export default resolver(DEFAULT_STATE, {
+
+  // When touching the histogram
+  // NOTE: this is a kind of a hack to force a re-render of the brushed viz
+  [MACRO_HISTOGRAM_TOUCHED](state, action) {
+    return {
+      ...state,
+      histogram: action.data
+    };
+  },
 
   // When histograms are loading
   [MACRO_HISTOGRAM_LOADING](state) {
@@ -222,7 +232,7 @@ export function touchHistogram() {
   return (dispatch, getState) => {
     const data = getState().macro.histogram.slice();
 
-    return dispatch({type: MACRO_HISTOGRAM_LOADED, data});
+    return dispatch({type: MACRO_HISTOGRAM_TOUCHED, data});
   };
 }
 

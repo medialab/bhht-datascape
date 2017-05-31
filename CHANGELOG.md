@@ -4,6 +4,7 @@
 
 * Fixing the `1970` location peak.
 * Fixing a bug when changing people or location within a micro page.
+* Fixing a bug where category selection would reset after changing date selection.
 
 # v0.1.0
 
