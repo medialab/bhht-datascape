@@ -20,8 +20,19 @@ function createFrequentationQuery(location) {
   const query = {
     size: 0,
     query: {
-      term: {
-        location
+      bool: {
+        must: [
+          {
+            term: {
+              location
+            }
+          },
+          {
+            exists: {
+              field: 'max'
+            }
+          }
+        ]
       }
     },
     aggs: {
@@ -30,7 +41,7 @@ function createFrequentationQuery(location) {
           ranges: createHistogramRanges(STEP),
           script: {
             lang: 'painless',
-            inline: '[Math.floor(doc[\'min\'].date.year / 10) * 10, Math.ceil(doc[\'max\'].date.year / 10) * 10]'
+            inline: 'Math.ceil(doc[\'max\'].date.year / 10) * 10'
           }
         }
       }
