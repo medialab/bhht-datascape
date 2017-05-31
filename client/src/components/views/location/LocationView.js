@@ -52,7 +52,7 @@ class LocationView extends Component {
 
   componentWillUpdate(nextProps) {
     if (nextProps.name !== this.props.name && this.props.name)
-      this.props.actions.loadPeopleInfo(nextProps.name);
+      this.props.actions.loadLocationInfo(nextProps.name);
   }
 
   render() {

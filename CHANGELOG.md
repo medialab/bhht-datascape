@@ -3,6 +3,7 @@
 # v0.2.0
 
 * Fixing the `1970` location peak.
+* Fixing a bug when changing people or location within a micro page.
 
 # v0.1.0
 

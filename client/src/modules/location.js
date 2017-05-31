@@ -7,6 +7,8 @@
 import client from '../client';
 import {resolver} from './helpers';
 
+import {ROUTER_CHANGE_VIEW} from './router';
+
 /**
  * Constants.
  */
@@ -25,6 +27,14 @@ const DEFAULT_STATE = {
  * Reducer.
  */
 export default resolver(DEFAULT_STATE, {
+
+  // When the route changes
+  [ROUTER_CHANGE_VIEW](state) {
+    return {
+      ...state,
+      info: null
+    };
+  },
 
   // When people info is loading
   [LOCATION_INFO_LOADING](state) {
