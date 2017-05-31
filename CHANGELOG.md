@@ -2,6 +2,9 @@
 
 # v0.2.0
 
+* Adding period presets.
+* Adding a label system for filter values.
+* Dropping some fields on people index.
 * Fixing the `1970` location peak.
 * Fixing a bug when changing people or location within a micro page.
 * Fixing a bug where category selection would reset after changing date selection.

@@ -100,22 +100,10 @@
           }
         }
       },
-      "citizenship": {
-        "type": "keyword"
-      },
-      "region": {
-        "type": "keyword"
-      },
       "birthLocation": {
         "type": "keyword"
       },
       "deathLocation": {
-        "type": "keyword"
-      },
-      "continent": {
-        "type": "keyword"
-      },
-      "period": {
         "type": "keyword"
       },
       "availableLanguages": {

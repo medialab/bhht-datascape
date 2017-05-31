@@ -35,7 +35,9 @@ import {
 /**
  * Data.
  */
+import META from 'specs/meta.json';
 import PRESETS from './presets.json';
+import LABELS from './labels.json';
 
 /**
  * Constants.
@@ -78,6 +80,8 @@ function MacroViewModeSelector(props) {
     onSelect
   } = props;
 
+  const labels = LABELS[selected];
+
   return (
     <table>
       <tbody>
@@ -104,7 +108,7 @@ function MacroViewModeSelector(props) {
                     style={{backgroundColor: muted ? null : value.color}}
                     className={cls('button', 'value-selector', muted && 'muted')}
                     onClick={() => onSelect(value.name)}>
-                    {value.name}
+                    {labels ? labels[value.name] : value.name}
                   </a>
                 );
               })
@@ -120,10 +124,18 @@ function MacroViewModeSelector(props) {
  * Period selector.
  */
 const PRESET_OPTIONS = PRESETS.map(preset => {
-  return {
-    value: [preset.start, preset.end],
-    label: preset.label
+  const option = {
+    value: [
+      preset.start || ('' + META.dates.min),
+      preset.end || ('' + META.dates.max)
+    ]
   };
+
+  option.label = (
+    <span>{preset.label} <small>({option.value[0]} • {option.value[1]})</small></span>
+  );
+
+  return option;
 });
 
 const optionMapper = year => ({value: year, label: year});

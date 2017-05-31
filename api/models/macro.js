@@ -36,12 +36,13 @@ const lexicographicSort = (a, b) => a.name.localeCompare(b.name);
 const LANGUAGES_ORDER = {
   multiWithEn: 1,
   multiWithoutEn: 2,
-  de: 3,
-  es: 4,
-  fr: 5,
-  it: 6,
-  pt: 7,
-  sv: 8
+  en: 3,
+  de: 4,
+  es: 5,
+  fr: 6,
+  it: 7,
+  pt: 8,
+  sv: 9
 };
 
 const languagesSort = (a, b) => LANGUAGES_ORDER[a.name] - LANGUAGES_ORDER[b.name];

@@ -75,9 +75,6 @@ const QUERY_BUCKETS = {
     const filters = {};
 
     LANGS.forEach(lang => {
-      if (lang === 'en')
-        return;
-
       filters[lang] = createBoolQueryForLang(lang);
     });
 
