@@ -19,6 +19,8 @@ import PeopleViewNotorietyIndicator from './PeopleViewNotorietyIndicator';
 import {loadPeopleInfo} from '../../../modules/people';
 import {formatDate, formatLifetime} from '../../../helpers';
 
+import LABELS from 'specs/labels.json';
+
 /**
  * Formats.
  */
@@ -106,7 +108,7 @@ class PeopleView extends Component {
           <strong>Wikipedia pages:</strong>
           {' '}
           {info.availableLanguages.map(lang => {
-            const url = createWikipediaURL(lang, info.name);
+            const url = createWikipediaURL(lang, info.links[lang]);
 
             return (
               <span key={lang}>
@@ -122,8 +124,8 @@ class PeopleView extends Component {
           })}
         </div>
         <PeopleViewInfo title="Gender" value={info.gender} />
-        <PeopleViewInfo title="Category" value={info.category} />
-        <PeopleViewInfo title="SubCategory" value={info.subcategory} />
+        <PeopleViewInfo title="Category" value={LABELS.categories[info.category]} />
+        <PeopleViewInfo title="SubCategory" value={LABELS.subcategories[info.subcategory]} />
         <PeopleViewInfo title="Birth date" value={formatDate(info.birthDatePrecision, info.birth)} />
         <PeopleViewInfo title="Death date" value={formatDate(info.deathDatePrecision, info.death)} />
         <PeopleViewInfo title="Estimated birth date" value={info.estimatedBirthDate} />
@@ -155,7 +157,7 @@ class PeopleView extends Component {
         <h4 className="title is-4">Occupations</h4>
         {info.occupations.map(occupation => (
           <div key={occupation.order}>
-            {occupation.order}. <strong>{occupation.category}</strong> (<em>{occupation.subcategory}</em>) [{occupation.weight}]
+            {occupation.order}. <strong>{LABELS.categories[occupation.category]}</strong> (<em>{LABELS.subcategories[occupation.subcategory]}</em>) [{occupation.weight}]
           </div>
         ))}
         <hr />
