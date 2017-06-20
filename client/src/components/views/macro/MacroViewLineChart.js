@@ -18,6 +18,8 @@ import {
   Brush
 } from 'recharts';
 
+import LABELS from 'specs/labels.json';
+
 /**
  * Constants.
  */
@@ -34,6 +36,39 @@ export default class MacroViewLineChart extends Component {
     this.debouncedOnBrush = debounce((...args) => {
       this.props.onBrush(...args);
     }, 500);
+
+    this.renderTooltip = this.renderTooltip.bind(this);
+  }
+
+  renderTooltip(data) {
+    const payload = data.payload.slice().sort((a, b) => {
+      return b.value - a.value;
+    });
+
+    const labels = LABELS[this.props.mode];
+
+    const style = {
+      margin: 0,
+      padding: 10,
+      backgroundColor: '#fff',
+      border: '1px solid #ccc',
+      whiteSpace: 'nowrap'
+    };
+
+    return (
+      <div style={style}>
+        <p className="recharts-tooltip-label">{LABEL_FORMAT(data.label)}</p>
+        <ul>
+          {payload.map(item => {
+            return (
+              <li key={item.name}>
+                <span style={{color: item.color}}>{labels ? labels[item.name] : item.name}:</span> {NUMBER_FORMAT(item.value)}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
   }
 
   render() {
@@ -60,8 +95,7 @@ export default class MacroViewLineChart extends Component {
         <CartesianGrid strokeDasharray="3 3" />
         <Tooltip
           isAnimationActive={false}
-          formatter={NUMBER_FORMAT}
-          labelFormatter={LABEL_FORMAT} />
+          content={this.renderTooltip} />
         {names.map((name, i) => {
           return (
             <Line
