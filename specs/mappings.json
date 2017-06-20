@@ -222,6 +222,32 @@
             "type": "integer"
           }
         }
+      },
+      "links": {
+        "type": "object",
+        "properties": {
+          "en": {
+            "type": "keyword"
+          },
+          "fr": {
+            "type": "keyword"
+          },
+          "es": {
+            "type": "keyword"
+          },
+          "it": {
+            "type": "keyword"
+          },
+          "sv": {
+            "type": "keyword"
+          },
+          "de": {
+            "type": "keyword"
+          },
+          "pt": {
+            "type": "keyword"
+          }
+        }
       }
     }
   },

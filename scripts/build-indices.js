@@ -42,6 +42,8 @@ const MAPPINGS = require('../specs/mappings.json'),
       ANALYZERS = require('../specs/analyzers.json'),
       FILTERS = require('../specs/filters.json');
 
+const FLOAT_CHECK = /\./;
+
 const DATE_PRECISION_HIERARCHY = {
   century: 1,
   circa: 2,
@@ -195,8 +197,26 @@ const readStreams = {
     .pipe(createCSVParserStream())
     .pipe(through.obj(function(doc, enc, next) {
 
+      const links = {};
+
+      if (doc.english_link)
+        links.en = doc.english_link;
+      if (doc.french_link)
+        links.fr = doc.french_link;
+      if (doc.spanish_link)
+        links.es = doc.spanish_link;
+      if (doc.portuguese_link)
+        links.pt = doc.portuguese_link;
+      if (doc.german_link)
+        links.de = doc.german_link;
+      if (doc.italian_link)
+        links.it = doc.italian_link;
+      if (doc.swedish_link)
+        links.sv = doc.swedish_link;
+
       // People information
       const people = {
+        links,
         name: doc.name,
         label: createWikipediaLabel(doc.name),
         wikipediaId: doc.id,
@@ -222,6 +242,16 @@ const readStreams = {
       };
 
       people.availableLanguagesCount = people.availableLanguages.length;
+
+      // Sanity checks
+      if (people.estimatedBirthDate && FLOAT_CHECK.test(people.estimatedBirthDate)) {
+        console.error(`This person has a float birth date: ${people.estimatedBirthDate}.`, doc);
+        people.estimatedBirthDate = people.estimatedBirthDate.split('.')[0];
+      }
+      if (people.estimatedDeathDate && FLOAT_CHECK.test(people.estimatedDeathDate)) {
+        console.error(`This person has a float birth date: ${people.estimatedDeathDate}.`, doc);
+        people.estimatedDeathDate = people.estimatedDeathDate.split('.')[0];
+      }
 
       // Trimming
       emptyFilter(people);
@@ -276,7 +306,7 @@ const readStreams = {
       const occupations = new Map();
 
       for (let i = 1; i <= 3; i++) {
-        const subcategory = doc['occupationB_' + i];
+        const subcategory = doc[`occupation_${i}_L2`];
 
         if (!subcategory || subcategory === '.')
           continue;
