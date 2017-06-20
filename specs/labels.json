@@ -1,0 +1,40 @@
+{
+  "languages": {
+    "multiWithEn": "English International",
+    "multiWithoutEn": "Non-English International",
+    "en": "English Local",
+    "de": "German Local",
+    "es": "Spanish Local",
+    "fr": "French Local",
+    "it": "Italian Local",
+    "pt": "Portuguese Local",
+    "sv": "Swedish Local"
+  },
+  "categories": {
+    "academics": "Academics",
+    "culture": "Culture",
+    "entrepreneur": "Business/Economics/Trade",
+    "family": "Family",
+    "governance_executive": "Governance Executive",
+    "governance_symbolic": "Governance Symbolic",
+    "other": "Other",
+    "sports": "Sports"
+  },
+  "subcategories": {
+    "corporate": "Corporate",
+    "culture_1": "Culture (Core)",
+    "culture_2": "Culture (Related)",
+    "education": "Teaching & Education",
+    "explorer": "Explorer/Developer",
+    "familyB": "Family",
+    "law": "Law Enforcement",
+    "military": "Military",
+    "nobility": "Nobility",
+    "otherB": "Other",
+    "politics": "Politics",
+    "religious": "Religious",
+    "science": "Science",
+    "sports": "Sports",
+    "worker": "Worker/Employee/Services"
+  }
+}

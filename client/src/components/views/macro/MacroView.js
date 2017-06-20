@@ -36,8 +36,8 @@ import {
  * Data.
  */
 import META from 'specs/meta.json';
+import LABELS from 'specs/labels.json';
 import PRESETS from './presets.json';
-import LABELS from './labels.json';
 
 /**
  * Constants.
