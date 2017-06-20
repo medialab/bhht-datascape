@@ -245,12 +245,18 @@ const readStreams = {
 
       // Sanity checks
       if (people.estimatedBirthDate && FLOAT_CHECK.test(people.estimatedBirthDate)) {
-        console.error(`This person has a float birth date: ${people.estimatedBirthDate}.`, doc);
+        // console.error(`This person has a float birth date: ${people.estimatedBirthDate}.`, doc);
         people.estimatedBirthDate = people.estimatedBirthDate.split('.')[0];
+
+        if (people.estimatedBirthDate === '-')
+          people.estimatedBirthDate = '0';
       }
       if (people.estimatedDeathDate && FLOAT_CHECK.test(people.estimatedDeathDate)) {
-        console.error(`This person has a float birth date: ${people.estimatedDeathDate}.`, doc);
+        // console.error(`This person has a float birth date: ${people.estimatedDeathDate}.`, doc);
         people.estimatedDeathDate = people.estimatedDeathDate.split('.')[0];
+
+        if (people.estimatedDeathDate === '-')
+          people.estimatedDeathDate = '0';
       }
 
       // Trimming
