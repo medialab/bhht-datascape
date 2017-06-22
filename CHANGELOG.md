@@ -4,6 +4,7 @@
 
 * Keeping state of macro view across routing.
 * Adding distinct names to people view.
+* Removing weight info from occupations in people view.
 
 # v0.3.0
 

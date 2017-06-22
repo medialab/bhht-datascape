@@ -167,7 +167,7 @@ class PeopleView extends Component {
         <h4 className="title is-4">Occupations</h4>
         {info.occupations.map(occupation => (
           <div key={occupation.order}>
-            {occupation.order}. <strong>{LABELS.categories[occupation.category]}</strong> (<em>{LABELS.subcategories[occupation.subcategory]}</em>) [{occupation.weight}]
+            {occupation.order}. <strong>{LABELS.categories[occupation.category]}</strong> (<em>{LABELS.subcategories[occupation.subcategory]}</em>)
           </div>
         ))}
         <hr />
