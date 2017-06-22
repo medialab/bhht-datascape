@@ -88,6 +88,11 @@ class PeopleView extends Component {
 
     const isAlive = info.dead ? 'No' : 'Yes';
 
+    const distinctNames = new Set();
+
+    for (const lang in info.links)
+      distinctNames.add(createWikipediaLabel(info.links[lang]));
+
     // const chronology = (
     //   <Measure>
     //     {dimensions => (
@@ -123,6 +128,7 @@ class PeopleView extends Component {
             );
           })}
         </div>
+        <PeopleViewInfo title="Distinct Names" value={[...distinctNames].join(', ')} />
         <PeopleViewInfo title="Gender" value={info.gender} />
         <PeopleViewInfo title="Category" value={LABELS.categories[info.category]} />
         <PeopleViewInfo title="SubCategory" value={LABELS.subcategories[info.subcategory]} />

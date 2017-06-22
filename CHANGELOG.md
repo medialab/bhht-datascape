@@ -1,5 +1,10 @@
 # Changelog
 
+# v0.4.0
+
+* Keeping state of macro view across routing.
+* Adding distinct names to people view.
+
 # v0.3.0
 
 * Adding labels for categories & subcategories.
