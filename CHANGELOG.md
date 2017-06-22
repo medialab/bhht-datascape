@@ -3,6 +3,7 @@
 # v0.5.0 (provisional)
 
 * Tweaking notoriety info.
+* Fixing the GET API.
 
 # v0.4.0
 
