@@ -15,7 +15,6 @@ import {createWikipediaURL, createWikipediaLabel} from 'lib/helpers';
 import Link from '../../Link';
 // import PeopleViewChronology from './PeopleViewChronology';
 import PeopleViewTrajectory from './PeopleViewTrajectory';
-import PeopleViewNotorietyIndicator from './PeopleViewNotorietyIndicator';
 import {loadPeopleInfo} from '../../../modules/people';
 import {formatDate, formatLifetime} from '../../../helpers';
 
@@ -153,13 +152,17 @@ class PeopleView extends Component {
         <hr />
         <h4 className="title is-4">Notoriety</h4>
         {Object.keys(info.notoriety).map(lang => {
+
+          const rank = info.ranking[lang],
+                max = info.maxNotoriety[lang];
+
+          const percentage = (rank * 100) / max,
+                decile = Math.ceil(percentage / 10) * 10;
+
           return (
             <div key={lang} style={{width: '50%'}}>
-              <strong>{lang}</strong>
+              <strong>{lang}</strong> Top {decile}%
               &nbsp;(<em>{NUMBER_FORMAT(info.ranking[lang])}</em> on <em>{NUMBER_FORMAT(info.maxNotoriety[lang])}</em>)
-              <PeopleViewNotorietyIndicator
-                notoriety={info.maxNotoriety[lang] - info.ranking[lang]}
-                max={info.maxNotoriety[lang]} />
             </div>
           );
         })}

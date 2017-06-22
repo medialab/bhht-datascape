@@ -1,5 +1,9 @@
 # Changelog
 
+# v0.5.0 (provisional)
+
+* Tweaking notoriety info.
+
 # v0.4.0
 
 * Keeping state of macro view across routing.
