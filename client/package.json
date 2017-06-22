@@ -1,6 +1,6 @@
 {
   "name": "bhht-datascape-client",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "description": "Client for the BHHT datascape.",
   "main": "index.js",
   "scripts": {

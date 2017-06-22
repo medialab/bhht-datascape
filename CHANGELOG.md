@@ -1,6 +1,6 @@
 # Changelog
 
-# v0.5.0 (provisional)
+# v0.5.0
 
 * Tweaking notoriety info.
 * Fixing the GET API.
