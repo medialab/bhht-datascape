@@ -1,5 +1,11 @@
 # Changelog
 
+# v0.3.0
+
+* Adding labels for categories & subcategories.
+* Improving the people page with new data.
+* Improving the line chart tooltips.
+
 # v0.2.0
 
 * Adding period presets.
