@@ -157,11 +157,11 @@ class PeopleView extends Component {
                 max = info.maxNotoriety[lang];
 
           const percentage = (rank * 100) / max,
-                decile = Math.ceil(percentage / 10) * 10;
+                percentile = Math.ceil(percentage / 1) * 1;
 
           return (
             <div key={lang} style={{width: '50%'}}>
-              <strong>{lang}</strong> Top {decile}%
+              <strong>{lang}</strong> Top {percentile}%
               &nbsp;(<em>{NUMBER_FORMAT(info.ranking[lang])}</em> on <em>{NUMBER_FORMAT(info.maxNotoriety[lang])}</em>)
             </div>
           );
