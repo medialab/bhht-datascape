@@ -8,6 +8,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {compose} from 'recompose';
+import cls from 'classnames';
 import Link from './Link';
 import FuzzySearcher from './FuzzySearcher';
 import MacroView from './views/macro/MacroView';
@@ -18,7 +19,6 @@ import LocationView from './views/location/LocationView';
  * View map.
  */
 const MAP = {
-  macro: MacroView,
   people: PeopleView,
   location: LocationView
 };
@@ -72,9 +72,14 @@ class Application extends Component {
           </div>
           <div className="nav-right" />
         </nav>
-        <div className="container is-fluid">
-          <RouteComponent />
+        <div className={cls('container', 'is-fluid', view !== 'macro' && 'is-hidden')}>
+          <MacroView />
         </div>
+        {view !== 'macro' && (
+          <div className="container is-fluid">
+            <RouteComponent />
+          </div>
+        )}
       </div>
     );
   }
