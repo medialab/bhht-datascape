@@ -8,6 +8,8 @@ import React from 'react';
 import Link from '../../Link';
 import {formatLifetime} from '../../../helpers';
 
+import LABELS from 'specs/labels.json';
+
 /**
  * People item.
  */
@@ -21,7 +23,9 @@ function MacroViewTopListPeopleItem({rank, link, item}) {
         </strong>
         &nbsp;({item.gender === 'Female' ? 'F' : 'M'})
         <small> ({formatLifetime(item)})</small>
-        {item.category && <span> - <em><small>{item.category} / {item.subcategory}</small></em></span>}
+        {item.category && <span>
+        <br />
+        <em><small>{LABELS.categories[item.category]} § {LABELS.subcategories[item.subcategory]}</small></em></span>}
       </Link>
     </div>
   );

@@ -4,6 +4,7 @@
 
 * Tweaking notoriety info.
 * Fixing the GET API.
+* Tweaking the top people list and add missing labels.
 
 # v0.4.0
 
