@@ -88,10 +88,14 @@ class PeopleView extends Component {
 
     const isAlive = info.dead ? 'No' : 'Yes';
 
-    const distinctNames = new Set();
+    const names = {};
 
-    for (const lang in info.links)
-      distinctNames.add(createWikipediaLabel(info.links[lang]));
+    for (const lang in info.links) {
+      const name = createWikipediaLabel(info.links[lang]);
+
+      names[name] = names[name] || [];
+      names[name].push(lang);
+    }
 
     // const chronology = (
     //   <Measure>
@@ -128,7 +132,7 @@ class PeopleView extends Component {
             );
           })}
         </div>
-        <PeopleViewInfo title="Distinct Names" value={[...distinctNames].join(', ')} />
+        <PeopleViewInfo title="Distinct Names" value={Object.keys(names).map(name => `${name} (${names[name].join(', ')})`).join(' - ')} />
         <PeopleViewInfo title="Gender" value={info.gender} />
         <PeopleViewInfo title="Category" value={LABELS.categories[info.category]} />
         <PeopleViewInfo title="SubCategory" value={LABELS.subcategories[info.subcategory]} />
