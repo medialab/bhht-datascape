@@ -337,7 +337,7 @@ function createTopLocationsQuery(params) {
             must: [
               {
                 range: {
-                  min: {
+                  year: {
                     format: 'y',
                     gte: period[0],
                     lt: period[1]

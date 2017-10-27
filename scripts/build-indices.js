@@ -386,23 +386,37 @@ const readStreams = {
     .createReadStream(joinPath(argv.b, BASE_PATHS))
     .pipe(createCSVParserStream())
     .pipe(through.obj(function(doc, enc, next) {
-      const path = {
-        lang: 'en',
-        people: doc.name,
-        location: doc.location,
-        min: doc.min,
-        max: doc.max,
-        order: +doc.n_traj
-      };
+      const name = doc.name;
 
-      // Incrementing location score
-      LOCATIONS_SCORES.add(doc.location);
+      const links = doc.links.split('§').map(tuple => {
+        const [year, location] = tuple.split('@');
 
-      emptyFilter(path);
+        return {
+          year,
+          location
+        };
+      });
+
+      for (let i = 0, l = links.length; i < l; i++) {
+        const {year, location} = links[i];
+
+        const path = {
+          lang: 'en',
+          people: name,
+          location,
+          year,
+          order: i
+        };
+
+        emptyFilter(path);
+
+        // Incrementing location score
+        LOCATIONS_SCORES.add(location);
+
+        this.push(path);
+      }
 
       pathLogger(nb => `  -> (${prettyNumber(nb)}) paths processed.`);
-
-      this.push(path);
 
       return next();
     }))

@@ -262,11 +262,7 @@
       "location": {
         "type": "keyword"
       },
-      "min": {
-        "type": "date",
-        "format": "yyyy"
-      },
-      "max": {
+      "year": {
         "type": "date",
         "format": "yyyy"
       },
