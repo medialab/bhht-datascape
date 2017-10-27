@@ -388,7 +388,7 @@ const readStreams = {
       const name = doc.name;
 
       const links = doc.links.split('§').map(tuple => {
-        const [location, year] = tuple.split('@');
+        const [location, year] = tuple.split('|');
 
         return {
           year,
