@@ -8,6 +8,9 @@
         "type": "text",
         "analyzer": "label"
       },
+      "aliases": {
+        "type": "keyword"
+      },
       "availableLanguages": {
         "type": "keyword"
       },

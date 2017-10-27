@@ -434,8 +434,9 @@ const readStreams = {
       const best = _.maxBy(scoredAliases, item => item[1]);
 
       const location = {
-        name: aliases,
+        name: best.alias,
         label: createWikipediaLabel(best.alias),
+        aliases,
         position: {
           lat: doc.lat,
           lon: doc.lon
