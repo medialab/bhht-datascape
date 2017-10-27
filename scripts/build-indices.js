@@ -79,8 +79,7 @@ const CLIENT = require('../api/client');
 /**
  * Indices.
  */
-const LOCATIONS = new Map(),
-      LOCATIONS_SCORES = new MultiSet();
+const LOCATIONS_SCORES = new MultiSet();
 
 /**
  * Helpers.
@@ -428,24 +427,28 @@ const readStreams = {
     .pipe(createCSVParserStream())
     .pipe(through.obj(function(doc, enc, next) {
 
-      if (LOCATIONS.has(doc.location))
-        return next();
+      const aliases = doc.aliases.split('§');
+
+      const scoredAliases = aliases.map(alias => ({alias, score: LOCATIONS_SCORES.multiplicity(alias)});
+
+      const best = _.maxBy(scoredAliases, item => item[1]);
 
       const location = {
-        name: doc.location,
-        label: createWikipediaLabel(doc.location),
+        name: aliases,
+        label: createWikipediaLabel(best.alias),
         position: {
           lat: doc.lat,
           lon: doc.lon
-        }
+        },
+        instance: doc.instance.split('§')
       };
 
       location.suggest = {
-        input: location.label,
-        weight: LOCATIONS_SCORES.multiplicity(doc.location)
+        input: best.alias,
+        weight: best.score
       };
 
-      LOCATIONS.set(location.name, location);
+      emptyFilter(location);
 
       locationLogger(nb => `  -> (${prettyNumber(nb)}) locations processed.`);
 
@@ -491,6 +494,9 @@ async.series([
   },
   function indexPeople(next) {
     console.log('Indexing people...');
+
+    // TODO: remove
+    return process.nextTick(next);
 
     return readStreams
       .people()

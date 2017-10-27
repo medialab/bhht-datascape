@@ -8,6 +8,9 @@
         "type": "text",
         "analyzer": "label"
       },
+      "availableLanguages": {
+        "type": "keyword"
+      },
       "suggest": {
         "type": "completion",
         "analyzer": "suggestion",
@@ -15,6 +18,9 @@
       },
       "position": {
         "type": "geo_point"
+      },
+      "instance": {
+        "type": "keyword"
       }
     }
   },
