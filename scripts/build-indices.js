@@ -118,6 +118,16 @@ const prettyNumber = number => padStart(numeral(number).format('0,0'), 9);
 // Function used to create a lang map for some values
 const POSSIBLE_LANGS = new Set(['en', 'fr', 'es', 'it', 'sv', 'de', 'pt']);
 
+const LABELS_TO_LANG = {
+  english: 'en'
+  french: 'fr'
+  german: 'de'
+  italian: 'it'
+  portuguese: 'pt'
+  spanish: 'es'
+  swedish: 'sv'
+};
+
 const pluralLangSplitter = string => {
   const langs = {};
 
@@ -231,7 +241,7 @@ const readStreams = {
         deathLocation: doc.place_of_death,
         dead: !!+doc.dead,
         languagesCount: doc.noccur_languages ? (+doc.noccur_languages + 1) : 1,
-        mainLanguage: doc.language,
+        mainLanguage: LABELS_TO_LANG[doc.language],
         originalId: doc.newid,
         availableLanguages: doc.ID_LANGUE.split('|').map(item => item.toLowerCase()),
         words: pluralLangSplitter(doc.count_words),
