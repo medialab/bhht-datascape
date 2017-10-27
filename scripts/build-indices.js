@@ -34,8 +34,8 @@ require('util').inspect.defaultOptions.colors = true;
  * Constants.
  */
 const BASE_PEOPLE = 'base1_individus.csv',
-      BASE_LOCATIONS = 'base2_locations.csv',
-      BASE_PATHS = 'base3_trajectoires.csv';
+      BASE_LOCATIONS = 'base2_locations_mined.csv',
+      BASE_PATHS = 'base3_trajectoires_mined.csv';
 
 const MAPPINGS = require('../specs/mappings.json'),
       CATEGORIES = require('../specs/meta.json').categories,
