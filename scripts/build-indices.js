@@ -119,12 +119,12 @@ const prettyNumber = number => padStart(numeral(number).format('0,0'), 9);
 const POSSIBLE_LANGS = new Set(['en', 'fr', 'es', 'it', 'sv', 'de', 'pt']);
 
 const LABELS_TO_LANG = {
-  english: 'en'
-  french: 'fr'
-  german: 'de'
-  italian: 'it'
-  portuguese: 'pt'
-  spanish: 'es'
+  english: 'en',
+  french: 'fr',
+  german: 'de',
+  italian: 'it',
+  portuguese: 'pt',
+  spanish: 'es',
   swedish: 'sv'
 };
 
