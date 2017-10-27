@@ -388,7 +388,7 @@ const readStreams = {
       const name = doc.name;
 
       const links = doc.links.split('§').map(tuple => {
-        const [year, location] = tuple.split('@');
+        const [location, year] = tuple.split('@');
 
         return {
           year,
@@ -400,7 +400,6 @@ const readStreams = {
         const {year, location} = links[i];
 
         const path = {
-          lang: 'en',
           people: name,
           location,
           year,
@@ -429,7 +428,7 @@ const readStreams = {
 
       const aliases = doc.aliases.split('§');
 
-      const scoredAliases = aliases.map(alias => ({alias, score: LOCATIONS_SCORES.multiplicity(alias)});
+      const scoredAliases = aliases.map(alias => ({alias, score: LOCATIONS_SCORES.multiplicity(alias)}));
 
       const best = _.maxBy(scoredAliases, item => item[1]);
 

@@ -262,9 +262,6 @@
   },
   "path": {
     "properties": {
-      "lang": {
-        "type": "keyword"
-      },
       "people": {
         "type": "keyword"
       },

@@ -35,7 +35,7 @@
     "csv": "^1.1.1",
     "dolman": "^0.4.0",
     "elasticsearch": "^13.1.1",
-    "elasticsearch-streams": "0.0.9",
+    "elasticsearch-streams": "0.0.10",
     "express": "^4.15.2",
     "lodash": "^4.17.4",
     "mnemonist": "^0.15.0",
