@@ -38,7 +38,7 @@
     "elasticsearch-streams": "0.0.9",
     "express": "^4.15.2",
     "lodash": "^4.17.4",
-    "mnemonist": "^0.12.0",
+    "mnemonist": "^0.15.0",
     "morgan": "^1.8.1",
     "numeral": "^2.0.4",
     "through2": "^2.0.3",
