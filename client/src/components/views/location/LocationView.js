@@ -10,7 +10,7 @@ import Measure from 'react-measure';
 import {bindActionCreators} from 'redux';
 import {compose} from 'recompose';
 import {connect} from 'react-redux';
-import {createWikipediaURL} from 'lib/helpers';
+import {createWikipediaLabel} from 'lib/helpers';
 import WorldMap from '../../WorldMap';
 import LocationViewFrequentationChart from './LocationViewFrequentationChart';
 import {loadLocationInfo} from '../../../modules/location';
@@ -36,6 +36,17 @@ const enhance = compose(
     }
   )
 );
+
+/**
+ * Helper components.
+ */
+function LocationViewInfo({title, value}) {
+  return (
+    <p>
+      <strong>{title}:</strong> {value}
+    </p>
+  );
+}
 
 /**
  * Main component.
@@ -81,20 +92,36 @@ class LocationView extends Component {
       ];
     }
 
-    const url = createWikipediaURL('en', info.name);
-
     return (
       <div>
         <h1 className="title">{info.label}</h1>
-        <p>
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer">
-            {url}
-          </a>
-        </p>
+        <div>
+          <LocationViewInfo title="Available languages" value={info.availableLanguages.join(', ')} />
+          <LocationViewInfo title="Aliases" />
+          <div className="content">
+            <ul>
+              {info.aliases.map(alias => {
+                return (
+                  <li key={alias}>{createWikipediaLabel(alias)}</li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
         <hr />
+        {info.instance && (
+          <div>
+            <h4 className="title is-4">Instance of</h4>
+            <div className="content">
+              <ul>
+                {info.instance.map(label => {
+                  return <li key={label}>{label}</li>
+                })}
+              </ul>
+            </div>
+            <hr />
+          </div>
+        )}
         <h4 className="title is-4">Frequentation</h4>
         <Measure style={{height: '150px'}}>
           {dimensions => {
@@ -114,6 +141,7 @@ class LocationView extends Component {
             <WorldMap
               center={markers[0].position}
               markers={markers} />
+            <hr />
           </div>
         )}
       </div>
