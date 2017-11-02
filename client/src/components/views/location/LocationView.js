@@ -64,9 +64,11 @@ class LocationView extends Component {
     if (loading || !info)
       return <div>Loading...</div>;
 
+    const hasCoordinates = !!info.position;
+
     let markers;
 
-    if (info.position) {
+    if (hasCoordinates) {
       markers = [
         {
           key: name,
@@ -105,12 +107,14 @@ class LocationView extends Component {
             );
           }}
         </Measure>
-        <hr />
-        <h4 className="title is-4">Map</h4>
-        {markers && (
-          <WorldMap
-            center={markers[0].position}
-            markers={markers} />
+        {hasCoordinates && (
+          <div>
+            <hr />
+            <h4 className="title is-4">Map</h4>
+            <WorldMap
+              center={markers[0].position}
+              markers={markers} />
+          </div>
         )}
       </div>
     );

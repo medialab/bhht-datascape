@@ -1,6 +1,13 @@
 # Changelog
 
-# v0.6.0
+## v0.7.0
+
+* New import script working with mined data.
+* New location page.
+* New people page.
+* New location instance page.
+
+## v0.6.0
 
 * Changed notoriety decile to percentile.
 
