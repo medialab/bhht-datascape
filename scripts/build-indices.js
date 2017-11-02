@@ -52,8 +52,8 @@ const DATE_PRECISION_HIERARCHY = {
 
 const BULK_SIZES = {
   people: 700,
-  location: 1500,
-  path: 1500
+  location: 1000,
+  path: 1000
 };
 
 const LOG_RATE = 10 * 1000;
@@ -430,22 +430,37 @@ const readStreams = {
 
       const scoredAliases = aliases.map(alias => ({alias, score: LOCATIONS_SCORES.multiplicity(alias)}));
 
-      const best = _.maxBy(scoredAliases, item => item[1]);
+      const best = _.maxBy(scoredAliases, item => item.score);
 
       const location = {
         name: best.alias,
         label: createWikipediaLabel(best.alias),
         aliases,
-        position: {
-          lat: doc.lat,
-          lon: doc.lon
-        },
-        instance: doc.instance.split('§')
+        availableLanguages: doc.langs.split('§')
       };
 
+      if (doc.instance)
+        location.instance = doc.instance.split('§');
+
+      if (doc.lat && doc.lon) {
+        location.position = {
+          lat: +doc.lat,
+          lon: +doc.lon
+        };
+
+        const {lat, lon} = location.position;
+
+        // Filtering inconsistent coordinates (Apollo XI, for instance...)
+        if (lat > 90 || lat < -90)
+          delete location.position;
+        else if (lon > 180 || lon < -180)
+          delete location.position;
+      }
+
+      // TODO: could use all the aliases here if needed
       location.suggest = {
         input: best.alias,
-        weight: best.score
+        weight: best.score || 1
       };
 
       emptyFilter(location);
@@ -494,9 +509,6 @@ async.series([
   },
   function indexPeople(next) {
     console.log('Indexing people...');
-
-    // TODO: remove
-    return process.nextTick(next);
 
     return readStreams
       .people()
