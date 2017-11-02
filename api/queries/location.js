@@ -14,22 +14,22 @@ const {
 const STEP = 10;
 
 /**
- * Function returning a frequentation query for the given location.
+ * Function returning a frequentation query for the given location aliases.
  */
-function createFrequentationQuery(location) {
+function createFrequentationQuery(aliases) {
   const query = {
     size: 0,
     query: {
       bool: {
         must: [
           {
-            term: {
-              location
+            terms: {
+              location: aliases
             }
           },
           {
             exists: {
-              field: 'max'
+              field: 'year'
             }
           }
         ]
@@ -41,7 +41,7 @@ function createFrequentationQuery(location) {
           ranges: createHistogramRanges(STEP),
           script: {
             lang: 'painless',
-            inline: 'Math.ceil(doc[\'max\'].date.year / 10) * 10'
+            inline: 'Math.ceil(doc[\'year\'].date.year / 10) * 10'
           }
         }
       }

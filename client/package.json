@@ -36,7 +36,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "bulma": "^0.6.0",
+    "bulma": "^0.4.0",
     "classnames": "^2.2.5",
     "config": "^1.26.1",
     "d3-format": "^1.1.1",
@@ -50,7 +50,7 @@
     "react-autosuggest": "^9.0.0",
     "react-dom": "^15.6.1",
     "react-leaflet": "^1.1.4",
-    "react-measure": "^2.0.2",
+    "react-measure": "^1.4.6",
     "react-redux": "^5.0.3",
     "react-select": "^1.0.0-rc.4",
     "recharts": "^0.22.3",

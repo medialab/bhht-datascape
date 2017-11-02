@@ -17,40 +17,51 @@ const {
  */
 exports.get = function(id, callback) {
 
-  async.parallel({
-    info: next => {
-      return client.get({index: 'location', type: 'location', id}, (err, result) => {
+  const query = {
+    size: 1,
+    query: {
+      term: {
+        aliases: id
+      }
+    }
+  };
+
+  async.waterfall([
+    next => {
+      return client.search({index: 'location', type: 'location', body: query}, (err, result) => {
         if (err) {
           if (err.status === 404)
             return next(null, null);
           return next(err);
         }
 
-        return next(null, result._source);
+        return next(null, result.hits.hits[0]._source);
       });
     },
-    frequentation: async.apply(exports.frequentation, id)
-  }, (err, data) => {
-    if (err)
-      return callback(err);
+    (location, next) => {
+      return exports.frequentation(location.aliases, (err, result) => {
+        if (err)
+          return next(err);
 
-    const location = data.info;
+        const frequentation = result
+          .aggregations
+          .histogram
+          .buckets
+          .map(bucket => {
+            return {
+              from: '' + bucket.from,
+              count: bucket.doc_count
+            };
+          });
 
-    // Mapping frequentation data
-    location.frequentation = data
-      .frequentation
-      .aggregations
-      .histogram
-      .buckets
-      .map(bucket => {
-        return {
-          from: '' + bucket.from,
-          count: bucket.doc_count
-        };
+        return next(null, location, frequentation);
       });
-
-    return callback(null, location);
-  });
+    },
+    (location, frequentation, next) => {
+      location.frequentation = frequentation;
+      return next(null, location);
+    }
+  ], callback);
 };
 
 /**
@@ -86,10 +97,10 @@ exports.suggestions = function(query, callback) {
 };
 
 /**
- * Function retrieving frequentation stats for the given location.
+ * Function retrieving frequentation stats for the given location aliases.
  */
-exports.frequentation = function(location, callback) {
-  const query = createFrequentationQuery(location);
+exports.frequentation = function(aliases, callback) {
+  const query = createFrequentationQuery(aliases);
 
   return client.search({index: 'path', body: query}, (err, result) => {
     if (err)

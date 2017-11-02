@@ -64,16 +64,20 @@ class LocationView extends Component {
     if (loading || !info)
       return <div>Loading...</div>;
 
-    const markers = [
-      {
-        key: name,
-        position: [
-          +info.position.lat,
-          +info.position.lon
-        ],
-        label: info.label
-      }
-    ];
+    let markers;
+
+    if (info.position) {
+      markers = [
+        {
+          key: name,
+          position: [
+            +info.position.lat,
+            +info.position.lon
+          ],
+          label: info.label
+        }
+      ];
+    }
 
     const url = createWikipediaURL('en', info.name);
 
@@ -87,9 +91,6 @@ class LocationView extends Component {
             rel="noopener noreferrer">
             {url}
           </a>
-        </p>
-        <p>
-          {info.position.lat}, {info.position.lon}
         </p>
         <hr />
         <h4 className="title is-4">Frequentation</h4>
@@ -106,9 +107,11 @@ class LocationView extends Component {
         </Measure>
         <hr />
         <h4 className="title is-4">Map</h4>
-        <WorldMap
-          center={markers[0].position}
-          markers={markers} />
+        {markers && (
+          <WorldMap
+            center={markers[0].position}
+            markers={markers} />
+        )}
       </div>
     );
   }
