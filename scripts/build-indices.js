@@ -387,6 +387,9 @@ const readStreams = {
     .pipe(through.obj(function(doc, enc, next) {
       const name = doc.name;
 
+      if (!doc.links)
+        return next();
+
       const links = doc.links.split('§').map(tuple => {
         const [location, year] = tuple.split('|');
 
