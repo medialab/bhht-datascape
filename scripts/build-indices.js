@@ -46,7 +46,7 @@ const BULK_SIZES = {
   people: 700,
   location: 1000,
   path: 1000,
-  relatedLocations: 3000
+  relatedLocations: 1000
 };
 
 const LOG_RATE = 10 * 1000;
@@ -446,7 +446,21 @@ const readStreams = {
 
       return next();
     }))
-    .pipe(createTransformBulkStream('people')),
+    .pipe(through.obj(function(doc, enc, next) {
+
+      const payload = {
+        update: {
+          _type: 'people',
+          _index: 'people',
+          _id: doc.name
+        }
+      };
+
+      this.push(payload);
+      this.push({doc: {relatedLocations: doc.relatedLocations}});
+
+      return next();
+    })),
 
   // Locations
   location: () => fs
@@ -538,7 +552,7 @@ async.series([
   },
   function indexPeople(next) {
     console.log('Indexing people...');
-
+    return process.nextTick(next);
     return readStreams
       .people()
       .pipe(writeStreams.people)
