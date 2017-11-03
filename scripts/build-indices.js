@@ -552,7 +552,7 @@ async.series([
   },
   function indexPeople(next) {
     console.log('Indexing people...');
-    return process.nextTick(next);
+
     return readStreams
       .people()
       .pipe(writeStreams.people)
