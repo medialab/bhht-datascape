@@ -430,7 +430,7 @@ const readStreams = {
       let links = doc.links.split('§').map(tuple => {
         const location = tuple.split('|')[0];
 
-        return location
+        return location;
       });
 
       links = new Set(links);

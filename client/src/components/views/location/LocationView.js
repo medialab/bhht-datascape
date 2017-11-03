@@ -14,6 +14,7 @@ import {createWikipediaLabel} from 'lib/helpers';
 import WorldMap from '../../WorldMap';
 import Link from '../../Link';
 import LocationViewFrequentationChart from './LocationViewFrequentationChart';
+import {MacroViewTopListPeopleItem} from '../macro/MacroViewTopList';
 import {loadLocationInfo} from '../../../modules/location';
 
 /**
@@ -127,6 +128,25 @@ class LocationView extends Component {
               </em>
             </Link>
             <hr />
+          </div>
+        )}
+        {info.relatedPeople && info.relatedPeople.length && (
+          <div>
+            <h4 className="title is-4">
+              Top {info.relatedPeople.length >= 100 ? 100 : info.relatedPeople.length} people
+            </h4>
+            <ul style={{height: '288px', overflowY: 'auto'}}>
+              {info.relatedPeople.map((people, i) => {
+                return (
+                  <li key={people.name} style={{marginBottom: '10px'}}>
+                    <MacroViewTopListPeopleItem
+                      rank={i + 1}
+                      item={people}
+                      link={`people/${people.name}`} />
+                  </li>
+                );
+              })}
+            </ul>
           </div>
         )}
         <h4 className="title is-4">Frequentation</h4>

@@ -13,7 +13,7 @@ import LABELS from 'specs/labels.json';
 /**
  * People item.
  */
-function MacroViewTopListPeopleItem({rank, link, item}) {
+export function MacroViewTopListPeopleItem({rank, link, item}) {
   return (
     <div className="top-list-item">
       <Link to={link}>

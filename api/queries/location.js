@@ -56,19 +56,28 @@ function createFrequentationQuery(aliases) {
  */
 function createRelatedPeopleQuery(aliases) {
   const query = {
-    size: 0,
+    size: 100,
     query: {
       terms: {
-        location: aliases
+        relatedLocations: aliases
       }
     },
-    aggs: {
-      relatedPeople: {
-        terms: {
-          field: 'people',
-          size: 10 * 1000
-        }
-      }
+    sort: [
+      {compoundNotoriety: 'desc'}
+    ],
+    _source: {
+      includes: [
+        'label',
+        'name',
+        'gender',
+        'category',
+        'subcategory',
+        'birth',
+        'death',
+        'birthDatePrecision',
+        'deathDatePrecision',
+        'dead'
+      ]
     }
   };
 

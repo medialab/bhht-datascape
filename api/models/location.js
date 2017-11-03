@@ -63,17 +63,11 @@ exports.get = function(id, callback) {
     (location, next) => {
       const body = createRelatedPeopleQuery(location.aliases);
 
-      return client.search({index: 'path', body}, (err, result) => {
+      return client.search({index: 'people', body}, (err, result) => {
         const relatedPeople = result
-          .aggregations
-          .relatedPeople
-          .buckets
-          .map(bucket => {
-            return {
-              people: bucket.key,
-              weight: bucket.doc_count
-            };
-          });
+          .hits
+          .hits
+          .map(hit => hit._source);
 
         location.relatedPeople = relatedPeople;
 

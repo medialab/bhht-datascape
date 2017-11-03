@@ -54,7 +54,7 @@ class DistinctInstanceValuesView extends Component {
           </em>
         </p>
         <hr />
-        {values && (
+        {values ? (
           <table>
             <thead>
               <tr>
@@ -73,7 +73,7 @@ class DistinctInstanceValuesView extends Component {
               })}
             </tbody>
           </table>
-        )}
+        ) : 'Loading...'}
       </div>
     );
   }
