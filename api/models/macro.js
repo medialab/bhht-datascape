@@ -5,7 +5,8 @@
  * Model in charge of querying the ElasticSearch database for the necessary
  * data for the macro view.
  */
-const client = require('../client');
+const uniqBy = require('lodash/uniqBy'),
+      client = require('../client');
 
 const {
   createStockHistogramQuery,
@@ -99,8 +100,11 @@ exports.topLocations = function(params, callback) {
     if (err)
       return callback(err);
 
-    const locations = mapTopLocationsQueryResult(result);
+    let locations = mapTopLocationsQueryResult(result);
 
-    return callback(null, locations);
+    // Keeping only unique lowercase locations
+    const uniqueLocations = uniqBy(locations, location => location.name.toLowerCase());
+
+    return callback(null, uniqueLocations);
   });
 };

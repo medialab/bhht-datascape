@@ -22,14 +22,6 @@ const yargs = require('yargs'),
 
 require('util').inspect.defaultOptions.colors = true;
 
-// TODO: language the n traj field
-// TODO: make a from/to and rename min/max => date for paths
-// TODO: add birth/death to trajectory?
-// TODO: date quality for path
-// TODO: decide if life date_range is useful
-// TODO: create date range for path using min/max
-// TODO: check path has no date < 0
-
 /**
  * Constants.
  */
