@@ -45,7 +45,8 @@ const DATE_PRECISION_HIERARCHY = {
 const BULK_SIZES = {
   people: 700,
   location: 1000,
-  path: 1000
+  path: 1000,
+  relatedLocations: 3000
 };
 
 const LOG_RATE = 10 * 1000;
@@ -415,6 +416,37 @@ const readStreams = {
     }))
     .pipe(createTransformBulkStream('path')),
 
+  // People's related locations
+  relatedLocations: () => fs
+    .createReadStream(joinPath(argv.b, BASE_PATHS))
+    .pipe(createCSVParserStream())
+    .pipe(through.obj(function(doc, enc, next) {
+      const name = doc.name;
+
+      if (!doc.links)
+        return next();
+
+      let links = doc.links.split('§').map(tuple => {
+        const location = tuple.split('|')[0];
+
+        return location
+      });
+
+      links = new Set(links);
+
+      const update = {
+        name,
+        relatedLocations: Array.from(links)
+      };
+
+      this.push(update);
+
+      pathLogger(nb => `  -> (${prettyNumber(nb)}) related location updates processed.`);
+
+      return next();
+    }))
+    .pipe(createTransformBulkStream('people')),
+
   // Locations
   location: () => fs
     .createReadStream(joinPath(argv.b, BASE_LOCATIONS))
@@ -470,7 +502,7 @@ const readStreams = {
 };
 
 // Writable streams
-const createWritableBulkStream = name => {
+const createWritableBulkStream = (name, highWaterMarkKey) => {
   const stream = new WritableBulk((body, next) => {
     return CLIENT.bulk({
       index: name,
@@ -479,7 +511,7 @@ const createWritableBulkStream = name => {
     }, next);
   });
 
-  stream.highWaterMark = BULK_SIZES[name];
+  stream.highWaterMark = BULK_SIZES[highWaterMarkKey || name];
 
   return stream;
 };
@@ -487,7 +519,8 @@ const createWritableBulkStream = name => {
 const writeStreams = {
   location: createWritableBulkStream('location'),
   people: createWritableBulkStream('people'),
-  path: createWritableBulkStream('path')
+  path: createWritableBulkStream('path'),
+  relatedLocations: createWritableBulkStream('people', 'relatedLocations')
 };
 
 /**
@@ -508,6 +541,17 @@ async.series([
     return readStreams
       .people()
       .pipe(writeStreams.people)
+      .on('error', err => {
+        throw err;
+      })
+      .on('close', () => next());
+  },
+  function indexRelatedLocations(next) {
+    console.log('Indexing related locations...');
+
+    return readStreams
+      .relatedLocations()
+      .pipe(writeStreams.relatedLocations)
       .on('error', err => {
         throw err;
       })

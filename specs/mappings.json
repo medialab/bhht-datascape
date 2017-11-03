@@ -115,6 +115,9 @@
       "deathLocation": {
         "type": "keyword"
       },
+      "relatedLocations": {
+        "type": "keyword"
+      },
       "availableLanguages": {
         "type": "keyword"
       },
