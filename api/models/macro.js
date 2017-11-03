@@ -100,7 +100,7 @@ exports.topLocations = function(params, callback) {
     if (err)
       return callback(err);
 
-    let locations = mapTopLocationsQueryResult(result);
+    const locations = mapTopLocationsQueryResult(result);
 
     // Keeping only unique lowercase locations
     const uniqueLocations = uniqBy(locations, location => location.name.toLowerCase());

@@ -23,9 +23,12 @@ function MacroViewTopListPeopleItem({rank, link, item}) {
         </strong>
         &nbsp;({item.gender === 'Female' ? 'F' : 'M'})
         <small> ({formatLifetime(item)})</small>
-        {item.category && <span>
-        <br />
-        <em><small>{LABELS.categories[item.category]} § {LABELS.subcategories[item.subcategory]}</small></em></span>}
+        {item.category && (
+          <span>
+            <br />
+            <em><small>{LABELS.categories[item.category]} § {LABELS.subcategories[item.subcategory]}</small></em>
+          </span>
+        )}
       </Link>
     </div>
   );

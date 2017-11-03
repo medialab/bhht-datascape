@@ -115,7 +115,7 @@ class LocationView extends Component {
             <div className="content">
               <ul>
                 {info.instance.map(label => {
-                  return <li key={label}>{label}</li>
+                  return <li key={label}>{label}</li>;
                 })}
               </ul>
             </div>
