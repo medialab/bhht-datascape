@@ -52,6 +52,31 @@ function createFrequentationQuery(aliases) {
 }
 
 /**
+ * Function returning people related to the given location aliases.
+ */
+function createRelatedPeopleQuery(aliases) {
+  const query = {
+    size: 0,
+    query: {
+      terms: {
+        location: aliases
+      }
+    },
+    aggs: {
+      relatedPeople: {
+        terms: {
+          field: 'people',
+          size: 10 * 1000
+        }
+      }
+    }
+  };
+
+  return query;
+}
+
+/**
  * Exporting.
  */
 exports.createFrequentationQuery = createFrequentationQuery;
+exports.createRelatedPeopleQuery = createRelatedPeopleQuery;

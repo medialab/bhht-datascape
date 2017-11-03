@@ -9,7 +9,8 @@ const async = require('async'),
       client = require('../client');
 
 const {
-  createFrequentationQuery
+  createFrequentationQuery,
+  createRelatedPeopleQuery
 } = require('../queries/location');
 
 /**
@@ -54,12 +55,30 @@ exports.get = function(id, callback) {
             };
           });
 
-        return next(null, location, frequentation);
+        location.frequentation = frequentation;
+
+        return next(null, location);
       });
     },
-    (location, frequentation, next) => {
-      location.frequentation = frequentation;
-      return next(null, location);
+    (location, next) => {
+      const body = createRelatedPeopleQuery(location.aliases);
+
+      return client.search({index: 'path', body}, (err, result) => {
+        const relatedPeople = result
+          .aggregations
+          .relatedPeople
+          .buckets
+          .map(bucket => {
+            return {
+              people: bucket.key,
+              weight: bucket.doc_count
+            };
+          });
+
+        location.relatedPeople = relatedPeople;
+
+        return next(null, location);
+      });
     }
   ], callback);
 };
