@@ -169,7 +169,8 @@ const createEpisodicLogger = rate => {
 
 const locationLogger = createEpisodicLogger(LOG_RATE),
       peopleLogger = createEpisodicLogger(LOG_RATE),
-      pathLogger = createEpisodicLogger(LOG_RATE);
+      pathLogger = createEpisodicLogger(LOG_RATE),
+      relatedLocationsLogger = createEpisodicLogger(LOG_RATE);
 
 /**
  * Streams.
@@ -441,7 +442,7 @@ const readStreams = {
 
       this.push(update);
 
-      pathLogger(nb => `  -> (${prettyNumber(nb)}) related location updates processed.`);
+      relatedLocationsLogger(nb => `  -> (${prettyNumber(nb)}) related location updates processed.`);
 
       return next();
     }))
