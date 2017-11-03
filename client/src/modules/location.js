@@ -36,7 +36,7 @@ export default resolver(DEFAULT_STATE, {
     };
   },
 
-  // When people info is loading
+  // When location info is loading
   [LOCATION_INFO_LOADING](state) {
     return {
       ...state,
@@ -45,7 +45,7 @@ export default resolver(DEFAULT_STATE, {
     };
   },
 
-  // When people info is loaded
+  // When location info is loaded
   [LOCATION_INFO_LOADED](state, action) {
     return {
       ...state,

@@ -12,6 +12,7 @@ import {compose} from 'recompose';
 import {connect} from 'react-redux';
 import {createWikipediaLabel} from 'lib/helpers';
 import WorldMap from '../../WorldMap';
+import Link from '../../Link';
 import LocationViewFrequentationChart from './LocationViewFrequentationChart';
 import {loadLocationInfo} from '../../../modules/location';
 
@@ -97,16 +98,17 @@ class LocationView extends Component {
         <h1 className="title">{info.label}</h1>
         <div>
           <LocationViewInfo title="Available languages" value={info.availableLanguages.join(', ')} />
-          <LocationViewInfo title="Aliases" />
-          <div className="content">
-            <ul>
-              {info.aliases.map(alias => {
-                return (
-                  <li key={alias}>{createWikipediaLabel(alias)}</li>
-                );
-              })}
-            </ul>
-          </div>
+        </div>
+        <hr />
+        <h4 className="title is-4">Aliases</h4>
+        <div className="content">
+          <ul>
+            {info.aliases.map(alias => {
+              return (
+                <li key={alias}>{createWikipediaLabel(alias)}</li>
+              );
+            })}
+          </ul>
         </div>
         <hr />
         {info.instance && (
@@ -119,6 +121,11 @@ class LocationView extends Component {
                 })}
               </ul>
             </div>
+            <Link to="/meta/distinct-instance-values">
+              <em>
+                Display distinct entities existing in the database
+              </em>
+            </Link>
             <hr />
           </div>
         )}

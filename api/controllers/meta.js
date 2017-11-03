@@ -1,10 +1,10 @@
 /**
- * BHHT Datascape Misc Controller
+ * BHHT Datascape Meta Controller
  * ===============================
  *
  * Controller serving miscellaneous data.
  */
-const model = require('../models/misc');
+const model = require('../models/meta');
 
 module.exports = [
   {

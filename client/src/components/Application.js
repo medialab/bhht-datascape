@@ -14,13 +14,15 @@ import FuzzySearcher from './FuzzySearcher';
 import MacroView from './views/macro/MacroView';
 import PeopleView from './views/people/PeopleView';
 import LocationView from './views/location/LocationView';
+import DistinctInstanceValuesView from './views/meta/DistinctInstanceValuesView';
 
 /**
  * View map.
  */
 const MAP = {
   people: PeopleView,
-  location: LocationView
+  location: LocationView,
+  distinctInstanceValues: DistinctInstanceValuesView
 };
 
 /**

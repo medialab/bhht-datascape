@@ -1,5 +1,5 @@
 /**
- * BHHT Datascape Misc Queries
+ * BHHT Datascape Meta Queries
  * ============================
  *
  * Miscellaneous ES queries such as the distinct instance values etc.
@@ -16,7 +16,15 @@ exports.createDistinctInstanceValuesQuery = function() {
       instance: {
         terms: {
           field: 'instance',
-          size: 10 * 1000
+          size: 10 * 1000,
+          order: [
+            {
+              _count: 'desc'
+            },
+            {
+              _term: 'asc'
+            }
+          ]
         }
       }
     }

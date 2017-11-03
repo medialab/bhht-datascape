@@ -1,5 +1,5 @@
 /**
- * BHHT Misc Model
+ * BHHT Meta Model
  * ================
  *
  * Model in charge of miscellaneous queries.
@@ -9,7 +9,7 @@ const client = require('../client');
 const {
   createDistinctInstanceValuesQuery,
   mapDistinctInstanceValuesQueryResult
-} = require('../queries/misc');
+} = require('../queries/meta');
 
 /**
  * Function retrieving distinct instance values for locations.
