@@ -21,8 +21,11 @@ const client = new Client({
       suggestions: '/people/suggestions'
     },
     location: {
-      get: 'location/:name',
+      get: '/location/:name',
       suggestions: '/location/suggestions'
+    },
+    misc: {
+      distinctInstanceValues: '/misc/distinct-instance-values'
     }
   }
 });

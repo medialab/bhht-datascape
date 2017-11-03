@@ -31,11 +31,13 @@ const dolman = wrap(app, {typology});
  */
 const macroController = require('./controllers/macro'),
       peopleController = require('./controllers/people'),
-      locationController = require('./controllers/location');
+      locationController = require('./controllers/location'),
+      miscController = require('./controllers/misc');
 
 app.use('/macro', dolman.router(macroController));
 app.use('/people', dolman.router(peopleController));
 app.use('/location', dolman.router(locationController));
+app.use('/misc', dolman.router(miscController));
 
 /**
  * Exporting the application.
