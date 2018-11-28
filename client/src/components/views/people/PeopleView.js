@@ -173,11 +173,7 @@ class PeopleView extends Component {
             {occupation.order}. <strong>{LABELS.categories[occupation.category]}</strong> (<em>{LABELS.subcategories[occupation.subcategory]}</em>)
           </div>
         ))}
-        <hr />
-        <h4 className="title is-4">Contact points</h4>
-        {(info.paths && !!info.paths.length) ?
-          <PeopleViewTrajectory points={info.paths} /> :
-          (<p><em>This person does not have contact points.</em></p>)}
+        <br />
       </div>
     );
   }
