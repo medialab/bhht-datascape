@@ -1,6 +1,8 @@
 client/Dockerfile
 client/config.example.json
+client/node_modules
 README.md
 Dockerfile
 docker-compose.yml
 elasticsearch.yml
+node_modules
