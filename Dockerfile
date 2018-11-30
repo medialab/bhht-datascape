@@ -10,14 +10,15 @@ RUN apk add --no-cache su-exec
 RUN mkdir -p /bhht-datascape/ /bhht-datascape/client
 
 ADD ./package.json /bhht-datascape/
-ADD ./client/package.json /bhht-datascape/client/
 
-RUN cd /bhht-datascape/client/ && npm --quiet install --production false
 RUN cd /bhht-datascape/ && npm --quiet install --production false
 
 ADD . /bhht-datascape
 
-RUN cd /bhht-datascape/client/ && npm run build
+RUN cd /bhht-datascape/client/ \
+    && npm --quiet install --production false \
+    && npm run build \
+    && rm -rf ./node_modules /root/.npm /root/.node-gyp /root/.config /usr/lib/node_modules
 
 WORKDIR /bhht-datascape
 
