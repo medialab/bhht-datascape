@@ -19,7 +19,8 @@ commonLabels:
 
 secretGenerator:
 - name: htpasswd
-  env: htpasswd.env
+  files:
+    - htpasswd.secret
 
 images:
   - name: gitlab.sciences-po.fr:4567/medialab/bhht-datascape/bhht-api
