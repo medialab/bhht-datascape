@@ -17,6 +17,10 @@ patchesStrategicMerge:
 commonLabels:
   stage: staging
 
+secretGenerator:
+- name: htpasswd
+  env: htpasswd.env
+
 images:
   - name: gitlab.sciences-po.fr:4567/medialab/bhht-datascape/bhht-api
     newTag: 'staging'

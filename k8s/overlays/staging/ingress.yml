@@ -4,6 +4,9 @@ metadata:
   name: ingress
   annotations:
     ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: bhht-htpasswd
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
   rules:
   - host: bhht-pprd.medialab.sciences-po.fr

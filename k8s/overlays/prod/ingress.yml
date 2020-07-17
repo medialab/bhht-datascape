@@ -5,6 +5,9 @@ metadata:
   annotations:
     ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/server-alias: bhht-prod.medialab.sciences-po.fr
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: bhht-htpasswd
+    nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
 spec:
   rules:
   - host: bhht.medialab.sciences-po.fr
