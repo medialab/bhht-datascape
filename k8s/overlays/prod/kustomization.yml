@@ -16,11 +16,14 @@ patchesStrategicMerge:
 
 commonLabels:
   stage: production
+  
+generatorOptions:
+  disableNameSuffixHash: true
 
 secretGenerator:
 - name: htpasswd
   files:
-    - htpasswd.secret
+    - auth
 
 images:
   - name: gitlab.sciences-po.fr:4567/medialab/bhht-datascape/bhht-api
