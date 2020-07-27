@@ -1,25 +1,13 @@
 import csv
 import re
+import sys
+from string import digits
 from tqdm import tqdm
 from collections import Counter
 
 TOTAL = 2291815
 
-def ngrams(n, tokens):
-    limit = len(tokens) - n + 1
-
-    for i in range(limit):
-        yield tokens[i:i + n]
-
-PAREN_PATTERN = re.compile(r'\([^)]+\)', re.I)
-def extract_parentheses(name):
-    m = PAREN_PATTERN.search(name)
-
-    if m is not None:
-        return m.group(0)
-
-PREFIXES = Counter()
-FIRST_NAMES = Counter()
+NAMES = []
 
 with open('./data/names.csv') as f:
     reader = csv.reader(f)
@@ -28,54 +16,41 @@ with open('./data/names.csv') as f:
     for row_i, row in tqdm(enumerate(reader), total=TOTAL, desc='Indexing'):
         name = row[0]
 
-        if '_' in name:
-            first_name = name.split('_', 1)[0]
+        NAMES.append(name)
 
-            if len(first_name) > 3:
-                FIRST_NAMES[first_name + '_'] += 1
-
-        # for p in range(5, 10 + 1):
-        #     prefix = name[:p]
-
-        #     if prefix:
-        #         PREFIXES[prefix] += 1
-
-        # if row_i >= 10_000:
+        # if row_i >= 100:
         #     break
 
-COMPRESSION_TABLE = {}
+def first_mismatch_index(a, b):
+    if b is None:
+        return 0
 
-t = 0
-n = 0
-for g, c in FIRST_NAMES.most_common(255):
-    if c < 100:
-        continue
+    for i in range(len(a)):
+        if i == len(b):
+            return i
 
-    print(g, c)
-    t += c
+        if a[i] != b[i]:
+            return i
+    return 0
 
-    COMPRESSION_TABLE[g] = chr(n)
+def iter_with_prev(iterator):
+    prev_item = None
 
-    n += 1
+    for item in iterator:
+        if prev_item is not None:
+            yield prev_item, item
+        else:
+            yield None, item
 
-print(t, t / 2291815, n)
-# print(COMPRESSION_TABLE)
+        prev_item = item
 
-with open('./data/names.csv') as f, open('./data/names-compressed.csv', 'w') as of:
-    reader = csv.reader(f)
-    next(reader)
+def encode_name(m, name):
+    if name[0] in digits:
+        return str(m) + '§' + name[m:]
+    else:
+        return str(m) + name[m:]
 
-    writer = csv.writer(of)
-    writer.writerow(['name'])
-
-    for row_i, row in tqdm(enumerate(reader), total=TOTAL, desc='Compressing'):
-        name = row[0]
-
-        if '_' in name:
-            first_name, rest = name.split('_', 1)
-            first_name += '_'
-
-            if first_name in COMPRESSION_TABLE:
-                name = COMPRESSION_TABLE[first_name] + rest
-
-        writer.writerow([name])
+with open('./data/names-compressed.txt', 'w') as of:
+    for prev, name in iter_with_prev(sorted(NAMES)):
+        m = first_mismatch_index(name, prev)
+        of.write(encode_name(m, name) + '\n')
