@@ -1,0 +1,3 @@
+casanova==0.8.0
+click==7.1.2
+tqdm==4.48.0

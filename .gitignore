@@ -5,3 +5,6 @@ node_modules
 *.log
 .kotatsu
 package-lock.json
+.python-version
+*.csv
+data
