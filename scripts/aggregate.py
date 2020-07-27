@@ -9,6 +9,7 @@ from collections import Counter, defaultdict
 csv.field_size_limit(sys.maxsize)
 
 MAX_YEAR = 2020
+TOP_COUNT = 10_000
 
 MAPPING = {
     'wikidata_code_b': 'wikidata_code',
@@ -46,6 +47,22 @@ def decade_range(birth, death=None):
     for decade in range(start_decade, end_decade + 10, 10):
         yield decade
 
+def dump_series(name, data):
+    with open('./data/%s_series.csv' % name, 'w') as f:
+        writer = csv.writer(f)
+
+        if name == 'default':
+            writer.writerow(['decade', 'count'])
+
+            for decade in sorted(data.keys()):
+                writer.writerow([decade, data[decade]])
+        else:
+            writer.writerow(['decade', 'value', 'count'])
+
+            for value, items in data.items():
+                for decade in sorted(items.keys()):
+                    writer.writerow([decade, value, items[decade]])
+
 @click.command()
 @click.argument('path')
 @click.option('--total', help='Total number of line in target file for the progress bar.', type=int)
@@ -61,14 +78,19 @@ def aggregate(path, total=None):
         return {k: parse(k, row[i]) for k, i in mapping_pos.items() if row[i]}
 
     # Indexation
-    decades_data = {
+    series = {
         'default': Counter(),
-        'gender': defaultdict(Counter)
+        'gender': defaultdict(Counter),
+        'occupation': defaultdict(Counter)
     }
 
     names_file = open('./data/names.csv', 'w')
     names_writer = csv.writer(names_file)
     names_writer.writerow(['name'])
+
+    top_file = open('./data/top.csv', 'w')
+    top_writer = csv.DictWriter(top_file, fieldnames=list(MAPPING.values()))
+    top_writer.writeheader()
 
     # Reading file line by line
     for row_i, row in tqdm(enumerate(reader), total=total, unit='lines', desc='Processing data'):
@@ -76,19 +98,26 @@ def aggregate(path, total=None):
 
         names_writer.writerow([person['name']])
 
+        if person['ranking'] <= TOP_COUNT:
+            top_writer.writerow(person)
+
         if 'birth' in person:
             for decade in decade_range(person['birth'], person.get('death')):
-                decades_data['default'][decade] += 1
-                decades_data['gender'][person.get('gender', 'unknown')][decade] += 1
+                series['default'][decade] += 1
+                series['gender'][person.get('gender', 'unknown')][decade] += 1
+                series['occupation'][person.get('occupation', 'unknown')][decade] += 1
 
         # if row_i >= 100:
         #     break
 
     data_file.close()
     names_file.close()
+    top_file.close()
 
-    # Dumping histogram data
-    # TODO...
+    # Dumping series data
+    dump_series('default', series['default'])
+    dump_series('gender', series['gender'])
+    dump_series('occupation', series['occupation'])
 
 if __name__ == '__main__':
     aggregate()
