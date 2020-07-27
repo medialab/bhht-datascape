@@ -47,11 +47,14 @@ def decade_range(birth, death=None):
         yield decade
 
 @click.command()
-@click.argument('data', type=click.File())
+@click.argument('path')
 @click.option('--total', help='Total number of line in target file for the progress bar.', type=int)
-def aggregate(data, total=None):
+def aggregate(path, total=None):
 
-    reader = casanova.reader(data)
+    # We need to ignore encoding errors because the file is misformatted
+    data_file = open(path, 'r', encoding='utf-8', errors='ignore')
+
+    reader = casanova.reader(data_file)
     mapping_pos = {t: reader.pos[f] for f, t in MAPPING.items()}
 
     def map_person(row):
@@ -81,6 +84,7 @@ def aggregate(data, total=None):
         # if row_i >= 100:
         #     break
 
+    data_file.close()
     names_file.close()
 
     # Dumping histogram data
