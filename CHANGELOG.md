@@ -1,5 +1,9 @@
 # Changelog
 
+## v1.0.0 (provisional)
+
+* Datascape is now completely static.
+
 ## v0.7.0
 
 * New import script working with mined data.
