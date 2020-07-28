@@ -4,7 +4,6 @@ node_modules
 .DS_Store
 *.log
 .kotatsu
-package-lock.json
 .python-version
 *.csv
 data

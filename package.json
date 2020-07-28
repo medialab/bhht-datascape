@@ -4,7 +4,10 @@
   "description": "The BHHT project's datascape.",
   "private": true,
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "dev": "kotatsu serve --progress ./src/main.js --index ./index.html --public ./data --jsx --config ./webpack.config.js",
+    "prettier": "prettier --write './src/**/*.js'"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/medialab/bhht-datascape.git"
@@ -18,6 +21,18 @@
     "url": "https://github.com/medialab/bhht-datascape/issues"
   },
   "homepage": "https://github.com/medialab/bhht-datascape#readme",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "history": "^5.0.0",
+    "pako": "^1.0.11",
+    "papaparse": "^5.2.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router": "^5.2.0"
+  },
+  "devDependencies": {
+    "@yomguithereal/prettier-config": "^1.1.0",
+    "kotatsu": "^0.19.2",
+    "prettier": "^2.0.5"
+  },
+  "prettier": "@yomguithereal/prettier-config"
 }
