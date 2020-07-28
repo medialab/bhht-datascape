@@ -1,7 +1,12 @@
+import {EventEmitter} from 'events';
+import {useState, useEffect} from 'react';
 import Papa from 'papaparse';
 import {inflate} from 'pako';
 import urljoin from 'url-join';
 import split from 'obliterator/split';
+import meta from '../specs/meta.json';
+import getPath from 'lodash/fp/get';
+import {createWikipediaLabel} from '../lib/helpers';
 
 const DEFAULT_PARSE_OPTIONS = {
   header: true,
@@ -37,7 +42,6 @@ function get(url, callback) {
 }
 
 const DECODER = /(^\d+)/;
-const UNDERSCORE = /_/g;
 
 function decodeName(previous, entry) {
   let offset, suffix, s;
@@ -52,16 +56,18 @@ function decodeName(previous, entry) {
     suffix = s[2];
   }
 
-  return (previous.slice(0, offset) + suffix).replace(UNDERSCORE, ' ');
+  return createWikipediaLabel(previous.slice(0, offset) + suffix, false);
 }
 
-function getNames(callback) {
+function getNames(url, callback) {
   console.time('names');
 
-  return fetch(urljoin(BASE_URL, 'names.txt.gz'))
+  return fetch(url)
     .then(response => response.arrayBuffer())
     .then(buffer => {
+      console.time('names.zlib');
       const string = inflate(buffer, {to: 'string'});
+      console.timeEnd('names.zlib');
 
       const names = [];
 
@@ -78,4 +84,82 @@ function getNames(callback) {
       console.timeEnd('names');
       return callback(null, names);
     });
+}
+
+class AssetsManager extends EventEmitter {
+  constructor(baseUrl) {
+    super();
+
+    this.baseUrl = baseUrl;
+
+    this.data = {
+      names: null,
+      series: {},
+      top: null
+    };
+
+    meta.series.forEach(series => (this.data.series[series] = null));
+
+    // Fetching data in advance
+    this.get('top.csv.gz', (err, data) => {
+      if (err) return console.error(err);
+
+      this.data.top = data;
+      this.emit('top', data);
+    });
+
+    // TODO: schedule async jobs to avoid freezing the UI
+    // this.getNames('names.txt.gz', (err, data) => {
+    //   if (err) return console.error(err);
+
+    //   this.data.names = data;
+    //   this.emit('names', data);
+    // });
+
+    meta.series.forEach(series => {
+      this.get(`${series}_series.csv`, (err, data) => {
+        if (err) return console.error(err);
+
+        this.data.series[series] = data;
+        this.emit(`series.${series}`, data);
+      });
+    });
+  }
+
+  join(path) {
+    return urljoin(this.baseUrl, path);
+  }
+
+  get(path, callback) {
+    return get(this.join(path), callback);
+  }
+
+  getNames(path, callback) {
+    return getNames(this.join(path), callback);
+  }
+}
+
+const manager = new AssetsManager(BASE_URL);
+
+export default manager;
+
+export function useAsset(name) {
+  // NOTE: it would be fairly easy to make asset downloading lazy by tweaking things here
+
+  const data = getPath(manager.data, name);
+
+  const [asset, setAsset] = useState({downloaded: !!data, data: data});
+
+  if (!data)
+    useEffect(() => {
+      const listener = retrievedData => {
+        setAsset({downloaded: true, data: retrievedData});
+      };
+
+      manager.once(name, listener);
+
+      return () => manager.off(name, listener);
+    }, []);
+
+  return asset;
 }

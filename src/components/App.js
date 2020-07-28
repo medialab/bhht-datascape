@@ -1,4 +1,10 @@
 import React from 'react';
+import {
+  HashRouter as Router,
+  Switch,
+  Route
+} from 'react-router-dom'
+import Home from './Home';
 
 const titleStyle = {
   textAlign: 'center',
@@ -7,15 +13,22 @@ const titleStyle = {
 
 export default function App() {
   return (
-    <div className="container">
-      <div className="columns">
-        <div className="column is-2" />
-        <div className="column is-8">
-          <div className="content">
-            <h1 style={titleStyle}>A Brief History of Human Time</h1>
+    <Router>
+      <div className="container">
+        <div className="columns">
+          <div className="column is-1" />
+          <div className="column is-10">
+            <div className="content">
+              <h1 style={titleStyle}>A Brief History of Human Time</h1>
+            </div>
+            <Switch>
+              <Route path="/">
+                <Home />
+              </Route>
+            </Switch>
           </div>
         </div>
       </div>
-    </div>
+    </Router>
   );
 }
