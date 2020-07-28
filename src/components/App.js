@@ -27,6 +27,9 @@ export default function App() {
             </Switch>
           </div>
         </div>
+        <footer className="footer">
+          <div className="content has-text-centered">Footer</div>
+        </footer>
       </div>
     </Router>
   );

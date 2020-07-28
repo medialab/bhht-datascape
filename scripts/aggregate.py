@@ -151,10 +151,10 @@ def aggregate(path, total=None):
 
         names.append(person['name'])
 
-        if person['ranking'] <= TOP_COUNT:
-            top_writer.writerow(person)
-
         if 'birth' in person:
+            if person['ranking'] <= TOP_COUNT or person['birth'] <= 500:
+                top_writer.writerow(person)
+
             for decade in decade_range(person['birth'], person.get('death')):
                 series['default'][decade] += 1
                 series['gender'][person.get('gender', 'Unknown')][decade] += 1
@@ -175,7 +175,7 @@ def aggregate(path, total=None):
 
     # Compressing names index using front coding
     with open('./data/names.txt', 'w') as of:
-        for prev, name in iter_with_prev(sorted(names)):
+        for prev, name in tqdm(iter_with_prev(sorted(names)), total=total, unit='names', desc='Compressing names'):
             m = first_mismatch_index(name, prev)
             of.write(encode_name(m, name) + '\n')
 
