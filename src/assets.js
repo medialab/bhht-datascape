@@ -190,7 +190,7 @@ export function useAsset(name) {
     manager.once(name, listener);
 
     return () => manager.off(name, listener);
-  }, [name]);
+  }, [asset, name]);
 
-  return {downloaded: !!data, data};
+  return data;
 }

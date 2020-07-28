@@ -7,7 +7,7 @@ $body-background-color: $background;
 $navbar-background-color: $background;
 $text: $black;
 
-$family-sans-serif: Merriweather, BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+$family-sans-serif: Merriweather, sans-serif;
 
 @import "~bulma/bulma.sass";
 @import "./rc-slider.css";
