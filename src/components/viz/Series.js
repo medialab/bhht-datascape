@@ -9,8 +9,8 @@ const style = {
   border: '1px dashed black'
 };
 
-function floor10(n) {
-  return Math.floor(n / 10) * 10;
+function ceil10(n) {
+  return Math.ceil(n / 10) * 10;
 }
 
 function SliceTooltip({slice}) {
@@ -49,11 +49,14 @@ function SliceTooltip({slice}) {
 export default function Series({data, range}) {
   if (!data) return <div style={style} />;
 
-  var timeStep = floor10((range[1] - range[0]) / 14);
+  var timeStep = ceil10((range[1] - range[0]) / 14);
 
-  const yearTicks = ticks(range[0], range[1], timeStep || 10)
-    .slice(0, -1)
-    .concat(range[1]);
+  let yearTicks = ticks(range[0], range[1], timeStep || 10);
+
+  if (range[1] - yearTicks[yearTicks.length - 1] <= timeStep / 2)
+    yearTicks = yearTicks.slice(0, -1);
+
+  yearTicks.push(range[1]);
 
   data = data.map(line => {
     return {
