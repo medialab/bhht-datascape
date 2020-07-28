@@ -5,11 +5,14 @@
 # Script compiling the project's data into tiny pieces that the website will
 # be able to process.
 #
+import os
 import csv
 import sys
 import casanova
 import click
 import math
+import gzip
+import shutil
 from string import digits
 from tqdm import tqdm
 from collections import Counter, defaultdict
@@ -106,6 +109,12 @@ def dump_series(name, data):
                 for decade in sorted(items.keys()):
                     writer.writerow([decade, value, items[decade]])
 
+def gzip_file(p):
+    with open(p, 'rb') as f_in, gzip.open(p + '.gz', 'wb') as f_out:
+        shutil.copyfileobj(f_in, f_out)
+
+    os.remove(p)
+
 # =============================================================================
 # CLI Action
 # =============================================================================
@@ -163,10 +172,14 @@ def aggregate(path, total=None):
     dump_series('occupation', series['occupation'])
 
     # Compressing names index using front coding
-    with open('./data/names-compressed.txt', 'w') as of:
+    with open('./data/names.txt', 'w') as of:
         for prev, name in iter_with_prev(sorted(names)):
             m = first_mismatch_index(name, prev)
             of.write(encode_name(m, name) + '\n')
+
+    # Gzip some large files
+    gzip_file('./data/top.csv')
+    gzip_file('./data/names.txt')
 
 # =============================================================================
 # Operations
