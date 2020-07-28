@@ -1,6 +1,7 @@
 import React from 'react';
 import {ResponsiveLine} from '@nivo/line';
 import ticks from 'lodash/range';
+import {prettyNumber} from '../../utils';
 
 const style = {
   height: '400px',
@@ -10,6 +11,39 @@ const style = {
 
 function floor10(n) {
   return Math.floor(n / 10) * 10;
+}
+
+function SliceTooltip({slice}) {
+  const year = slice.points[0].data.x;
+
+  return (
+    <div
+      style={{
+        background: 'white',
+        padding: '9px 12px',
+        border: '1px solid #ccc'
+      }}>
+      <div>Year: {year}</div>
+      {slice.points.map(point => (
+        <div
+          key={point.id}
+          style={{
+            padding: '3px 0'
+          }}>
+          <span
+            style={{
+              display: 'inline-block',
+              width: '12px',
+              height: '12px',
+              background: point.serieColor
+            }}
+          />
+          <span> {point.serieId}</span> -{' '}
+          <strong>{prettyNumber(point.data.yFormatted)}</strong>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 export default function Series({data, range}) {
@@ -36,6 +70,7 @@ export default function Series({data, range}) {
         data={data}
         isInteractive
         enableSlices="x"
+        sliceTooltip={SliceTooltip}
         enableCrosshair
         animate={false}
         margin={{top: 20, right: 30, bottom: 40, left: 50}}
