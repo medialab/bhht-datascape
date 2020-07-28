@@ -1,4 +1,5 @@
 {
+  "series": ["default", "gender", "occupation"],
   "categories": {
     "education": "academics",
     "science": "academics",
