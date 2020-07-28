@@ -1,13 +1,24 @@
+# =============================================================================
+# Aggregation Script
+# =============================================================================
+#
+# Script compiling the project's data into tiny pieces that the website will
+# be able to process.
+#
 import csv
 import sys
 import casanova
 import click
 import math
+from string import digits
 from tqdm import tqdm
 from collections import Counter, defaultdict
 
 csv.field_size_limit(sys.maxsize)
 
+# =============================================================================
+# Constants
+# =============================================================================
 MAX_YEAR = 2020
 TOP_COUNT = 10_000
 
@@ -25,6 +36,38 @@ MAPPING = {
 
 INTS = ['birth', 'death']
 FLOATS = ['ranking']
+
+# =============================================================================
+# Helpers
+# =============================================================================
+def first_mismatch_index(a, b):
+    if b is None:
+        return 0
+
+    for i in range(len(a)):
+        if i == len(b):
+            return i
+
+        if a[i] != b[i]:
+            return i
+    return 0
+
+def iter_with_prev(iterator):
+    prev_item = None
+
+    for item in iterator:
+        if prev_item is not None:
+            yield prev_item, item
+        else:
+            yield None, item
+
+        prev_item = item
+
+def encode_name(m, name):
+    if name[0] in digits:
+        return str(m) + '§' + name[m:]
+    else:
+        return str(m) + name[m:]
 
 def parse(k, item):
     if k in INTS:
@@ -63,6 +106,9 @@ def dump_series(name, data):
                 for decade in sorted(items.keys()):
                     writer.writerow([decade, value, items[decade]])
 
+# =============================================================================
+# CLI Action
+# =============================================================================
 @click.command()
 @click.argument('path')
 @click.option('--total', help='Total number of line in target file for the progress bar.', type=int)
@@ -84,9 +130,7 @@ def aggregate(path, total=None):
         'occupation': defaultdict(Counter)
     }
 
-    names_file = open('./data/names.csv', 'w')
-    names_writer = csv.writer(names_file)
-    names_writer.writerow(['name'])
+    names = []
 
     top_file = open('./data/top.csv', 'w')
     top_writer = csv.DictWriter(top_file, fieldnames=list(MAPPING.values()))
@@ -96,7 +140,7 @@ def aggregate(path, total=None):
     for row_i, row in tqdm(enumerate(reader), total=total, unit='lines', desc='Processing data'):
         person = map_person(row)
 
-        names_writer.writerow([person['name']])
+        names.append(person['name'])
 
         if person['ranking'] <= TOP_COUNT:
             top_writer.writerow(person)
@@ -111,7 +155,6 @@ def aggregate(path, total=None):
         #     break
 
     data_file.close()
-    names_file.close()
     top_file.close()
 
     # Dumping series data
@@ -119,5 +162,14 @@ def aggregate(path, total=None):
     dump_series('gender', series['gender'])
     dump_series('occupation', series['occupation'])
 
+    # Compressing names index using front coding
+    with open('./data/names-compressed.txt', 'w') as of:
+        for prev, name in iter_with_prev(sorted(names)):
+            m = first_mismatch_index(name, prev)
+            of.write(encode_name(m, name) + '\n')
+
+# =============================================================================
+# Operations
+# =============================================================================
 if __name__ == '__main__':
     aggregate()
