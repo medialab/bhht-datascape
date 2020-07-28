@@ -4,7 +4,7 @@ import ticks from 'lodash/range';
 import {prettyNumber} from '../../utils';
 
 const style = {
-  height: '400px',
+  height: '350px',
   backgroundColor: 'white',
   border: '1px dashed black'
 };
@@ -38,7 +38,7 @@ function SliceTooltip({slice}) {
               background: point.serieColor
             }}
           />
-          <span> {point.serieId}</span> -{' '}
+          <span> {point.serieId === 'default' ? 'All' : point.serieId}</span> •{' '}
           <strong>{prettyNumber(point.data.yFormatted)}</strong>
         </div>
       ))}
@@ -49,7 +49,7 @@ function SliceTooltip({slice}) {
 export default function Series({data, range}) {
   if (!data) return <div style={style} />;
 
-  var timeStep = floor10((range[1] - range[0]) / 15);
+  var timeStep = floor10((range[1] - range[0]) / 14);
 
   const yearTicks = ticks(range[0], range[1], timeStep || 10)
     .slice(0, -1)
@@ -76,6 +76,7 @@ export default function Series({data, range}) {
         margin={{top: 20, right: 30, bottom: 40, left: 50}}
         curve="monotoneX"
         lineWidth={1}
+        colors={data.map(line => line.color)}
         enablePoints={false}
         axisLeft={{
           orient: 'left',

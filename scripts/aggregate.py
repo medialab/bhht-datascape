@@ -157,8 +157,8 @@ def aggregate(path, total=None):
         if 'birth' in person:
             for decade in decade_range(person['birth'], person.get('death')):
                 series['default'][decade] += 1
-                series['gender'][person.get('gender', 'unknown')][decade] += 1
-                series['occupation'][person.get('occupation', 'unknown')][decade] += 1
+                series['gender'][person.get('gender', 'Unknown')][decade] += 1
+                series['occupation'][person.get('occupation', 'Unknown')][decade] += 1
 
         # if row_i >= 100:
         #     break

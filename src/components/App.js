@@ -6,7 +6,8 @@ const titleStyle = {
   textAlign: 'center',
   padding: '25px',
   paddingBottom: '0px',
-  fontSize: '2.5em'
+  fontSize: '2.5em',
+  textDecoration: 'underline'
 };
 
 export default function App() {

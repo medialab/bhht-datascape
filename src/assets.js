@@ -3,9 +3,12 @@ import {useState, useEffect} from 'react';
 import Papa from 'papaparse';
 import {inflate} from 'pako';
 import urljoin from 'url-join';
+import groupBy from 'lodash/groupBy';
+import map from 'lodash/map';
 import split from 'obliterator/split';
 import meta from '../specs/meta.json';
 import getPath from 'lodash/fp/get';
+import palettes from 'iwanthue/precomputed/k-means-fancy-light';
 import {createWikipediaLabel} from '../lib/helpers';
 
 const DEFAULT_PARSE_OPTIONS = {
@@ -13,6 +16,11 @@ const DEFAULT_PARSE_OPTIONS = {
   skipEmptyLines: true,
   dynamicTyping: true
 };
+
+const mapSeriesPoint = point => ({
+  x: point.decade,
+  y: point.count
+});
 
 function get(url, callback) {
   const complete = results => {
@@ -120,6 +128,29 @@ class AssetsManager extends EventEmitter {
       this.get(`${series}_series.csv`, (err, data) => {
         if (err) return console.error(err);
 
+        let i = 0;
+
+        // Processing data
+        if (series === 'default')
+          data = [
+            {
+              id: 'default',
+              color: palettes[2][0],
+              data: data.map(mapSeriesPoint)
+            }
+          ];
+        else
+          data = map(
+            groupBy(data, point => point.value),
+            (points, value, groups) => {
+              return {
+                id: value,
+                color: palettes[Object.keys(groups).length][i++],
+                data: points.map(mapSeriesPoint)
+              };
+            }
+          );
+
         this.data.series[series] = data;
         this.emit(`series.${series}`, data);
       });
@@ -145,21 +176,21 @@ export default manager;
 
 export function useAsset(name) {
   // NOTE: it would be fairly easy to make asset downloading lazy by tweaking things here
+  const [asset, setAsset] = useState(null);
 
-  const data = getPath(manager.data, name);
+  const data = getPath(name, manager.data);
 
-  const [asset, setAsset] = useState({downloaded: !!data, data: data});
+  useEffect(() => {
+    if (data) return;
 
-  if (!data)
-    useEffect(() => {
-      const listener = retrievedData => {
-        setAsset({downloaded: true, data: retrievedData});
-      };
+    const listener = retrievedData => {
+      setAsset(retrievedData);
+    };
 
-      manager.once(name, listener);
+    manager.once(name, listener);
 
-      return () => manager.off(name, listener);
-    }, []);
+    return () => manager.off(name, listener);
+  }, [name]);
 
-  return asset;
+  return {downloaded: !!data, data};
 }
