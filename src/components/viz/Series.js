@@ -1,52 +1,64 @@
 import React from 'react';
 import {ResponsiveLine} from '@nivo/line';
-import range from 'lodash/range';
+import ticks from 'lodash/range';
 
-const TIME_STEP = 250;
+const style = {
+  height: '400px',
+  backgroundColor: 'white',
+  border: '1px dashed black'
+};
 
-function getYearTicks(lines) {
-  let min = Infinity,
-      max = -Infinity;
-
-  lines.forEach(line => {
-    line.data.forEach(point => {
-      if (point.x < min)
-        min = point.x;
-      if (point.x > max)
-        max = point.x;
-    });
-  });
-
-  return range(min, max, TIME_STEP);
+function floor10(n) {
+  return Math.floor(n / 10) * 10;
 }
 
-// xScale={{
-//   type: 'linear',
-//   min: 0
-// }}
+export default function Series({data, range}) {
+  if (!data) return <div style={style} />;
 
-export default function Series({data}) {
-  const yearTicks = getYearTicks(data);
+  var timeStep = floor10((range[1] - range[0]) / 15);
+
+  const yearTicks = ticks(range[0], range[1], timeStep || 10)
+    .slice(0, -1)
+    .concat(range[1]);
+
+  data = data.map(line => {
+    return {
+      ...line,
+      data: line.data.filter(
+        point => point.x >= range[0] && point.x <= range[1]
+      )
+    };
+  });
 
   return (
-    <ResponsiveLine
-      data={data}
-      enablePoints={false}
-      isInteractive
-      enableCrosshair
-      animate
-      margin={{top: 10, right: 60, bottom: 50, left: 40}}
-      curve="monotoneX"
-      axisLeft={{
-        orient: 'left',
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0,
-        format: '~s'
-      }}
-      axisBottom={{
-        tickValues: yearTicks
-      }}
-      gridXValues={yearTicks} />
+    <div style={style}>
+      <ResponsiveLine
+        data={data}
+        isInteractive
+        enableSlices="x"
+        enableCrosshair
+        animate={false}
+        margin={{top: 20, right: 30, bottom: 40, left: 50}}
+        curve="monotoneX"
+        lineWidth={1}
+        enablePoints={false}
+        axisLeft={{
+          orient: 'left',
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          format: '~s'
+        }}
+        xScale={{
+          type: 'linear',
+          min: range[0],
+          max: range[1]
+        }}
+        axisBottom={{
+          tickValues: yearTicks
+        }}
+        gridXValues={yearTicks}
+      />
+    </div>
   );
 }

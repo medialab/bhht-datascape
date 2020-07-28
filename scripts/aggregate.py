@@ -83,31 +83,31 @@ def parse(k, item):
 def floor_to_nearest_10(n):
     return math.floor(n / 10) * 10
 
-def decade_range(birth, death=None):
-    if death is None:
-        death = MAX_YEAR
+def decade_range(start, end=None):
+    if end is None:
+        end = MAX_YEAR
 
-    start_decade = floor_to_nearest_10(birth)
-    end_decade = floor_to_nearest_10(death)
+    start_decade = floor_to_nearest_10(start)
+    end_decade = floor_to_nearest_10(end)
 
     for decade in range(start_decade, end_decade + 10, 10):
         yield decade
 
-def dump_series(name, data):
+def dump_series(name, data, min_decade):
     with open('./data/%s_series.csv' % name, 'w') as f:
         writer = csv.writer(f)
 
         if name == 'default':
             writer.writerow(['decade', 'count'])
 
-            for decade in sorted(data.keys()):
-                writer.writerow([decade, data[decade]])
+            for decade in decade_range(min_decade):
+                writer.writerow([decade, data.get(decade, '')])
         else:
             writer.writerow(['decade', 'value', 'count'])
 
             for value, items in data.items():
-                for decade in sorted(items.keys()):
-                    writer.writerow([decade, value, items[decade]])
+                for decade in decade_range(min_decade):
+                    writer.writerow([decade, value, items.get(decade, '')])
 
 def gzip_file(p):
     with open(p, 'rb') as f_in, gzip.open(p + '.gz', 'wb') as f_out:
@@ -167,9 +167,11 @@ def aggregate(path, total=None):
     top_file.close()
 
     # Dumping series data
-    dump_series('default', series['default'])
-    dump_series('gender', series['gender'])
-    dump_series('occupation', series['occupation'])
+    min_decade = min(series['default'].keys())
+
+    dump_series('default', series['default'], min_decade)
+    dump_series('gender', series['gender'], min_decade)
+    dump_series('occupation', series['occupation'], min_decade)
 
     # Compressing names index using front coding
     with open('./data/names.txt', 'w') as of:

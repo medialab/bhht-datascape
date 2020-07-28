@@ -1,14 +1,12 @@
 import React from 'react';
-import {
-  HashRouter as Router,
-  Switch,
-  Route
-} from 'react-router-dom'
+import {HashRouter as Router, Switch, Route} from 'react-router-dom';
 import Home from './Home';
 
 const titleStyle = {
   textAlign: 'center',
-  padding: '15px'
+  padding: '25px',
+  paddingBottom: '0px',
+  fontSize: '2.5em'
 };
 
 export default function App() {
