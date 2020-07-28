@@ -1,0 +1,8 @@
+@charset "utf-8";
+@import "~bulma/sass/utilities/initial-variables.sass";
+
+$background: #fcf3d9;
+$body-background-color: $background;
+$navbar-background-color: $background;
+
+@import "~bulma/bulma.sass";

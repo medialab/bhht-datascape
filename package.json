@@ -5,7 +5,7 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "kotatsu serve --progress ./src/main.js --index ./index.html --public ./data --jsx --config ./webpack.config.js",
+    "dev": "kotatsu serve --progress ./src/main.js --index ./index.html --public ./data --jsx --config ./webpack.config.js --sass",
     "prettier": "prettier --write './src/**/*.js'"
   },
   "repository": {
@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/medialab/bhht-datascape#readme",
   "dependencies": {
+    "bulma": "^0.9.0",
     "history": "^5.0.0",
     "pako": "^1.0.11",
     "papaparse": "^5.2.0",
@@ -31,7 +32,8 @@
   },
   "devDependencies": {
     "@yomguithereal/prettier-config": "^1.1.0",
-    "kotatsu": "^0.19.2",
+    "kotatsu": "^0.19.3",
+    "node-sass": "^4.14.1",
     "prettier": "^2.0.5"
   },
   "prettier": "@yomguithereal/prettier-config"
