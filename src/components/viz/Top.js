@@ -26,6 +26,7 @@ const itemStyle = {
 export default debounce(function TopPeople({range, data}) {
   if (!data) return <div style={containerStyle}>...</div>;
 
+  // TODO: change this to range intersection
   let top = data.filter(person => {
     return (
       person.birth >= range[0] &&
