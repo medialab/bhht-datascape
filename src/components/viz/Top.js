@@ -29,8 +29,8 @@ export default debounce(function TopPeople({range, data}) {
   // TODO: change this to range intersection
   let top = data.filter(person => {
     return (
-      person.birth >= range[0] &&
-      (person.death === null ? meta.dates.max : person.death) <= range[1]
+      person.birth <= range[1] &&
+      (person.death === null ? meta.dates.max : person.death) >= range[0]
     );
   });
 
