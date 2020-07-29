@@ -90,7 +90,7 @@ function useBlacklist() {
 
 export default function Home() {
   const [dateRange, setDateRange] = useState([meta.dates.min, meta.dates.max]);
-  const [selectedSeries, setSelectedSeries] = useState(seriesOptions[1]);
+  const [selectedSeries, setSelectedSeries] = useState(seriesOptions[0]);
   const [blackList, toggleBlackList, resetBlackList] = useBlacklist();
 
   const series = useAsset(`series.${selectedSeries.value}`);

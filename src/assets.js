@@ -176,7 +176,7 @@ class AssetsManager extends EventEmitter {
   }
 
   join(path) {
-    return urljoin(this.baseUrl, path);
+    return urljoin(this.baseUrl, 'data', path);
   }
 
   get(path, callback) {

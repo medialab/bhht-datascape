@@ -5,8 +5,17 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "dev": "kotatsu serve ./src/main.js --index ./index.html --public ./data --jsx --config ./webpack.config.js --sass",
+    "dev": "kotatsu serve ./src/main.js --index ./index.html",
     "prettier": "prettier --write './src/**/*.js'"
+  },
+  "kotatsu": {
+    "config": "./webpack.config.js",
+    "public": [
+      "/data",
+      "./data"
+    ],
+    "jsx": true,
+    "sass": true
   },
   "repository": {
     "type": "git",
@@ -41,7 +50,9 @@
   },
   "devDependencies": {
     "@yomguithereal/prettier-config": "^1.1.0",
-    "kotatsu": "^0.19.3",
+    "gh-pages": "^3.1.0",
+    "http-server": "^0.12.3",
+    "kotatsu": "^0.20.0",
     "node-sass": "^4.14.1",
     "prettier": "^2.0.5"
   },
