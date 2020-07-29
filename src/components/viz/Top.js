@@ -23,7 +23,30 @@ const itemStyle = {
   margin: '5px'
 };
 
-export default debounce(function TopPeople({range, data}) {
+function Person({index, data, color}) {
+  let dates;
+
+  if (data.death)
+    dates = (
+      <span>
+        ({data.birth} • {data.death})
+      </span>
+    );
+  else dates = <span>({data.birth})</span>;
+
+  return (
+    <li style={itemStyle}>
+      {index + 1}. <strong>{createWikipediaLabel(data.name, false)}</strong>
+      &nbsp;{dates}
+      <br />
+      <small>
+        <em>{data.occupation}</em>
+      </small>
+    </li>
+  );
+}
+
+export default debounce(function TopPeople({range, data, colorMap}) {
   if (!data) return <div style={containerStyle}>...</div>;
 
   // TODO: change this to range intersection
@@ -39,13 +62,9 @@ export default debounce(function TopPeople({range, data}) {
   return (
     <div>
       <ul style={containerStyle}>
-        {top.map(person => {
-          return (
-            <li key={person.wikidata_code} style={itemStyle}>
-              {createWikipediaLabel(person.name, false)}
-            </li>
-          );
-        })}
+        {top.map((person, i) => (
+          <Person key={person.name} data={person} index={i} />
+        ))}
       </ul>
     </div>
   );

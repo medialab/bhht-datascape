@@ -28,7 +28,7 @@ export default function App() {
           </div>
         </div>
         <footer className="footer">
-          <div className="content has-text-centered">Footer</div>
+          <div className="content has-text-centered" />
         </footer>
       </div>
     </Router>
