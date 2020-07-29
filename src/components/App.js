@@ -2,6 +2,7 @@ import React from 'react';
 import {HashRouter as Router, Switch, Route, Link} from 'react-router-dom';
 import Home from './Home';
 import People from './People';
+import Separator from './Separator';
 
 const titleStyle = {
   textAlign: 'center',
@@ -27,8 +28,15 @@ export default function App() {
               <Route path="/p/:name">
                 <People />
               </Route>
-              <Route path="/">
+              <Route exact path="/">
                 <Home />
+              </Route>
+              <Route path="*">
+                <Separator />
+                <div className="content" style={{textAlign: 'center'}}>
+                  <h2>This Page Does Not Exist!</h2>
+                  <h3>Sorry :(</h3>
+                </div>
               </Route>
             </Switch>
           </div>
