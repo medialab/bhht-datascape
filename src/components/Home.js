@@ -91,7 +91,9 @@ export default function Home() {
       </div>
 
       <div className="columns">
-        <div className="column is-3"></div>
+        <div className="column is-3" style={{paddingTop: '40px'}}>
+          <Select isLoading={true} placeholder="Search..." />
+        </div>
         <div className="column is-9">
           <h2 style={{marginTop: '20px', fontSize: '1.8em'}}>Top People</h2>
           <Top range={dateRange} data={topPeople} />

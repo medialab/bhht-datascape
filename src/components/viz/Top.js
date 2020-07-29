@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import debounce from 'react-debounce-render';
 import Heap from 'mnemonist/heap';
 import meta from '../../../specs/meta.json';
@@ -23,7 +24,7 @@ const itemStyle = {
   margin: '5px'
 };
 
-function Person({index, data, color}) {
+function Person({index, data}) {
   let dates;
 
   if (data.death)
@@ -36,7 +37,10 @@ function Person({index, data, color}) {
 
   return (
     <li style={itemStyle}>
-      {index + 1}. <strong>{createWikipediaLabel(data.name, false)}</strong>
+      {index + 1}.{' '}
+      <Link to={'/p/' + encodeURIComponent(data.name)}>
+        <strong>{createWikipediaLabel(data.name, false)}</strong>
+      </Link>
       &nbsp;{dates}
       <br />
       <small>
