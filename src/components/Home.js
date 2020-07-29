@@ -41,6 +41,7 @@ export default function Home() {
 
   const series = useAsset(`series.${selectedSeries.value}`);
   const topPeople = useAsset('top');
+  const names = useAsset('names');
 
   return (
     <div>
@@ -92,7 +93,7 @@ export default function Home() {
 
       <div className="columns">
         <div className="column is-3" style={{paddingTop: '40px'}}>
-          <Select isLoading={true} placeholder="Search..." />
+          <Select isLoading={!names} placeholder="Search..." />
         </div>
         <div className="column is-9">
           <h2 style={{marginTop: '20px', fontSize: '1.8em'}}>Top People</h2>

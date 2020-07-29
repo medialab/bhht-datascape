@@ -23,6 +23,7 @@
   "homepage": "https://github.com/medialab/bhht-datascape#readme",
   "dependencies": {
     "@nivo/line": "^0.62.0",
+    "async": "^3.2.0",
     "bulma": "^0.9.0",
     "iwanthue": "^1.4.0",
     "lodash": "^4.17.19",

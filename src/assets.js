@@ -4,8 +4,10 @@ import Papa from 'papaparse';
 import {inflate} from 'pako';
 import urljoin from 'url-join';
 import groupBy from 'lodash/groupBy';
+import whilst from 'async/whilst';
 import map from 'lodash/map';
 import split from 'obliterator/split';
+import take from 'obliterator/take';
 import meta from '../specs/meta.json';
 import getPath from 'lodash/fp/get';
 import palettes from 'iwanthue/precomputed/k-means-fancy-light';
@@ -80,17 +82,33 @@ function getNames(url, callback) {
       const names = [];
 
       let previous = '';
+      let chunk = null;
 
-      for (const entry of split(/\n/g, string)) {
-        const decoded = decodeName(previous, entry);
+      const lines = split(/\n/g, string);
 
-        names.push(decoded);
+      whilst(
+        cond => {
+          chunk = take(lines, 10000);
+          return cond(null, chunk.length !== 0);
+        },
+        next => {
+          chunk.forEach(entry => {
+            const decoded = decodeName(previous, entry);
 
-        previous = decoded;
-      }
+            names.push(decoded);
 
-      console.timeEnd('names');
-      return callback(null, names);
+            previous = decoded;
+          });
+
+          return requestAnimationFrame(() => next());
+        },
+        err => {
+          if (err) return console.error(err);
+
+          console.timeEnd('names');
+          return callback(null, names);
+        }
+      );
     });
 }
 
@@ -115,14 +133,6 @@ class AssetsManager extends EventEmitter {
       this.data.top = data;
       this.emit('top', data);
     });
-
-    // TODO: schedule async jobs to avoid freezing the UI
-    // this.getNames('names.txt.gz', (err, data) => {
-    //   if (err) return console.error(err);
-
-    //   this.data.names = data;
-    //   this.emit('names', data);
-    // });
 
     meta.series.forEach(series => {
       this.get(`${series}_series.csv`, (err, data) => {
@@ -154,6 +164,14 @@ class AssetsManager extends EventEmitter {
         this.data.series[series] = data;
         this.emit(`series.${series}`, data);
       });
+    });
+
+    // TODO: schedule async jobs to avoid freezing the UI
+    this.getNames('names.txt.gz', (err, data) => {
+      if (err) return console.error(err);
+
+      this.data.names = data;
+      this.emit('names', data);
     });
   }
 
