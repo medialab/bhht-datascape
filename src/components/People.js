@@ -59,9 +59,11 @@ export default function People() {
               <strong className="special-red">Occupation</strong> •{' '}
               {data.occupation}
             </li>
-            <li>
-              <strong className="special-red">Region</strong> • {data.region}
-            </li>
+            {data.region && (
+              <li>
+                <strong className="special-red">Region</strong> • {data.region}
+              </li>
+            )}
             <li>
               <strong className="special-red">Ranking</strong> • {data.ranking}
             </li>

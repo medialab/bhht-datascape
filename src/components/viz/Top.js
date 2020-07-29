@@ -14,7 +14,9 @@ function comparator(a, b) {
 
 const containerStyle = {
   height: '400px',
-  overflowY: 'scroll'
+  overflowY: 'scroll',
+  borderBottom: '1px solid black',
+  borderTop: '1px solid black'
 };
 
 const itemStyle = {
@@ -50,7 +52,7 @@ function Person({index, data}) {
   );
 }
 
-export default debounce(function TopPeople({range, data, colorMap}) {
+export default debounce(function TopPeople({range, data}) {
   if (!data) return <div style={containerStyle}>...</div>;
 
   // TODO: change this to range intersection

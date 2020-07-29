@@ -34,7 +34,9 @@ const noOptionsMessage = ({inputValue}) => {
 
 const createLoadOptions = names => {
   return debounce((inputValue, callback) => {
-    let options = names.filter(name => name.toLowerCase().includes(inputValue));
+    let options = names.filter(name =>
+      name.toLowerCase().includes(inputValue.toLowerCase())
+    );
 
     const tooManyOptions = options.length > 25;
 
@@ -46,7 +48,7 @@ const createLoadOptions = names => {
     }));
 
     if (tooManyOptions) options.push({label: '...', value: '', disabled: true});
-
+    console.log(inputValue, options);
     return callback(options);
   }, 500);
 };
@@ -71,9 +73,25 @@ function SearchOption(props) {
   );
 }
 
+function useBlacklist() {
+  const [blackList, setBlackList] = useState(new Set());
+
+  const toggleBlackList = value => {
+    if (blackList.has(value)) blackList.delete(value);
+    else blackList.add(value);
+
+    setBlackList(new Set(blackList));
+  };
+
+  const resetBlackList = () => blackList.clear();
+
+  return [blackList, toggleBlackList, resetBlackList];
+}
+
 export default function Home() {
   const [dateRange, setDateRange] = useState([meta.dates.min, meta.dates.max]);
-  const [selectedSeries, setSelectedSeries] = useState(seriesOptions[0]);
+  const [selectedSeries, setSelectedSeries] = useState(seriesOptions[1]);
+  const [blackList, toggleBlackList, resetBlackList] = useBlacklist();
 
   const series = useAsset(`series.${selectedSeries.value}`);
   const topPeople = useAsset('top');
@@ -85,13 +103,18 @@ export default function Home() {
         <div className="column is-3">
           <SeriesSelect
             selected={selectedSeries}
-            onChange={setSelectedSeries}
+            onChange={option => {
+              setSelectedSeries(option);
+              resetBlackList();
+            }}
           />
           <ul style={{marginTop: '15px'}}>
             {series &&
               series.map(line => {
                 return (
-                  <li key={line.id}>
+                  <li
+                    key={line.id}
+                    style={{cursor: 'pointer', userSelect: 'none'}}>
                     <span
                       style={{
                         display: 'inline-block',
@@ -100,14 +123,46 @@ export default function Home() {
                         background: line.color
                       }}
                     />
-                    <span> {line.id === 'default' ? 'All' : line.id}</span>
+                    &nbsp;
+                    <span
+                      style={{
+                        textDecoration: blackList.has(line.id)
+                          ? 'line-through'
+                          : 'none',
+                        color: blackList.has(line.id) ? 'grey' : 'black'
+                      }}
+                      onClick={() => {
+                        if (
+                          !blackList.has(line.id) &&
+                          blackList.size === series.length - 1
+                        )
+                          return;
+                        toggleBlackList(line.id);
+                      }}>
+                      {line.id === 'default' ? 'All' : line.id}
+                    </span>
                   </li>
                 );
               })}
           </ul>
+          {selectedSeries.value !== 'default' && (
+            <div
+              style={{
+                fontSize: '0.7em',
+                textAlign: 'center',
+                marginTop: '15px'
+              }}>
+              <em>You can click values to filter them in/out.</em>
+            </div>
+          )}
         </div>
         <div className="column is-9">
-          <Series range={dateRange} data={series} />
+          <Series
+            range={dateRange}
+            data={
+              series ? series.filter(line => !blackList.has(line.id)) : null
+            }
+          />
           <div
             style={{
               marginLeft: '50px',
@@ -140,7 +195,14 @@ export default function Home() {
         </div>
         <div className="column is-9">
           <h2 style={{marginTop: '20px', fontSize: '1.8em'}}>Top People</h2>
-          <Top range={dateRange} data={topPeople} />
+          <Top
+            range={dateRange}
+            data={
+              topPeople
+                ? topPeople.filter(p => !blackList.has(p[selectedSeries.value]))
+                : null
+            }
+          />
         </div>
       </div>
     </div>

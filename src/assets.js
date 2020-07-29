@@ -145,7 +145,7 @@ class AssetsManager extends EventEmitter {
           data = [
             {
               id: 'default',
-              color: palettes[2][0],
+              color: '#d42a20',
               data: data.map(mapSeriesPoint)
             }
           ];
