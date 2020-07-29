@@ -5,8 +5,14 @@
   "private": true,
   "main": "index.js",
   "scripts": {
+    "build": "kotatsu build client ./src/main.js -o build/bundle.js --production",
+    "clean": "rm -rf ./build",
+    "deploy": "npm run make:prod && gh-pages -d ./build",
     "dev": "kotatsu serve ./src/main.js --index ./index.html",
-    "prettier": "prettier --write './src/**/*.js'"
+    "make": "BASE_URL='http://127.0.0.1:8000' ./scripts/make.sh",
+    "make:prod": "BASE_URL='https://medialab.github.io/bhht-datascape' ./scripts/make.sh",
+    "prettier": "prettier --write './src/**/*.js'",
+    "serve": "npm run make && http-server ./build -p 8000 -o"
   },
   "kotatsu": {
     "config": "./webpack.config.js",
