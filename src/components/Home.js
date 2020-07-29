@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {Range} from 'rc-slider';
 import Select from 'react-select';
+import AsyncSelect from 'react-select/async';
+import debounce from 'lodash/debounce';
 import Series from './viz/Series';
 import Top from './viz/Top';
 import {useAsset} from '../assets';
@@ -22,6 +24,26 @@ const seriesOptions = [
   {value: 'gender', label: 'By gender'},
   {value: 'occupation', label: 'By occupation'}
 ];
+
+const noOptionsMessage = ({inputValue}) => {
+  if (!inputValue || inputValue.length < 3) return 'Type to search people.';
+
+  return 'No results.';
+};
+
+const createLoadOptions = names => {
+  return debounce((inputValue, callback) => {
+    const options = names
+      .filter(name => name.toLowerCase().includes(inputValue))
+      .slice(0, 25)
+      .map(name => ({
+        label: name,
+        value: name
+      }));
+
+    return callback(options);
+  }, 500);
+};
 
 function SeriesSelect({selected, onChange}) {
   return (
@@ -93,7 +115,12 @@ export default function Home() {
 
       <div className="columns">
         <div className="column is-3" style={{paddingTop: '40px'}}>
-          <Select isLoading={!names} placeholder="Search..." />
+          <AsyncSelect
+            isLoading={!names}
+            placeholder="Search..."
+            noOptionsMessage={noOptionsMessage}
+            loadOptions={createLoadOptions(names)}
+          />
         </div>
         <div className="column is-9">
           <h2 style={{marginTop: '20px', fontSize: '1.8em'}}>Top People</h2>
