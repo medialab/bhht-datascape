@@ -62,6 +62,9 @@ export default function People() {
             <li>
               <strong className="special-red">Region</strong> • {data.region}
             </li>
+            <li>
+              <strong className="special-red">Ranking</strong> • {data.ranking}
+            </li>
           </ul>
         </div>
       </div>

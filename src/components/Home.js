@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
+import {Link} from 'react-router-dom';
 import {Range} from 'rc-slider';
-import Select from 'react-select';
+import Select, {components} from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'lodash/debounce';
 import Series from './viz/Series';
@@ -33,13 +34,18 @@ const noOptionsMessage = ({inputValue}) => {
 
 const createLoadOptions = names => {
   return debounce((inputValue, callback) => {
-    const options = names
-      .filter(name => name.toLowerCase().includes(inputValue))
-      .slice(0, 25)
-      .map(name => ({
-        label: name,
-        value: name
-      }));
+    let options = names.filter(name => name.toLowerCase().includes(inputValue));
+
+    const tooManyOptions = options.length > 25;
+
+    if (tooManyOptions) options = options.slice(0, 25);
+
+    options = options.map(name => ({
+      label: name,
+      value: name
+    }));
+
+    if (tooManyOptions) options.push({label: '...', value: '', disabled: true});
 
     return callback(options);
   }, 500);
@@ -54,6 +60,14 @@ function SeriesSelect({selected, onChange}) {
       value={selected}
       onChange={onChange}
     />
+  );
+}
+
+function SearchOption(props) {
+  return (
+    <Link to={'/p/' + props.value.replace(/\s/g, '_')} style={{color: 'black'}}>
+      <components.Option {...props} />
+    </Link>
   );
 }
 
@@ -120,6 +134,8 @@ export default function Home() {
             placeholder="Search..."
             noOptionsMessage={noOptionsMessage}
             loadOptions={createLoadOptions(names)}
+            components={{Option: SearchOption}}
+            isOptionDisabled={option => option.disabled}
           />
         </div>
         <div className="column is-9">
