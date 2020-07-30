@@ -73,6 +73,9 @@ def encode_name(m, name):
         return str(m) + name[m:]
 
 def parse(k, item):
+    if k == 'citizenship':
+        return item.replace('_', ' ')
+
     if k in INTS:
         return int(item)
     if k in FLOATS:
