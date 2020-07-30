@@ -1,5 +1,5 @@
 # Cleanup
-rm -rf ./build/
+npm run clean
 
 # Bulding javascript
 npm run build
