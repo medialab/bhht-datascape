@@ -1,7 +1,7 @@
 import React from 'react';
 import {ResponsiveLine} from '@nivo/line';
 import ticks from 'lodash/range';
-import {prettyNumber} from '../../utils';
+import commaNumber from 'comma-number';
 
 const style = {
   height: '350px',
@@ -39,7 +39,7 @@ function SliceTooltip({slice}) {
             }}
           />
           <span> {point.serieId === 'default' ? 'All' : point.serieId}</span> •{' '}
-          <strong>{prettyNumber(point.data.yFormatted)}</strong>
+          <strong>{commaNumber(point.data.yFormatted)}</strong>
         </div>
       ))}
     </div>
