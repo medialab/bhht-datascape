@@ -4,6 +4,16 @@ import {useAsset} from '../assets';
 import Separator from './Separator';
 import {createWikipediaLabel} from '../../lib/helpers';
 
+function PeopleProperty({label, value}) {
+  if (value === null || value === undefined) return null;
+
+  return (
+    <li>
+      <strong className="special-red">{label}</strong> • {value}
+    </li>
+  );
+}
+
 export default function People() {
   const params = useParams();
 
@@ -43,30 +53,13 @@ export default function People() {
         <div className="column is-3" />
         <div className="column is-6 content">
           <ul style={{listStyleType: 'none'}}>
-            <li>
-              <strong className="special-red">Birth date</strong> • {data.birth}
-            </li>
-            {data.death !== null && (
-              <li>
-                <strong className="special-red">Death date</strong> •{' '}
-                {data.death}
-              </li>
-            )}
-            <li>
-              <strong className="special-red">Gender</strong> • {data.gender}
-            </li>
-            <li>
-              <strong className="special-red">Occupation</strong> •{' '}
-              {data.occupation}
-            </li>
-            {data.region && (
-              <li>
-                <strong className="special-red">Region</strong> • {data.region}
-              </li>
-            )}
-            <li>
-              <strong className="special-red">Ranking</strong> • {data.ranking}
-            </li>
+            <PeopleProperty label="Birth date" value={data.birth} />
+            <PeopleProperty label="Death date" value={data.death} />
+            <PeopleProperty label="Gender" value={data.gender} />
+            <PeopleProperty label="Occupation" value={data.occupation} />
+            <PeopleProperty label="Region" value={data.region} />
+            <PeopleProperty label="Ranking" value={data.ranking} />
+            <PeopleProperty label="Citizenship" value={data.citizenship} />
           </ul>
         </div>
       </div>
