@@ -1,7 +1,23 @@
 # BHHT Datascape
 
-TODO...
+Sources and scripts related to BHHT's static website hosted at this url: https://medialab.github.io/bhht-datascape
 
-docs
+## Dependencies
 
-TODO... sort by prefix + ranking si dispo + > 25?
+The building scripts relie on `python` and the static website relies on `node`.
+
+I recommend [`nvm`](https://github.com/nvm-sh/nvm) to install `node`. And [`pyenv`](https://github.com/pyenv/pyenv-installer) to cleanly manage a `python` environment. But any will (virtualenv, conda, miniconda, spyder etc.).
+
+## Building the necessary data files
+
+First you will need to install the required python dependencies using `pip` in the desired `python` environment:
+
+```
+pip install -r requirements.txt
+```
+
+Then run the aggregation script thusly:
+
+```
+python scripts/aggregate.py <path-to-data.csv>
+```
