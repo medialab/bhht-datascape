@@ -37,3 +37,20 @@ npm run dev
 ```
 
 The dev version of the app will then be served on [http://localhost:3000](http://localhost:3000).
+
+This website is basically a static [React](https://reactjs.org/) web application loading the pre-aggregated data.
+
+## Building and deploying the static website
+
+If you are happy with your code changes or if you need to refresh the data you just built, you can use the following commands to build the static website:
+
+```bash
+# To only build the website into ./build folder:
+npm run build
+
+# To build then serve the website to http://localhost:8000
+npm run serve
+
+# To build and deploy the website in production
+npm run deploy
+```
