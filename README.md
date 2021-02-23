@@ -12,12 +12,28 @@ I recommend [`nvm`](https://github.com/nvm-sh/nvm) to install `node`. And [`pyen
 
 First you will need to install the required python dependencies using `pip` in the desired `python` environment:
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
 Then run the aggregation script thusly:
 
-```
+```bash
 python scripts/aggregate.py <path-to-data.csv>
 ```
+
+## Developing the static website
+
+After having built the necessary data files, you will first need to install `npm` dependencies:
+
+```bash
+npm install
+```
+
+Then you can develop the website (whose code is in the [src](./src) folder) thusly:
+
+```bash
+npm run dev
+```
+
+The dev version of the app will then be served on [http://localhost:3000](http://localhost:3000).
