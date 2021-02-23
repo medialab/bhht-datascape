@@ -194,7 +194,7 @@ export default function Home() {
           />
         </div>
         <div className="column is-9">
-          <h2 style={{marginTop: '20px', fontSize: '1.8em'}}>Top People</h2>
+          <h2 style={{marginTop: '20px', fontSize: '1.8em'}}>Notable People</h2>
           <Top
             range={dateRange}
             data={

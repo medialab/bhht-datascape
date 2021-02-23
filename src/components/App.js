@@ -23,6 +23,7 @@ export default function App() {
               <Link to="/">
                 <h1 style={titleStyle}>A Brief History of Human Time</h1>
               </Link>
+              <p style={{textAlign: 'center'}}><em>Work in progress...</em></p>
             </div>
             <Switch>
               <Route path="/p/:name">
