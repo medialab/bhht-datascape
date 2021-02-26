@@ -75,8 +75,8 @@ function SearchOption(props) {
   );
 }
 
-function useBlacklist() {
-  const [blackList, setBlackList] = useState(new Set());
+function useBlacklist(defaultBlacklist) {
+  const [blackList, setBlackList] = useState(new Set(defaultBlacklist));
 
   const toggleBlackList = value => {
     if (blackList.has(value)) blackList.delete(value);
@@ -91,9 +91,15 @@ function useBlacklist() {
 }
 
 export default function Home() {
-  const [dateRange, setDateRange] = useState([meta.dates.min, meta.dates.max]);
-  const [selectedSeries, setSelectedSeries] = useState(seriesOptions[0]);
-  const [blackList, toggleBlackList, resetBlackList] = useBlacklist();
+  const [dateRange, setDateRange] = useState([-1000, 1890]);
+  const [selectedSeries, setSelectedSeries] = useState(seriesOptions[2]);
+  const [blackList, toggleBlackList, resetBlackList] = useBlacklist([
+    'Culture',
+    'Other',
+    'Leadership',
+    'Sports/Games',
+    'Missing'
+  ]);
 
   const series = useAsset(`series.${selectedSeries.value}`);
   const topPeople = useAsset('top');

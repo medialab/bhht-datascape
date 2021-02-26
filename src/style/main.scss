@@ -1,9 +1,10 @@
 @charset "utf-8";
-@import "~bulma/sass/utilities/initial-variables.sass";
+@import '~bulma/sass/utilities/initial-variables.sass';
 
 $special-red: #d42a20;
 
-$background: #fcf3d9;
+// $background: #fcf3d9;
+$background: white;
 $body-background-color: $background;
 $navbar-background-color: $background;
 $footer-background-color: $background;
@@ -12,8 +13,8 @@ $link: $special-red;
 
 $family-sans-serif: Merriweather, sans-serif;
 
-@import "~bulma/bulma.sass";
-@import "./rc-slider.css";
+@import '~bulma/bulma.sass';
+@import './rc-slider.css';
 
 .special-red {
   color: $special-red;

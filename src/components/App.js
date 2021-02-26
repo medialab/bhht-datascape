@@ -15,7 +15,7 @@ const titleStyle = {
 export default function App() {
   return (
     <Router>
-      <div className="container">
+      <div className="container-fluid">
         <div className="columns">
           <div className="column is-1" />
           <div className="column is-10">
