@@ -5,6 +5,7 @@ node_modules
 *.log
 .kotatsu
 .python-version
+.vscode
 *.csv
 data
 build

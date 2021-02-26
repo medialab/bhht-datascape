@@ -9,6 +9,8 @@ import Top from './viz/Top';
 import {useAsset} from '../assets';
 import meta from '../../specs/meta.json';
 
+const MAX_SEARCH_RESULTS = 100;
+
 const rangeMarks = {
   '-3500': '-3500',
   '-1000': '-1000',
@@ -38,9 +40,9 @@ const createLoadOptions = names => {
       name.toLowerCase().includes(inputValue.toLowerCase())
     );
 
-    const tooManyOptions = options.length > 25;
+    const tooManyOptions = options.length > MAX_SEARCH_RESULTS;
 
-    if (tooManyOptions) options = options.slice(0, 25);
+    if (tooManyOptions) options = options.slice(0, MAX_SEARCH_RESULTS);
 
     options = options.map(name => ({
       label: name,
@@ -186,7 +188,8 @@ export default function Home() {
         <div className="column is-3" style={{paddingTop: '40px'}}>
           <AsyncSelect
             isLoading={!names}
-            placeholder="Search..."
+            isDisabled={!names}
+            placeholder={names ? 'Search...' : 'Loading...'}
             noOptionsMessage={noOptionsMessage}
             loadOptions={createLoadOptions(names)}
             components={{Option: SearchOption}}
