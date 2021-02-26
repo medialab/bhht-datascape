@@ -90,6 +90,22 @@ function useBlacklist(defaultBlacklist) {
   return [blackList, toggleBlackList, resetBlackList];
 }
 
+function SectionTitle({id, children}) {
+  return (
+    <h2
+      id={id}
+      style={{
+        borderBottom: '1px solid black',
+        fontSize: '2em',
+        marginBottom: '25px'
+      }}>
+      {children}
+    </h2>
+  );
+
+  // <a href={`#${id}`}>❦</a>
+}
+
 export default function Home() {
   const [dateRange, setDateRange] = useState([-1000, 1890]);
   const [selectedSeries, setSelectedSeries] = useState(seriesOptions[2]);
@@ -107,6 +123,7 @@ export default function Home() {
 
   return (
     <div>
+      <SectionTitle id="viz">Interactive visualizations</SectionTitle>
       <div className="columns">
         <div className="column is-3">
           <SeriesSelect
@@ -203,7 +220,7 @@ export default function Home() {
           />
         </div>
         <div className="column is-9">
-          <h2 style={{marginTop: '20px', fontSize: '1.8em'}}>Notable People</h2>
+          <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>Notable People</h3>
           <Top
             range={dateRange}
             data={
