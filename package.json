@@ -18,7 +18,9 @@
     "config": "./webpack.config.js",
     "public": [
       "/data",
-      "./data"
+      "./data",
+      "/img",
+      "./img"
     ],
     "jsx": true,
     "sass": true
