@@ -1,12 +1,13 @@
 import React, {useState} from 'react';
-import {Link} from 'react-router-dom';
 import {Range} from 'rc-slider';
-import Select, {components} from 'react-select';
+import Select from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'lodash/debounce';
 import Series from './viz/Series';
 import Top from './viz/Top';
+import People from './People';
 import {useAsset} from '../assets';
+import {createWikipediaName} from '../../lib/helpers';
 import meta from '../../specs/meta.json';
 
 const MAX_SEARCH_RESULTS = 100;
@@ -67,14 +68,6 @@ function SeriesSelect({selected, onChange}) {
   );
 }
 
-function SearchOption(props) {
-  return (
-    <Link to={'/p/' + props.value.replace(/\s/g, '_')} style={{color: 'black'}}>
-      <components.Option {...props} />
-    </Link>
-  );
-}
-
 function useBlacklist(defaultBlacklist) {
   const [blackList, setBlackList] = useState(new Set(defaultBlacklist));
 
@@ -116,6 +109,7 @@ export default function Home() {
     'Sports/Games',
     'Missing'
   ]);
+  const [selectedPeople, setSelectedPeople] = useState(null);
 
   const series = useAsset(`series.${selectedSeries.value}`);
   const topPeople = useAsset('top');
@@ -210,25 +204,38 @@ export default function Home() {
       <div className="columns">
         <div className="column is-3" style={{paddingTop: '40px'}}>
           <AsyncSelect
+            isClearable
             isLoading={!names}
             isDisabled={!names}
             placeholder={names ? 'Search...' : 'Loading...'}
             noOptionsMessage={noOptionsMessage}
             loadOptions={createLoadOptions(names)}
-            components={{Option: SearchOption}}
+            onChange={o => {
+              if (!o || o.value === null) setSelectedPeople(null);
+              else setSelectedPeople(createWikipediaName(o.value));
+            }}
             isOptionDisabled={option => option.disabled}
           />
         </div>
         <div className="column is-9">
-          <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>Notable People</h3>
-          <Top
-            range={dateRange}
-            data={
-              topPeople
-                ? topPeople.filter(p => !blackList.has(p[selectedSeries.value]))
-                : null
-            }
-          />
+          {selectedPeople ? (
+            <People
+              name={selectedPeople}
+              onReset={() => setSelectedPeople(null)}
+            />
+          ) : (
+            <Top
+              range={dateRange}
+              onSelect={setSelectedPeople}
+              data={
+                topPeople
+                  ? topPeople.filter(
+                      p => !blackList.has(p[selectedSeries.value])
+                    )
+                  : null
+              }
+            />
+          )}
         </div>
       </div>
     </div>

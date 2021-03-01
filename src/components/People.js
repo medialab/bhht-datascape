@@ -1,7 +1,5 @@
 import React from 'react';
-import {useParams} from 'react-router-dom';
 import {useAsset} from '../assets';
-import Separator from './Separator';
 import ExternalLink from './ExternalLink';
 import {createWikipediaLabel} from '../../lib/helpers';
 
@@ -15,27 +13,30 @@ function PeopleProperty({label, value}) {
   );
 }
 
-export default function People() {
-  const params = useParams();
-
+export default function People({name, onReset}) {
   const top = useAsset('top');
 
   if (!top) return <div style={{textAlign: 'center'}}>...</div>;
 
-  const data = top.find(p => p.name === params.name);
+  const data = top.find(p => p.name === name);
 
   // TODO: verify the person exists in the whole dict?
 
   const title = (
-    <h2 style={{textAlign: 'center'}}>
-      {createWikipediaLabel(params.name, false)}
-    </h2>
+    <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>
+      {createWikipediaLabel(name, false)}
+    </h3>
+  );
+
+  const backToTheList = (
+    <p className="content">
+      <small onClick={onReset}>Back to the list</small>
+    </p>
   );
 
   if (!data)
     return (
       <div className="content" style={{textAlign: 'center'}}>
-        <Separator />
         {title}
         <p>
           This person exists in the paper's database but is not exposed through
@@ -43,6 +44,7 @@ export default function People() {
           <br />
           Please contact the paper's authors for more information.
         </p>
+        {backToTheList}
       </div>
     );
 
@@ -50,7 +52,6 @@ export default function People() {
 
   return (
     <div className="content">
-      <Separator />
       {title}
       <div style={{textAlign: 'center', marginBottom: '20px'}}>
         <ExternalLink href={wikidataUrl}>{wikidataUrl}</ExternalLink>
@@ -70,6 +71,7 @@ export default function People() {
           </ul>
         </div>
       </div>
+      {backToTheList}
     </div>
   );
 }

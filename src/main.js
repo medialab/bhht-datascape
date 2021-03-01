@@ -14,6 +14,17 @@ reactSelectTheme.colors.primary25 = '#ffcbc9';
 
 const container = document.getElementById('app');
 
-render(<App />, container);
+function renderApp(CurrentApp) {
+  render(<CurrentApp />, container);
+}
+
+renderApp(App);
 
 window.manager = manager;
+
+if (module.hot) {
+  module.hot.accept('./components/App', () => {
+    const NewestApp = require('./components/App').default;
+    renderApp(NewestApp);
+  });
+}

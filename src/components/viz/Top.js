@@ -1,5 +1,4 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import debounce from 'react-debounce-render';
 import Heap from 'mnemonist/heap';
 import meta from '../../../specs/meta.json';
@@ -26,7 +25,7 @@ const itemStyle = {
   margin: '5px'
 };
 
-function Person({index, data}) {
+function Person({index, data, onClick}) {
   let dates;
 
   if (data.death)
@@ -38,11 +37,11 @@ function Person({index, data}) {
   else dates = <span>({data.birth})</span>;
 
   return (
-    <li style={itemStyle}>
+    <li style={itemStyle} onClick={() => onClick(data.name)}>
       {index + 1}.{' '}
-      <Link to={'/p/' + encodeURIComponent(data.name)}>
-        <strong>{createWikipediaLabel(data.name, false)}</strong>
-      </Link>
+      <strong className="special-red" style={{cursor: 'pointer'}}>
+        {createWikipediaLabel(data.name, false)}
+      </strong>
       &nbsp;{dates}
       <br />
       <small>
@@ -52,7 +51,7 @@ function Person({index, data}) {
   );
 }
 
-export default debounce(function TopPeople({range, data}) {
+export default debounce(function TopPeople({range, data, onSelect}) {
   if (!data) return <div style={containerStyle}>...</div>;
 
   // TODO: change this to range intersection
@@ -66,12 +65,20 @@ export default debounce(function TopPeople({range, data}) {
   top = Heap.nlargest(comparator, 100, top);
 
   return (
-    <div>
-      <ul style={containerStyle}>
-        {top.map((person, i) => (
-          <Person key={person.name} data={person} index={i} />
-        ))}
-      </ul>
-    </div>
+    <>
+      <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>Notable People</h3>
+      <div>
+        <ul style={containerStyle}>
+          {top.map((person, i) => (
+            <Person
+              key={person.name}
+              data={person}
+              index={i}
+              onClick={onSelect}
+            />
+          ))}
+        </ul>
+      </div>
+    </>
   );
 }, 500);
