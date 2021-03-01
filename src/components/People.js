@@ -26,7 +26,7 @@ export default function People({name, onReset}) {
   // TODO: verify the person exists in the whole dict?
 
   const title = (
-    <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>
+    <h3 style={{marginTop: '20px', fontSize: '1.8em'}} id="search">
       {createWikipediaLabel(name, false)} <Anchor id="search" />
     </h3>
   );

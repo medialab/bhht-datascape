@@ -54,7 +54,7 @@ function Person({index, data, onClick}) {
 
 export default debounce(function TopPeople({range, data, onSelect}) {
   const title = (
-    <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>
+    <h3 style={{marginTop: '20px', fontSize: '1.8em'}} id="search">
       Notable People <Anchor id="search" />
     </h3>
   );

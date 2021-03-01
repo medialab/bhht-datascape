@@ -49,6 +49,17 @@ export function About() {
       <SectionTitle id="about">About</SectionTitle>
       <div className="content">
         <p>
+          Since the time Plutarch’s Parallel Lives was written in the beginning
+          of the second century AD and his 23 biographies have survived two
+          thousand years (or even more ancient, the Epic of Gilgamesh dates back
+          to 2000 BC), the task of registering famous individuals and their
+          influence has been a recurrent field of study. Over the last few
+          years, this task has been undertaken to a much larger scale, with a
+          growing number of databases documenting history, allowing statistical
+          analysis of socio-historical facts, at a scale that had never been
+          reached so far.
+        </p>
+        <p>
           <ExternalLink href="https://cepr.org/active/publications/discussion_papers/dp.php?dpno=15852">
             Our most recent paper
           </ExternalLink>{' '}
@@ -179,6 +190,61 @@ export function Authors() {
         <ul>
           {AUTHORS.map(author => (
             <Author key={author.name} {...author} />
+          ))}
+        </ul>
+      </div>
+    </>
+  );
+}
+
+const REFERENCES = [
+  {
+    id: 'croix',
+    text:
+      'de la Croix, D. and O. Licandro (2015): “The longevity of famous people from Hammurabi to Einstein,” Journal of Economic Growth, 20, 263–303.'
+  },
+  {
+    id: 'gergaud',
+    text:
+      'Gergaud, O., M. Laouenan, and E. Wasmer (2016): “A Brief History of Human Time: Exploring a database of ’notable people’,” Sciences Po Economics Discussion Papers 2016-03, Sciences Po Departement of Economics. '
+  },
+  {
+    id: 'jara',
+    text:
+      'Jara-Figueroa, Christian, Y. A. and C. Hidalgo (2019): “How the medium shapes the message: Printing and the rise of the arts and sciences,” Plos One, 14(2): e0205771. '
+  },
+  {
+    id: 'schich',
+    text:
+      'Schich, M., C. Song, Y.-Y. Ahn, A. Mirsky, M. Martino, A.-L. Barabási, and D. Helbing (2014): “A network framework of cultural history,” Science, 345, 558–562. '
+  },
+  {
+    id: 'serafinelli',
+    text:
+      'Serafinelli, M. and G. Tabellini (2017): “Creativity over time and space,” Available at SSRN 3070203. '
+  },
+  {
+    id: 'tanon',
+    text:
+      'Tanon, T. P., G. Weikum, and F. Suchanek (2020): “YAGO 4: A Reason-able Knowledge Base,” in European Semantic Web Conference, Springer, 583–596. '
+  },
+  {
+    id: 'yu',
+    text:
+      'Yu, A. Z., S. Ronen, K. Hu, T. Lu, and C. A. Hidalgo (2016): “Pantheon 1.0, a manually verified dataset of globally famous biographies,” Scientific data, 3, 150075. '
+  }
+];
+
+export function References() {
+  return (
+    <>
+      <SectionTitle id="references">References</SectionTitle>
+      <div className="content">
+        <ul>
+          {REFERENCES.map(ref => (
+            <li key={ref.id} id={ref.id}>
+              <em>{ref.text}</em>
+            </li>
           ))}
         </ul>
       </div>

@@ -251,6 +251,7 @@ export default function Home() {
           )}
         </div>
       </div>
+      <contents.References />
     </div>
   );
 }
