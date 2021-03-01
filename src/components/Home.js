@@ -1,13 +1,14 @@
 import React, {useState} from 'react';
 import {Range} from 'rc-slider';
-import Select from 'react-select';
+import Select, {components} from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'lodash/debounce';
+import sortBy from 'lodash/sortBy';
 import Series from './viz/Series';
 import Top from './viz/Top';
 import People from './People';
 import {useAsset} from '../assets';
-import {createWikipediaName} from '../../lib/helpers';
+import {createWikipediaName, createWikipediaLabel} from '../../lib/helpers';
 import meta from '../../specs/meta.json';
 
 const MAX_SEARCH_RESULTS = 100;
@@ -35,11 +36,14 @@ const noOptionsMessage = ({inputValue}) => {
   return 'No results.';
 };
 
-const createLoadOptions = names => {
+const createLoadOptions = (rankings, names) => {
   return debounce((inputValue, callback) => {
     let options = names.filter(name =>
       name.toLowerCase().includes(inputValue.toLowerCase())
     );
+
+    // Sorting by rank
+    options = sortBy(options, [o => rankings[o] || Infinity, o => o]);
 
     const tooManyOptions = options.length > MAX_SEARCH_RESULTS;
 
@@ -47,7 +51,8 @@ const createLoadOptions = names => {
 
     options = options.map(name => ({
       label: name,
-      value: name
+      value: name,
+      ranking: rankings[name]
     }));
 
     if (tooManyOptions) options.push({label: '...', value: '', disabled: true});
@@ -55,6 +60,17 @@ const createLoadOptions = names => {
     return callback(options);
   }, 500);
 };
+
+function SearchOption(props) {
+  if (props.data.ranking)
+    return (
+      <strong style={{textDecoration: 'underline'}}>
+        <components.Option {...props} />
+      </strong>
+    );
+
+  return <components.Option {...props} />;
+}
 
 function SeriesSelect({selected, onChange}) {
   return (
@@ -114,6 +130,13 @@ export default function Home() {
   const series = useAsset(`series.${selectedSeries.value}`);
   const topPeople = useAsset('top');
   const names = useAsset('names');
+
+  const rankings = {};
+
+  if (topPeople)
+    topPeople.forEach(p => {
+      rankings[createWikipediaLabel(p.name)] = p.ranking;
+    });
 
   return (
     <div>
@@ -209,7 +232,8 @@ export default function Home() {
             isDisabled={!names}
             placeholder={names ? 'Search...' : 'Loading...'}
             noOptionsMessage={noOptionsMessage}
-            loadOptions={createLoadOptions(names)}
+            loadOptions={createLoadOptions(rankings, names)}
+            components={{Option: SearchOption}}
             onChange={o => {
               if (!o || o.value === null) setSelectedPeople(null);
               else setSelectedPeople(createWikipediaName(o.value));
