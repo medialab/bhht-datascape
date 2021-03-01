@@ -54,7 +54,7 @@ export default function App() {
         <div className="column is-1" />
 
         <div className="column is-2">
-          <div style={{position: 'sticky', top: '20px'}}>
+          <div style={{position: 'sticky', top: '0px'}}>
             <h2
               style={{
                 borderBottom: '1px solid black',
@@ -64,9 +64,7 @@ export default function App() {
               Menu
             </h2>
             <ul>
-              <MenuItem id="papers" disabled>
-                Papers
-              </MenuItem>
+              <MenuItem id="papers">Papers</MenuItem>
               <MenuItem id="about" disabled>
                 About
               </MenuItem>

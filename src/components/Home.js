@@ -7,7 +7,8 @@ import sortBy from 'lodash/sortBy';
 import Series from './viz/Series';
 import Top from './viz/Top';
 import People from './People';
-import Anchor from './Anchor';
+import SectionTitle from './SectionTitle';
+import * as contents from './contents';
 import {useAsset} from '../assets';
 import {createWikipediaName, createWikipediaLabel} from '../../lib/helpers';
 import meta from '../../specs/meta.json';
@@ -100,20 +101,6 @@ function useBlacklist(defaultBlacklist) {
   return [blackList, toggleBlackList, resetBlackList];
 }
 
-function SectionTitle({id, children}) {
-  return (
-    <h2
-      id={id}
-      style={{
-        borderBottom: '1px solid black',
-        fontSize: '2em',
-        marginBottom: '25px'
-      }}>
-      {children} <Anchor id={id} />
-    </h2>
-  );
-}
-
 export default function Home() {
   const [dateRange, setDateRange] = useState([-1000, 1890]);
   const [selectedSeries, setSelectedSeries] = useState(seriesOptions[2]);
@@ -139,6 +126,7 @@ export default function Home() {
 
   return (
     <div>
+      {<contents.Papers />}
       <SectionTitle id="series">Time series</SectionTitle>
       <div className="columns">
         <div className="column is-3">
