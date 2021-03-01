@@ -70,9 +70,7 @@ export default function App() {
               <MenuItem id="series">Time series</MenuItem>
               <MenuItem id="search">Search</MenuItem>
               <MenuItem id="references">References</MenuItem>
-              <MenuItem id="database" disabled>
-                Sample &amp; database
-              </MenuItem>
+              <MenuItem id="database">Sample &amp; database</MenuItem>
               <MenuItem id="figures" disabled>
                 Figures
               </MenuItem>

@@ -251,3 +251,19 @@ export function References() {
     </>
   );
 }
+
+export function Files() {
+  return (
+    <>
+      <SectionTitle id="database">Sample &amp; database</SectionTitle>
+      <div className="content large">
+        <p>A sample of the database will be available shortly.</p>
+        <p>
+          To request an access to the full database, for questions and
+          enquiries, please contact us by sending an email to{' '}
+          <code>5000yearsbhht@gmail.com</code>.
+        </p>
+      </div>
+    </>
+  );
+}

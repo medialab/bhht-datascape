@@ -53,7 +53,10 @@ export default function People({name, onReset}) {
             </em>
             <br />
             <br />
-            <em>Please contact the paper's authors for more information.</em>
+            <em>
+              Please <a href="#database">contact</a> the paper's authors for
+              more information.
+            </em>
           </p>
           {backToTheList}
         </div>
