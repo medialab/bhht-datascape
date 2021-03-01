@@ -52,7 +52,17 @@ function Person({index, data, onClick}) {
 }
 
 export default debounce(function TopPeople({range, data, onSelect}) {
-  if (!data) return <div style={containerStyle}>...</div>;
+  const title = (
+    <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>Notable People</h3>
+  );
+
+  if (!data)
+    return (
+      <>
+        {title}
+        <div style={containerStyle}>...</div>
+      </>
+    );
 
   // TODO: change this to range intersection
   let top = data.filter(person => {
@@ -66,7 +76,7 @@ export default debounce(function TopPeople({range, data, onSelect}) {
 
   return (
     <>
-      <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>Notable People</h3>
+      {title}
       <div>
         <ul style={containerStyle}>
           {top.map((person, i) => (

@@ -3,8 +3,10 @@ import {useAsset} from '../assets';
 import ExternalLink from './ExternalLink';
 import {createWikipediaLabel} from '../../lib/helpers';
 
-function PeopleProperty({label, value}) {
+function PeopleProperty({label, value, isUrl = false}) {
   if (value === null || value === undefined) return null;
+
+  if (isUrl) value = <ExternalLink href={value}>{value}</ExternalLink>;
 
   return (
     <li>
@@ -30,48 +32,52 @@ export default function People({name, onReset}) {
 
   const backToTheList = (
     <p className="content">
-      <small onClick={onReset}>Back to the list</small>
+      <em
+        onClick={onReset}
+        style={{textDecoration: 'underline', cursor: 'pointer'}}>
+        Back to the list of notable people
+      </em>
     </p>
   );
 
   if (!data)
     return (
-      <div className="content" style={{textAlign: 'center'}}>
+      <>
         {title}
-        <p>
-          This person exists in the paper's database but is not exposed through
-          this website.
-          <br />
-          Please contact the paper's authors for more information.
-        </p>
-        {backToTheList}
-      </div>
+        <div style={{borderTop: '1px solid black'}} className="content">
+          <p style={{marginTop: '20px'}}>
+            <em>
+              This person exists in the paper's database but the attached
+              metadata is not exposed through this website.
+            </em>
+            <br />
+            <br />
+            <em>Please contact the paper's authors for more information.</em>
+          </p>
+          {backToTheList}
+        </div>
+      </>
     );
 
   const wikidataUrl = `https://www.wikidata.org/wiki/${data.wikidata_code}`;
 
   return (
-    <div className="content">
+    <>
       {title}
-      <div style={{textAlign: 'center', marginBottom: '20px'}}>
-        <ExternalLink href={wikidataUrl}>{wikidataUrl}</ExternalLink>
+      <div style={{borderTop: '1px solid black'}} className="content">
+        <ul style={{listStyleType: 'none', marginLeft: '0px'}}>
+          <PeopleProperty label="Wikidata url" value={wikidataUrl} isUrl />
+          <PeopleProperty label="Birth date" value={data.birth} />
+          <PeopleProperty label="Death date" value={data.death} />
+          <PeopleProperty label="Gender" value={data.gender} />
+          <PeopleProperty label="Occupation" value={data.occupation} />
+          <PeopleProperty label="Region" value={data.region} />
+          <PeopleProperty label="Ranking" value={data.ranking} />
+          <PeopleProperty label="Citizenship" value={data.citizenship} />
+          <PeopleProperty label="Wikidata code" value={data.wikidata_code} />
+        </ul>
+        {backToTheList}
       </div>
-      <div className="columns">
-        <div className="column is-2" />
-        <div className="column is-8 content">
-          <ul style={{listStyleType: 'none'}}>
-            <PeopleProperty label="Birth date" value={data.birth} />
-            <PeopleProperty label="Death date" value={data.death} />
-            <PeopleProperty label="Gender" value={data.gender} />
-            <PeopleProperty label="Occupation" value={data.occupation} />
-            <PeopleProperty label="Region" value={data.region} />
-            <PeopleProperty label="Ranking" value={data.ranking} />
-            <PeopleProperty label="Citizenship" value={data.citizenship} />
-            <PeopleProperty label="Wikidata code" value={data.wikidata_code} />
-          </ul>
-        </div>
-      </div>
-      {backToTheList}
-    </div>
+    </>
   );
 }
