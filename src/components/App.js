@@ -65,9 +65,7 @@ export default function App() {
             </h2>
             <ul>
               <MenuItem id="papers">Papers</MenuItem>
-              <MenuItem id="about" disabled>
-                About
-              </MenuItem>
+              <MenuItem id="about">About</MenuItem>
               <MenuItem id="authors" disabled>
                 Authors
               </MenuItem>

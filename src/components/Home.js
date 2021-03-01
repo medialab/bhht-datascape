@@ -126,7 +126,8 @@ export default function Home() {
 
   return (
     <div>
-      {<contents.Papers />}
+      <contents.Papers />
+      <contents.About />
       <SectionTitle id="series">Time series</SectionTitle>
       <div className="columns">
         <div className="column is-3">
