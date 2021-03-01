@@ -66,16 +66,14 @@ export default function App() {
             <ul>
               <MenuItem id="papers">Papers</MenuItem>
               <MenuItem id="about">About</MenuItem>
-              <MenuItem id="authors" disabled>
-                Authors
-              </MenuItem>
+              <MenuItem id="authors">Authors</MenuItem>
               <MenuItem id="series">Time series</MenuItem>
               <MenuItem id="search">Search</MenuItem>
-              <MenuItem id="database" disabled>
-                Files &amp; database
-              </MenuItem>
               <MenuItem id="references" disabled>
                 References
+              </MenuItem>
+              <MenuItem id="database" disabled>
+                Sample &amp; database
               </MenuItem>
               <MenuItem id="figures" disabled>
                 Figures

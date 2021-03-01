@@ -15,7 +15,7 @@ export function Papers() {
     <>
       <SectionTitle id="papers">Papers</SectionTitle>
       <div className="content large">
-        <ul>
+        <ul style={{listStyleType: 'none'}}>
           <li>
             Version 1.0:{' '}
             <em>
@@ -122,6 +122,65 @@ export function About() {
           We welcome comments on our approach, and point towards this website to
           obtain the data, or extended requests.
         </p>
+      </div>
+    </>
+  );
+}
+
+function Author({name, affiliation, page}) {
+  return (
+    <li>
+      <ExternalLink href={page}>
+        <strong>{name}</strong>
+      </ExternalLink>
+      &nbsp;-&nbsp;<em>{affiliation}</em>
+    </li>
+  );
+}
+
+const AUTHORS = [
+  {
+    name: 'Morgane Laouenan',
+    affiliation: "CNRS, Centre d'Economie de la Sorbonne and LIEPP-Sciences Po",
+    page: 'https://www.sciencespo.fr/liepp/user/502'
+  },
+  {
+    name: 'Palaash Bhargava',
+    affiliation: 'Columbia University',
+    page: 'https://sites.google.com/view/palaashbhargava'
+  },
+  {
+    name: 'Jean-Benoit Eymeoud',
+    affiliation: 'LIEPP-Sciences Po',
+    page: 'https://sites.google.com/site/jeanbenoiteymeoud/'
+  },
+  {
+    name: 'Olivier Gergaud',
+    affiliation: 'KEDGE Business School and LIEPP-Sciences Po',
+    page: 'http://olivier.gergaud.free.fr/'
+  },
+  {
+    name: 'Guillaume Plique',
+    affiliation: 'médialab-Sciences Po',
+    page: 'https://medialab.sciencespo.fr/en/people/guillaume-plique/'
+  },
+  {
+    name: 'Etienne Wasmer',
+    affiliation: 'NYU Abu Dhabi and LIEPP-Sciences Po',
+    page: 'https://sites.google.com/site/etiennewasmer/'
+  }
+];
+
+export function Authors() {
+  return (
+    <>
+      <SectionTitle id="authors">Authors</SectionTitle>
+      <div className="content large">
+        <ul>
+          {AUTHORS.map(author => (
+            <Author key={author.name} {...author} />
+          ))}
+        </ul>
       </div>
     </>
   );
