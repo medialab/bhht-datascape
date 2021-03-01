@@ -1,6 +1,7 @@
 import React from 'react';
 import {useAsset} from '../assets';
 import ExternalLink from './ExternalLink';
+import Anchor from './Anchor';
 import {createWikipediaLabel} from '../../lib/helpers';
 
 function PeopleProperty({label, value, isUrl = false}) {
@@ -26,7 +27,7 @@ export default function People({name, onReset}) {
 
   const title = (
     <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>
-      {createWikipediaLabel(name, false)}
+      {createWikipediaLabel(name, false)} <Anchor id="search" />
     </h3>
   );
 

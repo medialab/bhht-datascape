@@ -7,6 +7,7 @@ import sortBy from 'lodash/sortBy';
 import Series from './viz/Series';
 import Top from './viz/Top';
 import People from './People';
+import Anchor from './Anchor';
 import {useAsset} from '../assets';
 import {createWikipediaName, createWikipediaLabel} from '../../lib/helpers';
 import meta from '../../specs/meta.json';
@@ -108,11 +109,9 @@ function SectionTitle({id, children}) {
         fontSize: '2em',
         marginBottom: '25px'
       }}>
-      {children}
+      {children} <Anchor id={id} />
     </h2>
   );
-
-  // <a href={`#${id}`}>❦</a>
 }
 
 export default function Home() {
@@ -140,7 +139,7 @@ export default function Home() {
 
   return (
     <div>
-      <SectionTitle id="viz">Interactive visualizations</SectionTitle>
+      <SectionTitle id="series">Time series</SectionTitle>
       <div className="columns">
         <div className="column is-3">
           <SeriesSelect

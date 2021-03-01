@@ -19,3 +19,11 @@ $family-sans-serif: Merriweather, sans-serif;
 .special-red {
   color: $special-red;
 }
+
+.anchor {
+  color: black;
+
+  &:hover {
+    color: $special-red;
+  }
+}

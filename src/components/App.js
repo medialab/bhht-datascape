@@ -9,14 +9,16 @@ const titleStyle = {
   textDecoration: 'underline'
 };
 
-function MenuItem({children, disabled = false}) {
+function MenuItem({id, children, disabled = false}) {
   return (
     <li
       style={{
         marginBottom: '8px',
         cursor: 'pointer'
       }}>
-      <strong style={{color: disabled ? 'grey' : 'black'}}>{children}</strong>
+      <a href={`#${id}`}>
+        <strong style={{color: disabled ? 'grey' : 'black'}}>{children}</strong>
+      </a>
     </li>
   );
 }
@@ -62,13 +64,26 @@ export default function App() {
               Menu
             </h2>
             <ul>
-              <MenuItem disabled>Papers</MenuItem>
-              <MenuItem disabled>About</MenuItem>
-              <MenuItem disabled>Authors</MenuItem>
-              <MenuItem>Interactive visualizations</MenuItem>
-              <MenuItem disabled>Files &amp; database</MenuItem>
-              <MenuItem disabled>References</MenuItem>
-              <MenuItem disabled>Figures</MenuItem>
+              <MenuItem id="papers" disabled>
+                Papers
+              </MenuItem>
+              <MenuItem id="about" disabled>
+                About
+              </MenuItem>
+              <MenuItem id="authors" disabled>
+                Authors
+              </MenuItem>
+              <MenuItem id="series">Time series</MenuItem>
+              <MenuItem id="search">Search</MenuItem>
+              <MenuItem id="database" disabled>
+                Files &amp; database
+              </MenuItem>
+              <MenuItem id="references" disabled>
+                References
+              </MenuItem>
+              <MenuItem id="figures" disabled>
+                Figures
+              </MenuItem>
             </ul>
             <div
               style={{

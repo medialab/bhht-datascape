@@ -1,6 +1,7 @@
 import React from 'react';
 import debounce from 'react-debounce-render';
 import Heap from 'mnemonist/heap';
+import Anchor from '../Anchor';
 import meta from '../../../specs/meta.json';
 import {createWikipediaLabel} from '../../../lib/helpers';
 
@@ -53,7 +54,9 @@ function Person({index, data, onClick}) {
 
 export default debounce(function TopPeople({range, data, onSelect}) {
   const title = (
-    <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>Notable People</h3>
+    <h3 style={{marginTop: '20px', fontSize: '1.8em'}}>
+      Notable People <Anchor id="search" />
+    </h3>
   );
 
   if (!data)
