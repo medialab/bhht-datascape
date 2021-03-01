@@ -1,6 +1,8 @@
 import React from 'react';
 import SectionTitle from './SectionTitle';
 import ExternalLink from './ExternalLink';
+import Figure from './Figure';
+import Separator from './Separator';
 
 function Ref({id, children}) {
   return (
@@ -263,6 +265,34 @@ export function Files() {
           enquiries, please contact us by sending an email to{' '}
           <code>5000yearsbhht@gmail.com</code>.
         </p>
+      </div>
+    </>
+  );
+}
+
+export function Figures() {
+  return (
+    <>
+      <SectionTitle id="figures">Figures</SectionTitle>
+      <div className="content">
+        <Figure
+          name="fig1.png"
+          legend="Fig. 1. Cloud of the most famous individuals in the database"
+        />
+        <Separator />
+        <Figure
+          name="fig2.png"
+          legend="Fig. 2 Relation between the most frequent Wikipedia editions and sources used to document the biography"
+        />
+        <Separator />
+        <Figure name="fig3.png" legend="Fig 3. Balance of fields covered" />
+        <Separator />
+        <Figure name="fig4.png" legend="Fig 4. Human occupations in time" />
+        <Separator />
+        <Figure
+          name="fig6.png"
+          legend="Fig 6. Historical periods detected thanks to a better coverage. WWI, The Spanish Civil War, WWII on the Western, non-English editions of Wikipedia"
+        />
       </div>
     </>
   );

@@ -71,18 +71,16 @@ export default function App() {
               <MenuItem id="search">Search</MenuItem>
               <MenuItem id="references">References</MenuItem>
               <MenuItem id="database">Sample &amp; database</MenuItem>
-              <MenuItem id="figures" disabled>
-                Figures
-              </MenuItem>
+              <MenuItem id="figures">Figures</MenuItem>
             </ul>
-            <div
+            {/* <div
               style={{
                 fontSize: '0.7em',
                 textAlign: 'center',
                 marginTop: '15px'
               }}>
               <em>Work in progress...</em>
-            </div>
+            </div> */}
           </div>
         </div>
 

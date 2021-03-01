@@ -253,6 +253,7 @@ export default function Home() {
       </div>
       <contents.References />
       <contents.Files />
+      <contents.Figures />
     </div>
   );
 }
