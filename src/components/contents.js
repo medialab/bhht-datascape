@@ -290,6 +290,11 @@ export function Figures() {
         <Figure name="fig4.png" legend="Fig 4. Human occupations in time" />
         <Separator />
         <Figure
+          name="fig5.png"
+          legend="Fig 5. Historical periods detected thanks to a better coverage. The French Revolution"
+        />
+        <Separator />
+        <Figure
           name="fig6.png"
           legend="Fig 6. Historical periods detected thanks to a better coverage. WWI, The Spanish Civil War, WWII on the Western, non-English editions of Wikipedia"
         />
