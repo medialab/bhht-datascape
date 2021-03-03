@@ -3,6 +3,7 @@ import SectionTitle from './SectionTitle';
 import ExternalLink from './ExternalLink';
 import Figure from './Figure';
 import Separator from './Separator';
+import {getPublicUrl} from '../helpers';
 
 function Ref({id, children}) {
   return (
@@ -259,7 +260,14 @@ export function Files() {
     <>
       <SectionTitle id="database">Sample &amp; database</SectionTitle>
       <div className="content large">
-        <p>A sample of the database will be available shortly.</p>
+        <p>
+          You can download a random sample out of <code>100k</code> records of
+          the ~<code>3.2M</code> individuals found in the full database by
+          clicking on the following link:&nbsp;
+          <a href={getPublicUrl('bhht-100k-sample.csv.gz')}>
+            bhht-100k-sample.csv.gz
+          </a>
+        </p>
         <p>
           To request an access to the full database, for questions and
           enquiries, please contact us by sending an email to{' '}
