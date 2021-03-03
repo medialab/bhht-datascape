@@ -2,7 +2,7 @@ import React from 'react';
 import urljoin from 'url-join';
 
 export default function Figure({name, legend}) {
-  const url = urljoin(BASE_URL, 'img', name);
+  const url = urljoin(BASE_URL, 'public', name);
 
   return (
     <div style={{textAlign: 'center', marginBottom: '20px'}}>

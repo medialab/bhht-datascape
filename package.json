@@ -19,8 +19,8 @@
     "public": [
       "/data",
       "./data",
-      "/img",
-      "./img"
+      "/public",
+      "./public"
     ],
     "jsx": true,
     "sass": true
