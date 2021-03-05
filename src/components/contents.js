@@ -318,25 +318,39 @@ export function Figures() {
         <Figure
           name="fig1.png"
           legend="Fig. 1. Cloud of the most famous individuals in the database"
+          notes="Size is proportional to relative notability level. The cloud focuses on the 3,000 most visible individuals (0.06% of the exhaustive sample). Colors represent the domain of influence defined later in the text (see Figures 5 and 6 for labels, e.g. green is culture, red is politics, blue is academia, etc.)."
         />
         <Separator />
         <Figure
           name="fig2.png"
           legend="Fig. 2 Relation between the most frequent Wikipedia editions and sources used to document the biography"
+          notes="Sample restricted to individuals with only one biography in Wikipedia. We consider the 10 most frequent external sources and 10 most popular Wikipedia language editions, and merge the rest into other sources."
+          maxHeight={500}
         />
         <Separator />
-        <Figure name="fig3.png" legend="Fig 3. Balance of fields covered" />
+        <Figure
+          name="fig3.png"
+          legend="Fig 3. Sunburst: relative importance of the main occupations and domains of influence"
+          notes="Restricted database (at least one Wikipedia edition among the 7 European languages analyzed)."
+          maxHeight={600}
+        />
         <Separator />
-        <Figure name="fig4.png" legend="Fig 4. Human occupations in time" />
+        <Figure
+          name="fig4.png"
+          legend="Fig 4. Share of individuals present in the database in any given year, breakdown by domain of influence"
+          notes="Restricted sample (at least one Wikipedia edition among the 7 European languages analyzed). Imputed life time when missing."
+        />
         <Separator />
         <Figure
           name="fig5.png"
-          legend="Fig 5. Historical periods detected thanks to a better coverage. The French Revolution"
+          legend="Fig 5. Evolution of the number of individuals associated with “politics”, 1400-2000AD"
+          notes="Restricted sample (at least one Wikipedia edition among the 7 European languages analyzed).  Most popular citizenships (share of living individuals on the vertical axis, year on the horizontal axis)."
         />
         <Separator />
         <Figure
           name="fig6.png"
-          legend="Fig 6. Historical periods detected thanks to a better coverage. WWI, The Spanish Civil War, WWII on the Western, non-English editions of Wikipedia"
+          legend="Fig 6. Age at death on Western non-English editions (right chart), 1800-2000AD"
+          notes="Restricted sample (at least one Wikipedia edition among the 7 European languages analyzed). A vertical line corresponds to the distribution of the age at death for a given date. The observed colors discontinuity illustrates wars episodes: First World War, Spanish Civil War, and Second World War."
         />
       </div>
     </>
