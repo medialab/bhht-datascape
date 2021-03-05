@@ -13,6 +13,20 @@ function Ref({id, children}) {
   );
 }
 
+function Citation({children}) {
+  return (
+    <blockquote
+      style={{
+        fontSize: '0.85em',
+        padding: '10px',
+        fontStyle: 'italic',
+        marginBottom: '20px'
+      }}>
+      {children}
+    </blockquote>
+  );
+}
+
 export function Papers() {
   return (
     <>
@@ -29,6 +43,11 @@ export function Papers() {
                 </ExternalLink>
               </strong>
             </em>
+            <Citation>
+              Gergaud O., Laouennan M., Wasmer, E. (2016) A Brief History of
+              Human Time: Exploring a database of 'notable people, Sciences Po
+              Economics Discussion Papers, 2016-03
+            </Citation>
           </li>
           <li>
             Version 2.0:{' '}
@@ -39,6 +58,12 @@ export function Papers() {
                 </ExternalLink>
               </strong>
             </em>
+            <Citation>
+              Morgane Laouenan, Palaash Bhargava, Jean-Benoît Eyméoud, Olivier
+              Gergaud, Guillaume Plique, Etienne Wasmer (2021) A Cross-verified
+              Database of Notable People, 3500BC-2018AD, CEPR discussion paper
+              15582, Feb. 2021
+            </Citation>
           </li>
         </ul>
       </div>
@@ -267,6 +292,13 @@ export function Files() {
           <a href={getPublicUrl('bhht-100k-sample.csv.gz')}>
             bhht-100k-sample.csv.gz
           </a>
+          <Citation>
+            BHHT database (100 000 obs. random sample) from Morgane Laouenan,
+            Jean-Benoît Eyméoud, Olivier Gergaud, Palaash Bhargava, Guillaume
+            Plique, Etienne Wasmer (2021) A Cross-verified Database of Notable
+            People, 3500BC-2018AD, CEPR discussion paper 15582, Feb. 2021,
+            available from https://medialab.github.io/bhht-datascape/
+          </Citation>
         </p>
         <p>
           To request an access to the full database, for questions and
