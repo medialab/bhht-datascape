@@ -6,11 +6,7 @@ import Separator from './Separator';
 import {getPublicUrl} from '../helpers';
 
 function Ref({id, children}) {
-  return (
-    <a href={`#${id}`}>
-      <em>{children}</em>
-    </a>
-  );
+  return <a href={`#${id}`}>{children}</a>;
 }
 
 function Citation({children}) {
@@ -27,6 +23,30 @@ function Citation({children}) {
   );
 }
 
+function BibTexCitation({code}) {
+  return <pre style={{fontSize: '0.6em'}}>{code.trim()}</pre>;
+}
+
+const FIRST_PAPER_BIBTEX = `
+@TECHREPORT{gergaud2017brief,
+  title = {@TECHREPORT{gergaud2017brief,
+  title = {A Brief History of Human Time: Exploring a database of 'notable people'},
+  author = {Gergaud, Olivier and Laouenan, Morgane and Wasmer, Etienne},
+  year = {2016},
+  institution = {Sciences Po Departement of Economics},
+  type = {Sciences Po Economics Discussion Papers},
+  number = {2016-03},
+  url = {https://EconPapers.repec.org/RePEc:spo:wpecon:info:hdl:2441/h4tv2ee028raq0ib4dabsqqei}
+  }},
+  author = {Gergaud, Olivier and Laouenan, Morgane and Wasmer, Etienne},
+  year = {2016},
+  institution = {Sciences Po Departement of Economics},
+  type = {Sciences Po Economics Discussion Papers},
+  number = {2016-03},
+  url = {https://EconPapers.repec.org/RePEc:spo:wpecon:info:hdl:2441/h4tv2ee028raq0ib4dabsqqei}
+}
+`;
+
 export function Papers() {
   return (
     <>
@@ -34,7 +54,7 @@ export function Papers() {
       <div className="content large">
         <ul style={{listStyleType: 'none'}}>
           <li>
-            Version 1.0:{' '}
+            Version 1.0 (2016):{' '}
             <em>
               <strong>
                 <ExternalLink href="https://ideas.repec.org/p/spo/wpecon/infohdl2441-h4tv2ee028raq0ib4dabsqqei.html">
@@ -48,9 +68,10 @@ export function Papers() {
               Human Time: Exploring a database of 'notable people, Sciences Po
               Economics Discussion Papers, 2016-03
             </Citation>
+            <BibTexCitation code={FIRST_PAPER_BIBTEX} />
           </li>
           <li>
-            Version 2.0:{' '}
+            Version 2.0 (2021):{' '}
             <em>
               <strong>
                 <ExternalLink href="https://cepr.org/active/publications/discussion_papers/dp.php?dpno=15852">
@@ -110,7 +131,7 @@ export function About() {
           <Ref id="tanon">Tanon et al. (2020)</Ref>, the second version of
           Pantheon (2.0) in{' '}
           <Ref id="jara">Jara-Figueroa and Hidalgo (2019)</Ref> and a recent
-          independent work by <Ref id="nekoei">Nekoei and Sinn (2020)</Ref>.
+          independent work by <Ref id="nekoei">Nekoei and Sinn (2020)</Ref>).
         </p>
         <p>
           Our approach complements existing approaches in several ways. First,
@@ -242,6 +263,11 @@ const REFERENCES = [
       'Jara-Figueroa, Christian, Y. A. and C. Hidalgo (2019): “How the medium shapes the message: Printing and the rise of the arts and sciences,” Plos One, 14(2): e0205771. '
   },
   {
+    id: 'nekoei',
+    text:
+      'Nekoei, Arash and Sinn, Fabian, Human Biographical Record (HBR) (December 2, 2020). Available at SSRN: https://ssrn.com/abstract=3741450'
+  },
+  {
     id: 'schich',
     text:
       'Schich, M., C. Song, Y.-Y. Ahn, A. Mirsky, M. Martino, A.-L. Barabási, and D. Helbing (2014): “A network framework of cultural history,” Science, 345, 558–562. '
@@ -270,7 +296,7 @@ export function References() {
       <div className="content">
         <ul>
           {REFERENCES.map(ref => (
-            <li key={ref.id} id={ref.id}>
+            <li key={ref.id} id={ref.id} style={{marginBottom: '20px'}}>
               <em>{ref.text}</em>
             </li>
           ))}
