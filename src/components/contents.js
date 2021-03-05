@@ -29,15 +29,7 @@ function BibTexCitation({code}) {
 
 const FIRST_PAPER_BIBTEX = `
 @TECHREPORT{gergaud2017brief,
-  title = {@TECHREPORT{gergaud2017brief,
   title = {A Brief History of Human Time: Exploring a database of 'notable people'},
-  author = {Gergaud, Olivier and Laouenan, Morgane and Wasmer, Etienne},
-  year = {2016},
-  institution = {Sciences Po Departement of Economics},
-  type = {Sciences Po Economics Discussion Papers},
-  number = {2016-03},
-  url = {https://EconPapers.repec.org/RePEc:spo:wpecon:info:hdl:2441/h4tv2ee028raq0ib4dabsqqei}
-  }},
   author = {Gergaud, Olivier and Laouenan, Morgane and Wasmer, Etienne},
   year = {2016},
   institution = {Sciences Po Departement of Economics},
