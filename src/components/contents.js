@@ -370,6 +370,12 @@ export function Figures() {
           legend="Fig 6. Age at death on Western non-English editions (right chart), 1800-2000AD"
           notes="Restricted sample (at least one Wikipedia edition among the 7 European languages analyzed). A vertical line corresponds to the distribution of the age at death for a given date. The observed colors discontinuity illustrates wars episodes: First World War, Spanish Civil War, and Second World War."
         />
+        <Separator />
+        <Figure
+          name="figadd1.png"
+          legend="Additional Fig 1. Women in Wikipedia or Wikidata by sphere of influence"
+          notes="The spheres of influence have, among others, the following color codes: culture:green, academic:blue, invention/exploration/development:light blue, sport:purple, business:brown, politics:light brown, religion:grey, administration/law:burgundy, nobility:red."
+        />
       </div>
     </>
   );
