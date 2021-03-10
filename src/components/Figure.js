@@ -12,9 +12,11 @@ export default function Figure({name, legend, notes, maxHeight = '450px'}) {
       <p style={{marginTop: '10px'}}>
         <em>{legend}</em>
       </p>
-      <p style={{fontSize: '0.85em'}}>
-        <em>{notes}</em>
-      </p>
+      {notes && (
+        <p style={{fontSize: '0.85em'}}>
+          <em>{notes}</em>
+        </p>
+      )}
     </div>
   );
 }

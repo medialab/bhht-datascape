@@ -373,8 +373,29 @@ export function Figures() {
         <Separator />
         <Figure
           name="figadd1.png"
-          legend="Additional Fig 1. Women in Wikipedia or Wikidata by sphere of influence"
-          notes="The spheres of influence have, among others, the following color codes: culture:green, academic:blue, invention/exploration/development:light blue, sport:purple, business:brown, politics:light brown, religion:grey, administration/law:burgundy, nobility:red."
+          legend="Additional Fig 1. Women in Wikipedia or Wikidata by domains of influence"
+          notes="See Figure 4 for the full set of color codes of the domains of influence."
+        />
+        <p align="center">-</p>
+        <Figure
+          name="figadd1-academia.png"
+          legend={
+            'Additional Fig 1.1. Women in Wikipedia or Wikidata in the "academia" domain'
+          }
+        />
+        <p align="center">-</p>
+        <Figure
+          name="figadd1-culture.png"
+          legend={
+            'Additional Fig 1.2. Women in Wikipedia or Wikidata in the "culture" domain'
+          }
+        />
+        <p align="center">-</p>
+        <Figure
+          name="figadd1-politics.png"
+          legend={
+            'Additional Fig 1.3. Women in Wikipedia or Wikidata in the "politics" domain'
+          }
         />
       </div>
     </>
