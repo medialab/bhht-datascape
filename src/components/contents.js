@@ -401,3 +401,43 @@ export function Figures() {
     </>
   );
 }
+
+export function Legal() {
+  return (
+    <>
+      <SectionTitle id="legal">License &amp; funding</SectionTitle>
+      <div className="content">
+        <p>
+          This paper describes the 2.0 version of a project started in 2014
+          collecting and exploiting data from individuals with a biography in
+          several language editions of <strong>Wikipedia</strong> under a{' '}
+          <ExternalLink href="https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License">
+            CC-BY-SA
+          </ExternalLink>{' '}
+          license and from <strong>Wikidata</strong> under a{' '}
+          <ExternalLink href="https://creativecommons.org/publicdomain/zero/1.0/">
+            CC0
+          </ExternalLink>{' '}
+          license.{' '}
+        </p>
+        <p>
+          This paper is a discussion paper aiming at getting comments and
+          feedback and sharing freely a sample of 100,000 observations. The
+          final version of the full database will be published under the terms
+          of the Creative Commons Attribution-ShareAlike license at the time of
+          the scientific publication.
+        </p>
+        <p align="center">-</p>
+        <p>
+          Financial support from{' '}
+          <ExternalLink href="https://www.sciencespo.fr/liepp/en.html">
+            LIEPP
+          </ExternalLink>{' '}
+          (ANR-11-LABX-0091, ANR-11-IDEX-0005-02) and{' '}
+          <ExternalLink href="https://nyuad.nyu.edu">NYUAD</ExternalLink> is
+          gratefully acknowledged.{' '}
+        </p>
+      </div>
+    </>
+  );
+}

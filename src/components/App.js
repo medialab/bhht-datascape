@@ -72,6 +72,7 @@ export default function App() {
               <MenuItem id="references">References</MenuItem>
               <MenuItem id="database">Sample &amp; database</MenuItem>
               <MenuItem id="figures">Figures</MenuItem>
+              <MenuItem id="legal">License &amp; funding</MenuItem>
             </ul>
             {/* <div
               style={{

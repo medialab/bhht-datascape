@@ -254,6 +254,7 @@ export default function Home() {
       <contents.References />
       <contents.Files />
       <contents.Figures />
+      <contents.Legal />
     </div>
   );
 }
