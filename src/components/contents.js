@@ -56,7 +56,7 @@ export function Papers() {
               </strong>
             </em>
             <Citation>
-              Gergaud O., Laouennan M., Wasmer, E. (2016) A Brief History of
+              Gergaud O., Laouenan M., Wasmer, E. (2016) A Brief History of
               Human Time: Exploring a database of 'notable people, Sciences Po
               Economics Discussion Papers, 2016-03
             </Citation>
