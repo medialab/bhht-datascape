@@ -397,6 +397,38 @@ export function Figures() {
             'Additional Fig 1.3. Women in Wikipedia or Wikidata in the "politics" domain'
           }
         />
+        <Separator />
+        <Figure
+          name="barycenters.png"
+          legend={
+            'Additional Fig 2.1 Barycenters and ellipses of covariance matrix of lon. & lat. of birthplaces'
+          }
+          notes="Ellipses are based on the variance-covariance matrix of longitudes and latitudes for a given period, with a threshold of 40%."
+        />
+        <p align="center">-</p>
+        <Figure
+          name="flows-north-america.png"
+          legend={
+            'Additional Fig 2.2 Birth to death flows of academics from the UK to North America'
+          }
+          notes="All curves connect the city of birth and of death of individuals."
+        />
+        <p align="center">-</p>
+        <Figure
+          name="flows-south-america.png"
+          legend={
+            'Additional Fig 2.3 Birth to death flows of notable individuals in culture from Italy to South America'
+          }
+          notes="All curves connect the city of birth and of death of individuals."
+        />
+        <p align="center">-</p>
+        <Figure
+          name="flows-asia.png"
+          legend={
+            'Additional Fig 2.4 Birth to death flows (all categories) within a rectangular area encompassing Asia including Central Asia, Western Asia and the southern part of Eurasia)'
+          }
+          notes="All curves connect the city of birth and of death of individuals."
+        />
       </div>
     </>
   );
