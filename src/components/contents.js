@@ -28,14 +28,36 @@ function BibTexCitation({code}) {
 }
 
 const FIRST_PAPER_BIBTEX = `
-@TECHREPORT{gergaud2017brief,
+@TECHREPORT{bhht1,
   title = {A Brief History of Human Time: Exploring a database of 'notable people'},
   author = {Gergaud, Olivier and Laouenan, Morgane and Wasmer, Etienne},
   year = {2016},
-  institution = {Sciences Po Departement of Economics},
+  institution = {Sciences Po Department of Economics},
   type = {Sciences Po Economics Discussion Papers},
   number = {2016-03},
   url = {https://EconPapers.repec.org/RePEc:spo:wpecon:info:hdl:2441/h4tv2ee028raq0ib4dabsqqei}
+}
+`;
+
+const SECOND_PAPER_BIBTEX = `
+@TECHREPORT{bhht2,
+  title = {A Cross-verified Database of Notable People, 3500BC-2018AD},
+  author = {Laouenan, Morgane and Bhargava, Palaash and Eyméoud, Jean-Benoît and Gergaud, Olivier and Plique, Guillaume and Wasmer, Etienne},
+  year = {2021},
+  institution = {Centre for Economic Policy Research},
+  type = {Discussion Papers},
+  number = {15852},
+  url = {https://cepr.org/active/publications/discussion_papers/dp.php?dpno=15852}
+}
+`;
+
+const THIRD_PAPER_BIBTEX = `
+@article{bhht3,
+  title = {A cross-verified database of notable people, 3500BC-2018AD},
+  author = {Laouenan, Morgane and Bhargava, Palaash and Eyméoud, Jean-Benoît and Gergaud, Olivier and Plique, Guillaume and Wasmer, Etienne},
+  journal = {Scientific data},
+  year = {Forthcoming},
+  publisher = {Nature Publishing Group}
 }
 `;
 
@@ -45,6 +67,40 @@ export function Papers() {
       <SectionTitle id="papers">Papers</SectionTitle>
       <div className="content large">
         <ul style={{listStyleType: 'none'}}>
+          <li>
+            Latest release (2022):{' '}
+            <em>
+              <strong>
+                A cross-verified database of notable people, 3500BC-2018AD
+              </strong>
+            </em>
+            <Citation>
+              Morgane Laouenan, Palaash Bhargava, Jean-Benoît Eyméoud, Olivier
+              Gergaud, Guillaume Plique, Etienne Wasmer (2022) A cross-verified
+              database of notable people, 3500BC-2018AD, Scientific Data,
+              Forthcoming.
+            </Citation>
+            <BibTexCitation code={THIRD_PAPER_BIBTEX} />
+          </li>
+
+          <li>
+            Version 2.0 (2021):{' '}
+            <em>
+              <strong>
+                <ExternalLink href="https://cepr.org/active/publications/discussion_papers/dp.php?dpno=15852">
+                  A Cross-verified Database of Notable People, 3500BC-2018AD
+                </ExternalLink>
+              </strong>
+            </em>
+            <Citation>
+              Morgane Laouenan, Palaash Bhargava, Jean-Benoît Eyméoud, Olivier
+              Gergaud, Guillaume Plique, Etienne Wasmer (2021) A Cross-verified
+              Database of Notable People, 3500BC-2018AD, CEPR discussion paper
+              15582, Feb. 2021
+            </Citation>
+            <BibTexCitation code={SECOND_PAPER_BIBTEX} />
+          </li>
+
           <li>
             Version 1.0 (2016):{' '}
             <em>
@@ -61,22 +117,6 @@ export function Papers() {
               Economics Discussion Papers, 2016-03
             </Citation>
             <BibTexCitation code={FIRST_PAPER_BIBTEX} />
-          </li>
-          <li>
-            Version 2.0 (2021):{' '}
-            <em>
-              <strong>
-                <ExternalLink href="https://cepr.org/active/publications/discussion_papers/dp.php?dpno=15852">
-                  A Cross-verified Database of Notable People, 3500BC-2018AD
-                </ExternalLink>
-              </strong>
-            </em>
-            <Citation>
-              Morgane Laouenan, Palaash Bhargava, Jean-Benoît Eyméoud, Olivier
-              Gergaud, Guillaume Plique, Etienne Wasmer (2021) A Cross-verified
-              Database of Notable People, 3500BC-2018AD, CEPR discussion paper
-              15582, Feb. 2021
-            </Citation>
           </li>
         </ul>
       </div>
