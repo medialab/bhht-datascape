@@ -344,12 +344,25 @@ export function Files() {
       <SectionTitle id="database">Sample &amp; database</SectionTitle>
       <div className="content large">
         <p>
-          You can download a random sample out of <code>100k</code> records of
-          the ~<code>3.2M</code> individuals found in the full database by
-          clicking on the following link:&nbsp;
-          <a href={getPublicUrl('bhht-100k-sample.csv.gz')}>
-            bhht-100k-sample.csv.gz
-          </a>
+          The full cross-verified dataset can be found here:
+          <br />
+          <ExternalLink href="https://doi.org/10.21410/7E4/RDAG3O" />
+        </p>
+        <p>
+          All the code and intermediate data used to produced the
+          beforementioned dataset can be found here:
+          <br />
+          <ExternalLink href="https://doi.org/10.21410/7E4/YLG6YR" />
+        </p>
+        <div>
+          <p>
+            For convenience, you can download a random sample out of{' '}
+            <code>100k</code> records of the ~<code>3.2M</code> individuals
+            found in the full database by clicking on the following link:&nbsp;
+            <a href={getPublicUrl('bhht-100k-sample.csv.gz')}>
+              bhht-100k-sample.csv.gz
+            </a>
+          </p>
           <Citation>
             BHHT database (100 000 obs. random sample) from Morgane Laouenan,
             Jean-Benoît Eyméoud, Olivier Gergaud, Palaash Bhargava, Guillaume
@@ -357,11 +370,10 @@ export function Files() {
             People, 3500BC-2018AD, CEPR discussion paper 15582, Feb. 2021,
             available from https://medialab.github.io/bhht-datascape/
           </Citation>
-        </p>
+        </div>
         <p>
-          To request an access to the full database, for questions and
-          enquiries, please contact us by sending an email to{' '}
-          <code>5000yearsbhht@gmail.com</code>.
+          For any other questions and enquiries, please contact us by sending an
+          email to <code>5000yearsbhht@gmail.com</code>.
         </p>
       </div>
     </>
