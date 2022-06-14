@@ -53,11 +53,19 @@ const SECOND_PAPER_BIBTEX = `
 
 const THIRD_PAPER_BIBTEX = `
 @article{bhht3,
-  title = {A cross-verified database of notable people, 3500BC-2018AD},
   author = {Laouenan, Morgane and Bhargava, Palaash and Eyméoud, Jean-Benoît and Gergaud, Olivier and Plique, Guillaume and Wasmer, Etienne},
-  journal = {Scientific data},
-  year = {Forthcoming},
-  publisher = {Nature Publishing Group}
+  title = {A cross-verified database of notable people, 3500BC-2018AD},
+  journal = {Scientific Data},
+  publisher = {Nature Publishing Group},
+  year = {2022},
+  month = {Jun},
+  day = {09},
+  volume = {9},
+  number = {1},
+  pages = {290},
+  issn = {2052-4463},
+  doi = {10.1038/s41597-022-01369-4},
+  url = {https://doi.org/10.1038/s41597-022-01369-4}
 }
 `;
 
@@ -71,14 +79,16 @@ export function Papers() {
             Latest release (2022):{' '}
             <em>
               <strong>
-                A cross-verified database of notable people, 3500BC-2018AD
+                <ExternalLink href="https://www.nature.com/articles/s41597-022-01369-4">
+                  A cross-verified database of notable people, 3500BC-2018AD
+                </ExternalLink>
               </strong>
             </em>
             <Citation>
               Morgane Laouenan, Palaash Bhargava, Jean-Benoît Eyméoud, Olivier
               Gergaud, Guillaume Plique, Etienne Wasmer (2022) A cross-verified
-              database of notable people, 3500BC-2018AD, Scientific Data,
-              Forthcoming.
+              database of notable people, 3500BC-2018AD, Scientific Data, June
+              2022
             </Citation>
             <BibTexCitation code={THIRD_PAPER_BIBTEX} />
           </li>
