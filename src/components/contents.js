@@ -369,10 +369,10 @@ export function Files() {
           <a href={getPublicUrl('birth-death-update-note.pdf')}>this note</a>{' '}
           about more recent updates to the database including:
           <ol>
-            <li>general corrections to birth and death dates</li>
+            <li>general corrections to birth and death places</li>
             <li>
-              the incorportation of new death date information since the initial
-              data collection in 2018, now up to August 2022
+              the incorporation of new death date information, since the initial
+              data collection was in 2018, now up to August 2022
             </li>
           </ol>
         </p>
