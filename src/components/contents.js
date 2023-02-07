@@ -364,9 +364,21 @@ export function Files() {
           <br />
           <ExternalLink href="https://doi.org/10.21410/7E4/YLG6YR" />
         </p>
+        <p>
+          Please be sure to read{' '}
+          <a href={getPublicUrl('birth-death-update-note.pdf')}>this note</a>{' '}
+          about more recent updates to the database including:
+          <ol>
+            <li>general corrections to birth and death dates</li>
+            <li>
+              the incorportation of new death date information since the initial
+              data collection in 2018, now up to August 2022
+            </li>
+          </ol>
+        </p>
         <div>
           <p>
-            For convenience, you can download a random sample out of{' '}
+            Finally, for convenience, you can download a random sample out of{' '}
             <code>100k</code> records of the ~<code>3.2M</code> individuals
             found in the full database by clicking on the following link:&nbsp;
             <a href={getPublicUrl('bhht-100k-sample.csv.gz')}>
