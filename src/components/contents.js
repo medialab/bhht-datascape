@@ -376,7 +376,7 @@ export function Files() {
             </li>
           </ol>
         </p>
-        <div>
+        {/* <div>
           <p>
             Finally, for convenience, you can download a random sample out of{' '}
             <code>100k</code> records of the ~<code>3.2M</code> individuals
@@ -392,7 +392,7 @@ export function Files() {
             People, 3500BC-2018AD, CEPR discussion paper 15582, Feb. 2021,
             available from https://medialab.github.io/bhht-datascape/
           </Citation>
-        </div>
+        </div> */}
         <p>
           For any other questions and enquiries, please contact us by sending an
           email to <code>5000yearsbhht@gmail.com</code>.
